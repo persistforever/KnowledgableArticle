@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "code", "code\code.pyproj", "{0272838B-43A3-407D-8F5D-23D6D78F3F86}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "FilteringArticle", "code\FilteringArticle.pyproj", "{0272838B-43A3-407D-8F5D-23D6D78F3F86}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "LabelingArticle", "LabelingArticle\LabelingArticle.pyproj", "{7996E34F-9C1B-4997-B18B-EE9821711A45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +15,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0272838B-43A3-407D-8F5D-23D6D78F3F86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0272838B-43A3-407D-8F5D-23D6D78F3F86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7996E34F-9C1B-4997-B18B-EE9821711A45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7996E34F-9C1B-4997-B18B-EE9821711A45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
