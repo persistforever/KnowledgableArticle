@@ -1,4 +1,4 @@
-# -*- encoding = gb18030 -*-
+﻿# -*- encoding = gb18030 -*-
 import codecs
 import ConfigParser
 import math
@@ -6,7 +6,7 @@ import math
 
 class Conf :
     # attributes
-    filename = '../data/labeling/settings.ini'
+    filename = 'E://file/knowledgable/labeling/settings.ini'
 
     # methods
     def readConf(self) :

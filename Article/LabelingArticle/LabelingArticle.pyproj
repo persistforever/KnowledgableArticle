@@ -3,15 +3,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>0272838b-43a3-407d-8f5d-23d6d78f3f86</ProjectGuid>
+    <ProjectGuid>dae73bd6-21d4-49ad-9728-0c19d9f1383a</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Frame.py</StartupFile>
+    <StartupFile>labeling.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>code</Name>
-    <RootNamespace>code</RootNamespace>
+    <Name>LabelingArticle</Name>
+    <RootNamespace>LabelingArticle</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,28 +21,14 @@
     <DebugSymbols>true</DebugSymbols>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="BasicClass.py" />
-    <Compile Include="Classifier.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extractor.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Filter.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Frame.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Simplifier.py">
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="BasicClass.py" />
+    <Compile Include="labeling.py" />
+  </ItemGroup>
   <Import Condition="Exists($(PtvsTargetsFile))" Project="$(PtvsTargetsFile)" />
   <Import Condition="!Exists($(PtvsTargetsFile))" Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
