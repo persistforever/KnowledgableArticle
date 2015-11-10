@@ -1,4 +1,4 @@
-# -*- encoding = utf-8 -*-
+﻿# -*- encoding = utf-8 -*-
 '''
 use lda to classify
 '''
@@ -20,13 +20,15 @@ class SVMClassifier :
         self.kernel = kernel
 
     # ---------- training and test ----------
-    def training(self, dataset, label) :
+    def classifying(self, traindataset, trainlabel, artlist) :
         clf = svm.SVC(kernel=self.kernel, probability=True)
-        clf.fit(dataset, label)
-        return clf
-
-    def testing(self, data, clf) :
-        return clf.predict_proba(data)
+        clf.fit(traindataset[:, :], trainlabel)
+        print 'training classifier finished ...'
+        for article in artlist :
+            article.testlabel = clf.predict_proba(np.array(article.featureset[0:]).reshape(1, -1))
+            article.testlabel = article.testlabel[0][1]
+        sortedlist = sorted(artlist, key=lambda x: x.testlabel, reverse=True)
+        return sortedlist
 
     # ---------- process methods ----------
     def crossValidation(self, dataset, label, n_folds=4) :
@@ -85,3 +87,16 @@ class SVMClassifier :
         plt.xlabel('value')
         plt.ylabel('frequence')
         plt.show()
+        
+
+class TopKClassifier :
+    # attributes
+
+    # ---------- init -----------
+    def __init__(self) :
+        pass
+
+    # ---------- training and test ----------
+    def classifying(self, traindataset, trainlabel, artlist) :
+        sortedlist = sorted(artlist, key=lambda x: x.featureset[9], reverse=True)
+        return sortedlist

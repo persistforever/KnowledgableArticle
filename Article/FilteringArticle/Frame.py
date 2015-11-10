@@ -85,11 +85,10 @@ class Corpus :
         dataset = [t[1:] for t in datalist]
         testdataset = np.array(dataset, dtype=float)
         testdataset = self.normalization(testdataset)
-        self.testdataset = dict()
         for idx in range(len(datalist)) :
             id = datalist[idx][0]
-            if id not in self.testdataset :
-                self.testdataset[id] = list(testdataset[idx])
+            if id in self.iddict :
+                self.iddict[id].importFeatureSet(list(testdataset[idx]))
         print 'importing testing dataset finished ...'
         
     def importKnowledgable(self, datapath) :
@@ -134,15 +133,9 @@ class Corpus :
         return dataset
     
     def classifying(self) :
-        classifier = Classifier.SVMClassifier()
-        clf = classifier.training(self.traindataset[:, :], self.trainlabel)
-        # clf = classifier.training(self.traindataset[:, 11:], self.trainlabel)
-        print 'training classifier finished ...'
-        self.testlabel = {}.fromkeys(self.testdataset.keys(), -1)
-        for artid in self.testdataset :
-        	self.testlabel[artid] = classifier.testing(np.array(self.testdataset[artid][0:]).reshape(1, -1), clf)
-        	self.testlabel[artid] = self.testlabel[artid][0][1]
-        sortedlist = list(sorted(self.testlabel.iteritems(), key=lambda x: x[1], reverse=True))
+        # classifier = Classifier.SVMClassifier()
+        classifier = Classifier.TopKClassifier()
+        sortedlist = classifier.classifying(self.traindataset[:, :], self.trainlabel, self.artlist)
         return sortedlist
         print 'testing classifier finished ...'
 
@@ -186,33 +179,33 @@ class Corpus :
     def writeKeyWord(self, keywordpath) :
         with open(keywordpath, 'w') as fw :
             for article in self.artlist :
-                fw.writelines(article.printId().encode('gb18030')  + '\t' + article.printKeyWord().encode('gb18030') + '\n')
+                fw.writelines(article.id.encode('gb18030')  + '\t' + article.printKeyWord().encode('gb18030') + '\n')
                 
     def writeTrainDataSet(self, datapath) :
         with open(datapath, 'w') as fw :
             for article in self.artlist :
                 if article.printLabel() != '-1' :
-                    fw.writelines(article.printFeatureSet().encode('gb18030') + article.printLabel().encode('gb18030') + '\n')
+                    fw.writelines(article.id.encode('gb18030') + '\t' + article.printFeatureSet().encode('gb18030') + article.label.encode('gb18030') + '\n')
                 
     def writeTestDataSet(self, datapath) :
         with open(datapath, 'w') as fw :
             for article in self.artlist :
                 if article.printLabel() == '-1' :
-                    fw.writelines(article.printId().encode('gb18030') + '\t' + article.printFeatureSet().encode('gb18030') + '\n')
+                    fw.writelines(article.id.encode('gb18030') + '\t' + article.printFeatureSet().encode('gb18030') + '\n')
                     
     def writeSplitTitle(self, datapath) :
         with open(datapath, 'w') as fw :
             for article in self.artlist :
                 if article.label == 1 :
                     for sub in article.subtitle :
-                        fw.writelines(article.printId().encode('gb18030') + '\t' + sub.encode('gb18030') + '\n')
+                        fw.writelines(article.id.encode('gb18030') + '\t' + sub.encode('gb18030') + '\n')
                 
     def writeKnowledgableArticle(self, datapath, artlist, rate=0.1) :
         outnum = int(rate * len(artlist))
-        outartlist =artlist[0: (outnum+1)]
+        outartlist = artlist[0: (outnum+1)]
         with open(datapath, 'w') as fw :
             for article in outartlist :
-                fw.writelines(article[0].encode('gb18030') + '\n')
+                fw.writelines(article.id.encode('gb18030') + '\n')
 
 
 # ---------- FilePath : list of file path ----------
@@ -263,6 +256,7 @@ def classifying(type) :
 	corpus = Corpus()
 	filepath = FilePath()
 	corpus.importTrainDataSet(filepath.getInputTraindataset(type))
+	corpus.importArticle(filepath.getOutputArticle(type))
 	corpus.importTestDataSet(filepath.getOutputTestdataset(type))
 	sortedlist = corpus.classifying()
 	corpus.writeKnowledgableArticle(filepath.getOutputKnowledgablearticle(type), sortedlist, rate=0.2)
@@ -281,5 +275,5 @@ def titleSimplifying(type) :
 
 # ---------- MAIN ----------
 type = '4'
-# classifying(type)
+classifying(type)
 titleSimplifying(type)
