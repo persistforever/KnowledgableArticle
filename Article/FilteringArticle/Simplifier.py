@@ -1,6 +1,7 @@
 ﻿# -*- encoding = utf-8 -*-
 '''
 title simplifier
+content simplifier
 '''
 
 import codecs

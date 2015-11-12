@@ -152,6 +152,11 @@ class Article :
         for value in data :
             self.featureset.append(float(value))
             
+    def importOriginFeatureSet(self, data) :
+        self.originfeatureset = []
+        for value in data :
+            self.originfeatureset.append(float(value))
+            
     # ----- process methods -----
     def calTF(self) :
         self.tfdict = dict()
@@ -192,12 +197,6 @@ class Article :
         for word in self.sptitle :
             title += word.name + ' '
         return title
-
-    def printId(self) :
-        return self.id
-
-    def printLabel(self) :
-        return str(self.label)
     
     def printArticle(self) :
         line = ''
@@ -232,13 +231,15 @@ class Article :
         line += self.id + u'\t'
         line += self.url + u'\t'
         line += self.simplytitle + u'\t'
-        line += self.content + u'\t'
-        return line   
+        line += self.title + u'\t'
+        line += str(self.testlabel) + u'\t'
+        line += self.printOriginFeatureSet()
+        return line.strip()
             
     def printKeyWord(self) :
         line = ''
         for word, tfidf in self.keyword :
-            line += word.toString() + '#' + str(round(tfidf, 4)) + '\t'
+            line += word.toString() + '#' + str(round(tfidf, 4)) + u'\t'
         return line
     
     def printFeatureSet(self) :
@@ -246,5 +247,21 @@ class Article :
         for value in self.featureset :
             if math.isnan(value) :
                 value = 0.0
-            line += str(value) + '\t'
+            line += str(value) + u'\t'
         return line
+    
+    def printOriginFeatureSet(self) :
+        line = ''
+        for value in self.originfeatureset :
+            if math.isnan(value) :
+                value = 0.0
+            line += str(value) + u'\t'
+        return line
+
+    def printClassifyResult(self) :
+        line = ''
+        line += self.id + u'\t'
+        line += self.url + u'\t'
+        line += self.title + u'\t'
+        line += self.printOriginFeatureSet()
+        return line.strip()

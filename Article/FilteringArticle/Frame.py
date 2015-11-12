@@ -1,8 +1,7 @@
 ﻿# -*- encoding = gb18030 -*-
 import codecs
 import numpy as np
-import Filter
-import Extractor
+import FeatureSelector
 import Classifier
 import Simplifier
 import math
@@ -72,7 +71,7 @@ class Corpus :
     def importTrainDataSet(self, datapath) :
         with codecs.open(datapath, 'r', 'gb18030') as fo :
             data = [np.array(line.strip().split('\t')) for line in fo.readlines()]
-        datasetlist = [t[0:-1] for t in data]
+        datasetlist = [t[3:-1] for t in data]
         labellist = [t[-1] for t in data]
         self.traindataset = np.array(datasetlist, dtype=float)
         self.traindataset = self.normalization(self.traindataset)
@@ -84,11 +83,12 @@ class Corpus :
             datalist = [np.array(line.strip().split('\t')) for line in fo.readlines()]
         dataset = [t[1:] for t in datalist]
         testdataset = np.array(dataset, dtype=float)
-        testdataset = self.normalization(testdataset)
+        normaltestdataset = self.normalization(testdataset)
         for idx in range(len(datalist)) :
             id = datalist[idx][0]
             if id in self.iddict :
-                self.iddict[id].importFeatureSet(list(testdataset[idx]))
+                self.iddict[id].importFeatureSet(list(normaltestdataset[idx]))
+                self.iddict[id].importOriginFeatureSet(list(testdataset[idx]))
         print 'importing testing dataset finished ...'
         
     def importKnowledgable(self, datapath) :
@@ -114,28 +114,32 @@ class Corpus :
         for article in self.artlist :
             if article.id not in self.iddict :
                 self.iddict[article.id] = article
-    
-    def testClassifier(self) :
-        classifier = Classifier.SVMClassifier()
-        classifier.comparisonExperiments(self.traindataset, self.trainlabel)
-        # classifier.plotDistribution(self.traindataset, 20)
-        print 'extracting feature finished ...'
 
     def normalization(self, dataset) :
-        for col in range(dataset.shape[1]) :
-            maximum = max(dataset[:, col])
-            minimum = min(dataset[:, col])
-            for row in range(dataset.shape[0]) :
+        normaldataset = np.zeros(shape=(dataset.shape[0], dataset.shape[1]))
+        for row in range(dataset.shape[0]) :
+            for col in range(dataset.shape[1]) :
+                normaldataset[row, col] = dataset[row, col]
+        for col in range(normaldataset.shape[1]) :
+            maximum = max(normaldataset[:, col])
+            minimum = min(normaldataset[:, col])
+            for row in range(normaldataset.shape[0]) :
                 if maximum - minimum == 0 :
-                    dataset[row, col] = 0.0
+                    normaldataset[row, col] = 0.0
                 else :
-                    dataset[row, col] = 1.0 * (maximum - dataset[row, col]) / (maximum - minimum)
-        return dataset
+                    normaldataset[row, col] = 1.0 * (maximum - normaldataset[row, col]) / (maximum - minimum)
+        return normaldataset
     
-    def classifying(self) :
-        # classifier = Classifier.SVMClassifier()
-        classifier = Classifier.TopKClassifier()
-        sortedlist = classifier.classifying(self.traindataset[:, :], self.trainlabel, self.artlist)
+    def classifying(self, type) :
+        if type == 1 :
+            classifier = Classifier.MulticonditionSortingClassifier()
+            sortedlist = classifier.processing(self.artlist)
+        elif type == 2 :
+            classifier = Classifier.SVMClassifier()
+            sortedlist = classifier.processing(self.traindataset, self.trainlabel, self.artlist)
+        elif type == 3 :
+            classifier = Classifier.FeatureSelectedSVMClassifier()
+            sortedlist = classifier.processing(self.traindataset, self.trainlabel, self.artlist)
         return sortedlist
         print 'testing classifier finished ...'
 
@@ -169,12 +173,6 @@ class Corpus :
         with open(splitpath, 'w') as fw :
             for article in self.artlist :
                 fw.writelines(article.printSplit().encode('gb18030') + '\n')
-
-    def writeSimplyArticle(self, datapath) :
-        with open(datapath, 'w') as fw :
-            for article in self.artlist :
-                if article.label == 1 :
-                    fw.writelines(article.printSimplyLine().encode('gb18030') + '\n')
                 
     def writeKeyWord(self, keywordpath) :
         with open(keywordpath, 'w') as fw :
@@ -199,13 +197,19 @@ class Corpus :
                 if article.label == 1 :
                     for sub in article.subtitle :
                         fw.writelines(article.id.encode('gb18030') + '\t' + sub.encode('gb18030') + '\n')
+
+    def writeSimplyArticle(self, datapath) :
+        with open(datapath, 'w') as fw :
+            for article in self.artlist :
+                if article.label == 1 :
+                    fw.writelines(article.printSimplyLine().encode('gb18030') + '\n')
                 
     def writeKnowledgableArticle(self, datapath, artlist, rate=0.1) :
         outnum = int(rate * len(artlist))
-        outartlist = artlist[0: (outnum+1)]
+        outartlist = artlist[0: outnum]
         with open(datapath, 'w') as fw :
             for article in outartlist :
-                fw.writelines(article.id.encode('gb18030') + '\n')
+                fw.writelines(article.printClassifyResult().encode('gb18030') + '\n')
 
 
 # ---------- FilePath : list of file path ----------
@@ -249,31 +253,34 @@ class FilePath :
     
     def getOutputSimplyArticle(self, type) :
         return self.maindir + 'output/' + type + '/simplyknowledgablearticle'
-    
+
+    def getOutputSimilarity(self, type) :
+        return self.maindir + 'output/' + type + '/featuresimilarity'
+        
 
 # ---------- classifying ----------
 def classifying(type) :
-	corpus = Corpus()
-	filepath = FilePath()
-	corpus.importTrainDataSet(filepath.getInputTraindataset(type))
-	corpus.importArticle(filepath.getOutputArticle(type))
-	corpus.importTestDataSet(filepath.getOutputTestdataset(type))
-	sortedlist = corpus.classifying()
-	corpus.writeKnowledgableArticle(filepath.getOutputKnowledgablearticle(type), sortedlist, rate=0.2)
+    corpus = Corpus()
+    filepath = FilePath()
+    corpus.importTrainDataSet(filepath.getInputTraindataset(type))
+    corpus.importArticle(filepath.getOutputArticle(type))
+    corpus.importTestDataSet(filepath.getOutputTestdataset(type))
+    sortedlist = corpus.classifying(2)
+    corpus.writeKnowledgableArticle(filepath.getOutputKnowledgablearticle(type), sortedlist, rate=0.2)
 
 # ---------- title simplifying ----------
 def titleSimplifying(type) :
-	corpus = Corpus()
-	filepath = FilePath()
-	corpus.importArticle(filepath.getOutputArticle(type))
-	corpus.importKnowledgable(filepath.getOutputKnowledgablearticle(type))
-	corpus.importSubTitle(filepath.getOutputSubtitle(type))
-	corpus.importKeyWord(filepath.getOutputKeyword(type))
-	corpus.titleSimplifying()
-	corpus.writeSimplyArticle(filepath.getOutputSimplyArticle(type))
+    corpus = Corpus()
+    filepath = FilePath()
+    corpus.importArticle(filepath.getOutputArticle(type))
+    corpus.importKnowledgable(filepath.getOutputKnowledgablearticle(type))
+    corpus.importSubTitle(filepath.getOutputSubtitle(type))
+    corpus.importKeyWord(filepath.getOutputKeyword(type))
+    corpus.titleSimplifying()
+    corpus.writeSimplyArticle(filepath.getOutputSimplyArticle(type))
 
 
 # ---------- MAIN ----------
 type = '4'
 classifying(type)
-titleSimplifying(type)
+# titleSimplifying(type)
