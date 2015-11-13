@@ -232,8 +232,6 @@ class Article :
         line += self.url + u'\t'
         line += self.simplytitle + u'\t'
         line += self.title + u'\t'
-        line += str(self.testlabel) + u'\t'
-        line += self.printOriginFeatureSet()
         return line.strip()
             
     def printKeyWord(self) :

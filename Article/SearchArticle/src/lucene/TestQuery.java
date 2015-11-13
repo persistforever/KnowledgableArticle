@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.lucene.analysis.Analyzer;  
 import org.apache.lucene.analysis.standard.StandardAnalyzer;  
+import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.ParseException;  
 import org.apache.lucene.queryParser.QueryParser;  
@@ -16,12 +17,12 @@ import org.apache.lucene.util.Version;
   
 public class TestQuery {  
     public static void main(String[] args) throws IOException, ParseException {  
-    	String index = "E://file/knowledgable/input/lucene/output";         //搜索的索引路径
+    	String index = "E://file/knowledgable/lucene/output";         //搜索的索引路径
         IndexReader reader = IndexReader.open(FSDirectory.open(new File(index)));
         IndexSearcher searcher = new IndexSearcher(reader);  
         
     	ScoreDoc[] hits = null;  
-        String queryString = "机器";   //搜索的关键词
+        String queryString = "股票";   //搜索的关键词
         Query query = null;  
         
   
@@ -36,6 +37,15 @@ public class TestQuery {
             hits = results.scoreDocs;
             if (hits.length > 0) {  
                 System.out.println("找到:" + hits.length + " 个结果!");  
+            }  // 显示记录  
+            for (ScoreDoc sr : hits)  
+            {
+		         // 文档编号  
+		         int docID = sr.doc;  
+		         // 真正的内容  
+		         Document doc = searcher.doc(docID);  
+		         System.out.println("url = " + doc.get("url"));
+		         System.out.println("title = " + doc.get("body"));
             }  
             searcher.close();
         } 

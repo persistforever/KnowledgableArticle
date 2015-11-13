@@ -93,8 +93,9 @@ class Corpus :
         
     def importKnowledgable(self, datapath) :
         with codecs.open(datapath, 'r', 'gb18030') as fo :
-            datalist = [line.strip() for line in fo.readlines()]
-        for id in datalist :
+            datalist = [line.strip().split('\t') for line in fo.readlines()]
+        for data in datalist :
+            id = data[0]
             if id in self.iddict :
                 self.iddict[id].label = 1
         print 'importing knowledgable finished ...'
@@ -147,6 +148,7 @@ class Corpus :
         artlist = []
         for article in self.artlist :
             if article.label == 1 :
+                print article.id
                 artlist.append(article)
         simplifier = Simplifier.TitleSimplifier()
         # simplifier.featureSimplifying(artlist)
@@ -283,4 +285,4 @@ def titleSimplifying(type) :
 # ---------- MAIN ----------
 type = '4'
 classifying(type)
-# titleSimplifying(type)
+titleSimplifying(type)
