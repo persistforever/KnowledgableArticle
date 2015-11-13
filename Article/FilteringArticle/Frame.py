@@ -283,6 +283,6 @@ def titleSimplifying(type) :
 
 
 # ---------- MAIN ----------
-type = '4'
+type = '4/20150704'
 classifying(type)
 titleSimplifying(type)

@@ -17,7 +17,7 @@ import org.apache.lucene.util.Version;
   
 public class TestQuery {  
     public static void main(String[] args) throws IOException, ParseException {  
-    	String index = "E://file/knowledgable/lucene/output";         //搜索的索引路径
+    	String index = "E://file/knowledgable/lucene/index";         //搜索的索引路径
         IndexReader reader = IndexReader.open(FSDirectory.open(new File(index)));
         IndexSearcher searcher = new IndexSearcher(reader);  
         
