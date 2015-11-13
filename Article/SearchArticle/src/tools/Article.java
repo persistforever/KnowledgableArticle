@@ -14,8 +14,8 @@ public class Article {
 		if (linelist.size() >= 4) {
 			this.id = linelist.get(0);
 			this.url = linelist.get(1);
-			this.completetitle = linelist.get(2);
-			this.keytitle = linelist.get(3);
+			this.keytitle = linelist.get(2);
+			this.completetitle = linelist.get(3);
 		}
 	}
 	
@@ -23,7 +23,7 @@ public class Article {
 		String outstring = "";
 		outstring += this.id.toString() + "\t" ;
 		outstring += this.url.toString() + "\t" ;
-		outstring += this.completetitle.toString() + "\t" ;
+		outstring += this.keytitle.toString() + "\t" ;
 		outstring += this.completetitle.toString() + "\t" ;
 		return outstring.trim();
 	}

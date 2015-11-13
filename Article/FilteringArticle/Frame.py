@@ -1,5 +1,7 @@
 ﻿# -*- encoding = gb18030 -*-
 import codecs
+import sys
+import os
 import numpy as np
 import FeatureSelector
 import Classifier
@@ -148,7 +150,6 @@ class Corpus :
         artlist = []
         for article in self.artlist :
             if article.label == 1 :
-                print article.id
                 artlist.append(article)
         simplifier = Simplifier.TitleSimplifier()
         # simplifier.featureSimplifying(artlist)
@@ -220,69 +221,100 @@ class FilePath :
     maindir = 'E://file/knowledgable/'
     
     # methods
-    def getInputArticle(self, type) :
-        return self.maindir + 'input/' + type + '/article'
+    def getInputArticle(self, type, date) :
+        path = os.path.abspath(self.maindir) 
+        path = os.path.join(path, 'input', type, date, 'article')
+        return path
     
-    def getInputInfo(self, type) :
-        return self.maindir + 'input/' + type + '/info'
+    def getInputInfo(self, type, date) :
+        path = os.path.abspath(self.maindir) 
+        path = os.path.join(path, 'input', type, date, 'info')
+        return path
     
     def getInputTraindataset(self, type) :
-        return self.maindir + 'input/' + type + '/traindataset'
+        path = os.path.abspath(self.maindir) 
+        path = os.path.join(path, 'input', type, 'traindataset')
+        return path
     
-    def getOuputOrigindata(self, type) :
-        return self.maindir + 'output/' + type + '/origindata'
+    def getOuputOrigindata(self, type, date) :
+        path = os.path.abspath(self.maindir) 
+        path = os.path.join(path, 'output', type, date, 'origindata')
+        return path
     
-    def getOutputArticle(self, type) :
-        return self.maindir + 'output/' + type + '/article'
+    def getOutputArticle(self, type, date) :
+        path = os.path.abspath(self.maindir)
+        path = os.path.join(path, 'output', type, date, 'article')
+        return path
     
-    def getOutputInfo(self, type) :
-        return self.maindir + 'output/' + type + '/info'
+    def getOutputInfo(self, type, date) :
+        path = os.path.abspath(self.maindir)
+        path = os.path.join(path, 'output', type, date, 'info')
+        return path
     
-    def getOutputSplit(self, type) :
-        return self.maindir + 'output/' + type + '/split'
+    def getOutputSplit(self, type, date) :
+        path = os.path.abspath(self.maindir)
+        path = os.path.join(path, 'output', type, date, 'split')
+        return path
     
-    def getOutputKeyword(self, type) :
-        return self.maindir + 'output/' + type + '/keyword'
+    def getOutputKeyword(self, type, date) :
+        path = os.path.abspath(self.maindir)
+        path = os.path.join(path, 'output', type, date, 'keyword_title')
+        return path
     
-    def getOutputTestdataset(self, type) :
-        return self.maindir + 'output/' + type + '/testdataset'
+    def getOutputTestdataset(self, type, date) :
+        path = os.path.abspath(self.maindir)
+        path = os.path.join(path, 'output', type, date, 'testdataset')
+        return path
     
-    def getOutputKnowledgablearticle(self, type) :
-        return self.maindir + 'output/' + type + '/knowledgablearticle'
+    def getOutputKnowledgablearticle(self, type, date) :
+        path = os.path.abspath(self.maindir)
+        path = os.path.join(path, 'output', type, date, 'knowledgablearticle')
+        return path
     
-    def getOutputSubtitle(self, type) :
-        return self.maindir + 'output/' + type + '/subtitle'
+    def getOutputSubtitle(self, type, date) :
+        path = os.path.abspath(self.maindir)
+        path = os.path.join(path, 'output', type, date, 'subtitle')
+        return path
     
-    def getOutputSimplyArticle(self, type) :
-        return self.maindir + 'output/' + type + '/simplyknowledgablearticle'
+    def getOutputSimplyArticle(self, type, date) :
+        path = os.path.abspath(self.maindir)
+        path = os.path.join(path, 'output', type, date, 'simplyknowledgablearticle')
+        return path
 
-    def getOutputSimilarity(self, type) :
-        return self.maindir + 'output/' + type + '/featuresimilarity'
+    def getOutputSimilarity(self, type, date) :
+        path = os.path.abspath(self.maindir)
+        path = os.path.join(path, 'output', type, date, 'featuresimilarity')
+        return path
         
 
 # ---------- classifying ----------
-def classifying(type) :
+def classifying(type, date) :
     corpus = Corpus()
     filepath = FilePath()
     corpus.importTrainDataSet(filepath.getInputTraindataset(type))
-    corpus.importArticle(filepath.getOutputArticle(type))
-    corpus.importTestDataSet(filepath.getOutputTestdataset(type))
+    corpus.importArticle(filepath.getOutputArticle(type, date))
+    corpus.importTestDataSet(filepath.getOutputTestdataset(type, date))
     sortedlist = corpus.classifying(2)
-    corpus.writeKnowledgableArticle(filepath.getOutputKnowledgablearticle(type), sortedlist, rate=0.2)
+    corpus.writeKnowledgableArticle(filepath.getOutputKnowledgablearticle(type, date), sortedlist, rate=0.2)
 
 # ---------- title simplifying ----------
-def titleSimplifying(type) :
+def titleSimplifying(type, date) :
     corpus = Corpus()
     filepath = FilePath()
-    corpus.importArticle(filepath.getOutputArticle(type))
-    corpus.importKnowledgable(filepath.getOutputKnowledgablearticle(type))
-    corpus.importSubTitle(filepath.getOutputSubtitle(type))
-    corpus.importKeyWord(filepath.getOutputKeyword(type))
+    corpus.importArticle(filepath.getOutputArticle(type, date))
+    corpus.importKnowledgable(filepath.getOutputKnowledgablearticle(type, date))
+    corpus.importSubTitle(filepath.getOutputSubtitle(type, date))
+    corpus.importKeyWord(filepath.getOutputKeyword(type, date))
     corpus.titleSimplifying()
-    corpus.writeSimplyArticle(filepath.getOutputSimplyArticle(type))
+    corpus.writeSimplyArticle(filepath.getOutputSimplyArticle(type, date))
 
 
 # ---------- MAIN ----------
-type = '4/20150704'
-classifying(type)
-titleSimplifying(type)
+if __name__ == '__main__' :
+    type = '4'
+    date = '20150714'
+else :
+    type = sys.argv[1]
+    date = sys.argv[2]
+classifying(type, date)
+titleSimplifying(type, date)
