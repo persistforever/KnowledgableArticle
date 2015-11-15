@@ -143,6 +143,10 @@ class Corpus :
         elif type == 3 :
             classifier = Classifier.FeatureSelectedSVMClassifier()
             sortedlist = classifier.processing(self.traindataset, self.trainlabel, self.artlist)
+        elif type == 4 :
+            classifier = Classifier.ClassifierTester()
+            classifier.processing(self.traindataset, self.trainlabel)
+            sortedlist = []
         return sortedlist
         print 'testing classifier finished ...'
 
@@ -317,4 +321,4 @@ else :
     type = sys.argv[1]
     date = sys.argv[2]
 classifying(type, date)
-titleSimplifying(type, date)
+# titleSimplifying(type, date)

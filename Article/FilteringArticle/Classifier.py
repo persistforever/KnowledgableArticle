@@ -40,12 +40,12 @@ class SVMClassifier :
 
     # ---------- training and test ----------
     def processing(self, traindataset, trainlabel, artlist) :
-        clf = svm.SVC(kernel='linear', probability=True)
+        clf = svm.LinearSVC(penalty='l2', C=10)
         clf.fit(traindataset, trainlabel)
         print 'training classifier finished ...'
         for article in artlist :
-            article.testlabel = clf.predict_proba(np.array(article.featureset[0:]).reshape(1, -1))
-            article.testlabel = article.testlabel[0][1]
+            article.testlabel = clf.decision_function(np.array(article.featureset[0:]).reshape(1, -1))
+            article.testlabel = article.testlabel[0]
         sortedlist = sorted(artlist, key=lambda x: x.testlabel, reverse=True)
         return sortedlist
 
@@ -64,8 +64,8 @@ class FeatureSelectedSVMClassifier :
         clf.fit(selector.selecting(traindataset), trainlabel)
         print 'training classifier finished ...'
         for article in artlist :
-            article.testlabel = clf.predict_proba(selector.featureTransform(np.array([article.featureset])))
-            article.testlabel = article.testlabel[0][1]
+            article.testlabel = clf.decision_function(selector.featureTransform(np.array([article.featureset])))
+            article.testlabel = article.testlabel[0]
         sortedlist = sorted(artlist, key=lambda x: x.testlabel, reverse=True)
         return sortedlist
 
@@ -74,12 +74,13 @@ class ClassifierTester :
     # ----- attributes -----
 
     # ---------- process methods ----------
-    def crossValidation(self, dataset, label, n_folds=4) :
+    def crossValidation(self, dataset, label, clf, n_folds=4) :
         kf = KFold(len(dataset), n_folds=n_folds, shuffle=True)
         accurancy = []
         for train, test in kf :
-            train_dataset, test_dataset, train_label, test_label = dataset[train], dataset[test], label[train], label[test]
-            clf = svm.SVC(kernel=self.kernel, probability=True)
+            # train_dataset, test_dataset, train_label, test_label = dataset[train], dataset[test], label[train], label[test]
+            test_dataset, train_dataset, test_label, train_label = dataset[train], dataset[test], label[train], label[test]
+            print train_dataset.shape, test_dataset.shape
             clf.fit(train_dataset, train_label)
             test_class = []
             for data in test_dataset :
@@ -101,22 +102,13 @@ class ClassifierTester :
 
     def processing(self, dataset, label) :
         dataset = np.column_stack((dataset[:, 0:21], dataset[:, 22], dataset[:, 24], dataset[:, 26], dataset[:, 28:]))
-        experiments = []
-        for n in range(2, 6) :
-            experiment = []
-            # experiment.append(self.crossValidation(dataset[:, 0:12], label, n_folds=n))
-            # experiment.append(self.crossValidation(dataset[:, 12:18], label, n_folds=n))
-            # experiment.append(self.crossValidation(dataset[:, 28:], label, n_folds=n))
-            # experiment.append(self.crossValidation(dataset[:, 0:18], label, n_folds=n))
-            experiment.append(self.crossValidation(dataset[:, :], label, n_folds=n))
-            selector = FeatureSelector.CorrcoefSelector(threshold=0.85)
-            experiment.append(self.crossValidation(selector.selecting(dataset), label, n_folds=n))
-            selector = FeatureSelector.ChisquaredSelector(threshold=0.1)
-            experiment.append(self.crossValidation(selector.selecting(dataset, label), label, n_folds=n))
-            selector = FeatureSelector.InfomationGainSelector(threshold=1e-3)
-            experiment.append(self.crossValidation(selector.selecting(dataset, label), label, n_folds=n))
-            print experiment
-            experiments.append(experiment)
+        type = 3
+        if type == 1 :
+            experiments = self.classifierComparasion(dataset, label)
+        elif type == 2 :
+            experiments = self.filteredFeatureSelectorComparasion(dataset, label)
+        elif type == 3 :
+            experiments = self.wrappedFeatureSelectorComparasion(dataset, label)
         color = ['yo--', 'ro--', 'go--', 'bo--', 'mo--']
         lgd = ('no', 'corrcoef', 'chisquared', 'infomationgain', 'token+info+pos')
         p = []
@@ -129,9 +121,52 @@ class ClassifierTester :
         plt.legend(tuple([t[0] for t in p]), lgd[0: len(experiments[0])])
         plt.show()
 
-    def plotDistribution(self, dataset, col) :
-        plt.hist(dataset[:, col], bins=20)
-        plt.title('distribution')
-        plt.xlabel('value')
-        plt.ylabel('frequence')
-        plt.show()
+    def filteredFeatureSelectorComparasion(self, dataset, label) :
+        clf = svm.SVC(kernel='linear', probability=True)
+        experiments = []
+        for n in range(2, 6) :
+            experiment = []
+            experiment.append(self.crossValidation(dataset, label, clf, n_folds=n))
+            selector = FeatureSelector.CorrcoefSelector(threshold=0.85)
+            experiment.append(self.crossValidation(selector.selecting(dataset), label, clf, n_folds=n))
+            selector = FeatureSelector.ChisquaredSelector(threshold=0.1)
+            experiment.append(self.crossValidation(selector.selecting(dataset, label), label, clf, n_folds=n))
+            selector = FeatureSelector.InfomationGainSelector(threshold=1e-3)
+            experiment.append(self.crossValidation(selector.selecting(dataset, label), label, clf, n_folds=n))
+            print experiment
+            experiments.append(experiment)
+        return experiments
+
+    def classifierComparasion(self, dataset, label) :
+        # selector = None
+        experiments = []
+        for n in range(2, 6) :
+            experiment = []
+            clf = svm.SVC(kernel='linear', probability=True) # best
+            experiment.append(self.crossValidation(dataset, label, clf, n_folds=n))
+            clf = svm.SVC(kernel='rbf', probability=True)
+            experiment.append(self.crossValidation(dataset, label, clf, n_folds=n))
+            clf = svm.SVC(kernel='poly', degree=2, probability=True)
+            experiment.append(self.crossValidation(dataset, label, clf, n_folds=n))
+            clf = svm.SVC(kernel='poly', degree=3, probability=True)
+            experiment.append(self.crossValidation(dataset, label, clf, n_folds=n))
+            clf = svm.LinearSVC(penalty='l2', C=10)
+            experiment.append(self.crossValidation(dataset, label, clf, n_folds=n))
+            print experiment
+            experiments.append(experiment)
+        return experiments
+
+    def wrappedFeatureSelectorComparasion(self, dataset, label) :
+        # selector = None
+        experiments = []
+        for n in range(2, 6) :
+            experiment = []
+            clf = svm.SVC(kernel='linear', C=10, probability=True)
+            experiment.append(self.crossValidation(dataset, label, clf, n_folds=n))
+            clf = svm.LinearSVC(penalty='l1', C=10, dual=False)
+            experiment.append(self.crossValidation(dataset, label, clf, n_folds=n))
+            clf = svm.LinearSVC(penalty='l2', C=10) # best
+            experiment.append(self.crossValidation(dataset, label, clf, n_folds=n))
+            print experiment
+            experiments.append(experiment)
+        return experiments
