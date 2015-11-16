@@ -7,8 +7,6 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "FilteringArticle", "Filteri
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "LabelingArticle", "LabelingArticle\LabelingArticle.pyproj", "{DAE73BD6-21D4-49AD-9728-0C19D9F1383A}"
 EndProject
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ShowArticle", "ShowArticle\ShowArticle.pyproj", "{4F303D4D-9636-4923-9E9A-ABBE8644BE88}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,10 +17,6 @@ Global
 		{CD7445F1-BEFB-4724-BAAA-6E1043271308}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAE73BD6-21D4-49AD-9728-0C19D9F1383A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DAE73BD6-21D4-49AD-9728-0C19D9F1383A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4F303D4D-9636-4923-9E9A-ABBE8644BE88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4F303D4D-9636-4923-9E9A-ABBE8644BE88}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4F303D4D-9636-4923-9E9A-ABBE8644BE88}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4F303D4D-9636-4923-9E9A-ABBE8644BE88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
