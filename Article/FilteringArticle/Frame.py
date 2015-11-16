@@ -216,7 +216,7 @@ class Corpus :
         outartlist = artlist[0: outnum]
         with open(datapath, 'w') as fw :
             for article in outartlist :
-                fw.writelines(article.printClassifyResult().encode('gb18030') + '\n')
+                fw.writelines(article.printArticle().encode('gb18030') + '\n')
 
 
 # ---------- FilePath : list of file path ----------
