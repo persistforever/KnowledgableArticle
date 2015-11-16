@@ -2,11 +2,14 @@
 import codecs
 import sys
 import os
+import csv
 import numpy as np
 import FeatureSelector
 import Classifier
 import Simplifier
 import math
+import lda
+import TopicModel
 from BasicClass import Article
 
 
@@ -159,6 +162,11 @@ class Corpus :
         # simplifier.featureSimplifying(artlist)
         simplifier.modelSimplifying(artlist)
         print 'simpltfying title finished ...'
+
+    def constrTree(self) :
+        model = TopicModel.LDA()
+        topiclist = model.constrTree(self.artlist)
+        return topiclist
             
     # ----- write methods -----
     def writeLine(self, datapath) :
@@ -218,6 +226,26 @@ class Corpus :
             for article in outartlist :
                 fw.writelines(article.printArticle().encode('gb18030') + '\n')
 
+    def writeTopicWord(self, datapath, wordlist) :
+        csvfile = file(datapath, 'wb')
+        writer = csv.writer(csvfile)
+        for word in wordlist :
+            writer.writerow([w.encode('gb18030') for w in word])
+        csvfile.close()
+
+    def writeArticleTopic(self, datapath) :
+        csvfile = file(datapath, 'wb')
+        writer = csv.writer(csvfile)
+        for article in self.artlist :
+            out = []
+            out.append(article.id.encode('gb18030'))
+            out.append(article.url.encode('gb18030'))
+            out.append(article.title.encode('gb18030'))
+            for topic in article.topiclist :
+                out.append(str(topic).encode('gb18030'))
+            writer.writerow(out)
+        csvfile.close()
+
 
 # ---------- FilePath : list of file path ----------
 class FilePath :
@@ -262,6 +290,11 @@ class FilePath :
     
     def getOutputKeyword(self, type, date) :
         path = os.path.abspath(self.maindir)
+        path = os.path.join(path, 'output', type, date, 'keyword')
+        return path
+    
+    def getOutputKeywordTitle(self, type, date) :
+        path = os.path.abspath(self.maindir)
         path = os.path.join(path, 'output', type, date, 'keyword_title')
         return path
     
@@ -289,6 +322,16 @@ class FilePath :
         path = os.path.abspath(self.maindir)
         path = os.path.join(path, 'output', type, date, 'featuresimilarity')
         return path
+
+    def getOutputTopicWord(self, type, date) :
+        path = os.path.abspath(self.maindir)
+        path = os.path.join(path, 'output', type, date, 'topicword.csv')
+        return path
+
+    def getOutputArticleTopic(self, type, date) :
+        path = os.path.abspath(self.maindir)
+        path = os.path.join(path, 'output', type, date, 'articletopic.csv')
+        return path
         
 
 # ---------- classifying ----------
@@ -308,9 +351,19 @@ def titleSimplifying(type, date) :
     corpus.importArticle(filepath.getOutputArticle(type, date))
     corpus.importKnowledgable(filepath.getOutputKnowledgablearticle(type, date))
     corpus.importSubTitle(filepath.getOutputSubtitle(type, date))
-    corpus.importKeyWord(filepath.getOutputKeyword(type, date))
+    corpus.importKeyWord(filepath.getOutputKeywordTitle(type, date))
     corpus.titleSimplifying()
     corpus.writeSimplyArticle(filepath.getOutputSimplyArticle(type, date))
+
+# ---------- title simplifying ----------
+def constrTree(type, data) :
+    corpus = Corpus()
+    filepath = FilePath()
+    corpus.importArticle(filepath.getOutputKnowledgablearticle(type, date))
+    corpus.importKeyWord(filepath.getOutputKeyword(type, date))
+    topiclist = corpus.constrTree()
+    corpus.writeTopicWord(filepath.getOutputTopicWord(type, data), topiclist)
+    corpus.writeArticleTopic(filepath.getOutputArticleTopic(type, date))
 
 
 # ---------- MAIN ----------
@@ -320,5 +373,6 @@ if __name__ == '__main__' :
 else :
     type = sys.argv[1]
     date = sys.argv[2]
-classifying(type, date)
+# classifying(type, date)
 # titleSimplifying(type, date)
+constrTree(type, date)
