@@ -2,8 +2,11 @@ package tools;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -31,7 +34,7 @@ public class FileOperator {
     }  
     
 	/* write methods */
-    public static void ArticleFileWriter(String FileName, ArrayList<Article> resultlist, String charset) 
+    public static void ArticleTextWriter(String FileName, ArrayList<Article> resultlist, String charset) 
     		throws IOException {
 		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(  
                 new FileOutputStream(FileName), charset));
@@ -41,5 +44,21 @@ public class FileOperator {
 		}
 		writer.write(outputstring);
 		writer.close();
-    }
+	}
+		
+    public static void ArticleCSVWriter(String FileName, ArrayList<Article> resultlist, String charset) {
+		try {
+			File csv = new File(FileName);
+			BufferedWriter writer = new BufferedWriter(new FileWriter(csv));
+			for(Article article: resultlist) {
+				writer.write(article.toString());
+				writer.newLine();
+			}
+			writer.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) { 
+			e.printStackTrace(); 
+		} 
+	}
 }

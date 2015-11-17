@@ -27,20 +27,21 @@ public class GbkOutputFormat<K, V> extends FileOutputFormat<K, V> {
 		CompressionCodec codec = null;
 		String extension = "";
 		if (isCompressed) {
-			Class codecClass = getOutputCompressorClass(job, GzipCodec.class);
-			codec = (CompressionCodec) ReflectionUtils.newInstance(codecClass,
-					conf);
-			extension = codec.getDefaultExtension();
+		      Class<? extends CompressionCodec> codecClass = 
+		    	        getOutputCompressorClass(job, GzipCodec.class);
+		    	      codec = (CompressionCodec) ReflectionUtils.newInstance(codecClass, conf);
+		    	      extension = codec.getDefaultExtension();
 		}
 		Path file = getDefaultWorkFile(job, extension);
 		FileSystem fs = file.getFileSystem(conf);
 		if (!(isCompressed)) {
 			FSDataOutputStream fileOut = fs.create(file, false);
-			return new LineRecordWriter(fileOut, keyValueSeparator);
+		      return new LineRecordWriter<K, V>(fileOut, keyValueSeparator);
 		}
 		FSDataOutputStream fileOut = fs.create(file, false);
-		return new LineRecordWriter(new DataOutputStream(
-				codec.createOutputStream(fileOut)), keyValueSeparator);
+	      return new LineRecordWriter<K, V>(new DataOutputStream
+                  (codec.createOutputStream(fileOut)),
+                  keyValueSeparator);
 	}
 
 	protected static class LineRecordWriter<K, V> extends RecordWriter<K, V> {
@@ -51,7 +52,7 @@ public class GbkOutputFormat<K, V> extends FileOutputFormat<K, V> {
 
 		static {
 			try {
-				newline = "\n".getBytes("gb18030");
+				newline = "\n".getBytes(gbk);
 			} catch (UnsupportedEncodingException uee) {
 				throw new IllegalArgumentException(
 						"can't find gb18030 encoding");
@@ -61,7 +62,7 @@ public class GbkOutputFormat<K, V> extends FileOutputFormat<K, V> {
 		public LineRecordWriter(DataOutputStream out, String keyValueSeparator) {
 			this.out = out;
 			try {
-				this.keyValueSeparator = keyValueSeparator.getBytes("gb18030");
+				this.keyValueSeparator = keyValueSeparator.getBytes(gbk);
 			} catch (UnsupportedEncodingException uee) {
 				throw new IllegalArgumentException(
 						"can't find gb18030 encoding");
@@ -77,7 +78,7 @@ public class GbkOutputFormat<K, V> extends FileOutputFormat<K, V> {
 				return;
 			}
 
-			this.out.write(o.toString().getBytes("gb18030"));
+			this.out.write(o.toString().getBytes(gbk));
 		}
 
 		public synchronized void write(K key, V value) throws IOException {

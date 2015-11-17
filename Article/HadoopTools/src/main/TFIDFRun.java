@@ -3,7 +3,6 @@ package main;
 import article.IDF;
 import article.TFIDF;
 import java.io.IOException;
-import java.io.PrintStream;
 
 public class TFIDFRun {
 	String datapath = "";
@@ -34,10 +33,9 @@ public class TFIDFRun {
 		System.out.println("============ calculate IDF value ===============");
 		IDF idf = new IDF(this.datapath, this.idfpath, this.length);
 		idf.run();
-
-		System.out
-				.println("============ calculate TFIDF value ===============");
+		/*
+		System.out.println("============ calculate TFIDF value ===============");
 		TFIDF tfidf = new TFIDF(this.datapath, this.idfpath, this.tfidfpath);
-		tfidf.run();
+		tfidf.run();*/
 	}
 }

@@ -3,21 +3,16 @@ package tools;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Method;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.Mapper.Context;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.mapreduce.Reducer.Context;
-import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 
 public class HadoopFileOperation {
+	@SuppressWarnings("rawtypes")
 	public static void ReducerReadFile(Reducer.Context context, String path,
 			ReadOneLineInterface interfc) throws IOException,
 			InterruptedException {
@@ -51,6 +46,7 @@ public class HadoopFileOperation {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static void MapperReadFile(Mapper.Context context, String path,
 			ReadOneLineInterface interfc) throws IOException,
 			InterruptedException {
@@ -98,29 +94,6 @@ public class HadoopFileOperation {
 			path = path + arg + "/";
 		}
 		return path.substring(0, path.length() - 1);
-	}
-
-	public static String MapperGetDate(Mapper.Context context)
-			throws IOException {
-		InputSplit split = context.getInputSplit();
-		Class splitClass = split.getClass();
-		FileSplit fileSplit = null;
-		if (splitClass.equals(FileSplit.class)) {
-			fileSplit = (FileSplit) split;
-		} else if (splitClass.getName().equals(
-				"org.apache.hadoop.mapreduce.lib.input.TaggedInputSplit")) {
-			try {
-				Method getInputSplitMethod = splitClass.getDeclaredMethod(
-						"getInputSplit", new Class[0]);
-				getInputSplitMethod.setAccessible(true);
-				fileSplit = (FileSplit) getInputSplitMethod.invoke(split,
-						new Object[0]);
-			} catch (Exception e) {
-				throw new IOException(e);
-			}
-		}
-		String path = fileSplit.getPath().toString();
-		return LineSplit.split(path, "/", 8);
 	}
 
 	public static abstract interface ReadOneLineInterface {

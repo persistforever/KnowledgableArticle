@@ -13,10 +13,7 @@ public class IDFReducer extends Reducer<Text, IntWritable, Text, Text> {
 		for (IntWritable num : value) {
 			sum += num.get();
 		}
-		double idf = Math.log(1.0D
-				* Integer.parseInt(context.getConfiguration().get("length"))
-				/ sum);
-		String stridf = String.valueOf(idf);
-		context.write(new Text(key), new Text(stridf));
+		double idf = Math.log(1.0 * Integer.parseInt(context.getConfiguration().get("length")) / sum);
+		context.write(new Text(key), new Text(String.valueOf(idf)));
 	}
 }

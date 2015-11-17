@@ -3,11 +3,8 @@ package article;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.Mapper.Context;
-
 import tools.LineSplit;
 
 public class TFMapper extends Mapper<Object, Text, Text, Text> {
@@ -20,7 +17,7 @@ public class TFMapper extends Mapper<Object, Text, Text, Text> {
 		String content = LineSplit.split(line, "\t", 2);
 		ArrayList<String> wordList = LineSplit.split(content, " ");
 		for (String word : wordList) {
-			context.write(new Text(word), new IntWritable(1));
+			context.write(new Text(word), new Text(id));
 		}
 	}
 }

@@ -13,6 +13,7 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
+import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -31,7 +32,7 @@ public class ArticleLucene {
 	ArrayList<Article> artlist = new ArrayList<Article>();
     File fileDir = new File("E://file/knowledgable/lucene/input/4");
     File indexDir = new File("E://file/knowledgable/lucene/index"); 
-    File outputDir = new File("E://file/knowledgable/lucene/output/queryresult"); 
+    File outputDir = new File("E://file/knowledgable/lucene/output/queryresult.csv"); 
 	
 	/* methods */
     public ArticleLucene() throws IOException {
@@ -65,12 +66,12 @@ public class ArticleLucene {
             Field idfield = new Field("id", article.id, Field.Store.YES, Field.Index.NO);  
             Field urlfield = new Field("url", article.url, Field.Store.YES, Field.Index.NO);   
             Field cpltlfield = new Field("cpltitle", article.completetitle, Field.Store.YES, Field.Index.NO);
-            Field keytlfield = new Field("keytitle", article.keytitle, Field.Store.YES, 
+            Field contentfield = new Field("content", article.content, Field.Store.YES, 
             		Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);  
             document.add(idfield); 
             document.add(urlfield);
             document.add(cpltlfield);
-            document.add(keytlfield);
+            document.add(contentfield);
             indexWriter.addDocument(document);
         }
         indexWriter.close();
@@ -82,11 +83,12 @@ public class ArticleLucene {
     	IndexReader reader = IndexReader.open(FSDirectory.open(this.indexDir));
         IndexSearcher searcher = new IndexSearcher(reader);  
     	ScoreDoc[] hits = null;
-        Query query = null; 
+        Query query = null;
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);  
         ArrayList<Article> resultlist = new ArrayList<Article>();
-        try {  
-            QueryParser qp = new QueryParser(Version.LUCENE_36, "keytitle", analyzer);  
+        try {
+        	String[] fields = {"cpltitle", "content"};
+        	QueryParser qp = new MultiFieldQueryParser(Version.LUCENE_36, fields, analyzer);
             query = qp.parse(querystring);  
         } catch (ParseException e) {  
         }  
@@ -103,12 +105,12 @@ public class ArticleLucene {
     		         attributeslist.add(doc.get("id").toString());
     		         attributeslist.add(doc.get("url").toString());
     		         attributeslist.add(doc.get("cpltitle").toString());
-    		         attributeslist.add(doc.get("keytitle").toString());
+    		         attributeslist.add(doc.get("content").toString());
     		         resultlist.add(new Article(attributeslist));
                 }    
             }
             searcher.close();
         }
-        FileOperator.ArticleFileWriter(this.outputDir.getPath(), resultlist, "gb18030");
+        FileOperator.ArticleCSVWriter(this.outputDir.getPath(), resultlist, "gb18030");
     }
 }
