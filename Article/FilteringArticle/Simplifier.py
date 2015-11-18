@@ -7,19 +7,21 @@ content simplifier
 import codecs
 import numpy as np
 import re
+import os
 from BasicClass import Article
 import gensim
 
 
 class TitleSimplifier :
     # attributes
-    sppath = 'E://file/knowledgable/input/tools/titlespst'
+    sppath = os.path.abspath('E:/file/knowledgable/input/tools/titlespst')
+    modelpath = os.path.abspath('E:/file/knowledgable/input/tools/vectors.txt')
     spdict = dict()
     
     # methods    
     def __init__(self) :
         self.spdict = self.importSpDict(self.sppath)
-        self.vecmodel = gensim.models.Word2Vec.load('vectors.txt')
+        self.vecmodel = gensim.models.Word2Vec.load(self.modelpath)
         
     def importSpDict(self, sppath) :
         spdict = dict()

@@ -6,7 +6,7 @@ import math
 
 class Conf :
     # attributes
-    filename = 'E://file/knowledgable/labeling/settings.ini'
+    filename = 'E:\file\knowledgable\labeling\settings.ini'
 
     # methods
     def readConf(self) :

@@ -9,7 +9,6 @@ import Classifier
 import Simplifier
 import math
 import lda
-import TopicModel
 from BasicClass import Article
 
 
@@ -162,11 +161,6 @@ class Corpus :
         # simplifier.featureSimplifying(artlist)
         simplifier.modelSimplifying(artlist)
         print 'simpltfying title finished ...'
-
-    def constrTree(self) :
-        model = TopicModel.LDA()
-        topiclist = model.constrTree(self.artlist)
-        return topiclist
             
     # ----- write methods -----
     def writeLine(self, datapath) :
@@ -226,31 +220,11 @@ class Corpus :
             for article in outartlist :
                 fw.writelines(article.printArticle().encode('gb18030') + '\n')
 
-    def writeTopicWord(self, datapath, wordlist) :
-        csvfile = file(datapath, 'wb')
-        writer = csv.writer(csvfile)
-        for word in wordlist :
-            writer.writerow([w.encode('gb18030') for w in word])
-        csvfile.close()
-
-    def writeArticleTopic(self, datapath) :
-        csvfile = file(datapath, 'wb')
-        writer = csv.writer(csvfile)
-        for article in self.artlist :
-            out = []
-            out.append(article.id.encode('gb18030'))
-            out.append(article.url.encode('gb18030'))
-            out.append(article.title.encode('gb18030'))
-            for topic in article.topiclist :
-                out.append(str(topic).encode('gb18030'))
-            writer.writerow(out)
-        csvfile.close()
-
 
 # ---------- FilePath : list of file path ----------
 class FilePath :
     # attributes
-    maindir = 'E://file/knowledgable/'
+    maindir = os.path.abspath('E:/file/knowledgable/')
     
     # methods
     def getInputArticle(self, type, date) :
@@ -317,21 +291,6 @@ class FilePath :
         path = os.path.abspath(self.maindir)
         path = os.path.join(path, 'output', type, date, 'simplyknowledgablearticle')
         return path
-
-    def getOutputSimilarity(self, type, date) :
-        path = os.path.abspath(self.maindir)
-        path = os.path.join(path, 'output', type, date, 'featuresimilarity')
-        return path
-
-    def getOutputTopicWord(self, type, date) :
-        path = os.path.abspath(self.maindir)
-        path = os.path.join(path, 'output', type, date, 'topicword.csv')
-        return path
-
-    def getOutputArticleTopic(self, type, date) :
-        path = os.path.abspath(self.maindir)
-        path = os.path.join(path, 'output', type, date, 'articletopic.csv')
-        return path
         
 
 # ---------- classifying ----------
@@ -355,24 +314,13 @@ def titleSimplifying(type, date) :
     corpus.titleSimplifying()
     corpus.writeSimplyArticle(filepath.getOutputSimplyArticle(type, date))
 
-# ---------- title simplifying ----------
-def constrTree(type, data) :
-    corpus = Corpus()
-    filepath = FilePath()
-    corpus.importArticle(filepath.getOutputKnowledgablearticle(type, date))
-    corpus.importKeyWord(filepath.getOutputKeyword(type, date))
-    topiclist = corpus.constrTree()
-    corpus.writeTopicWord(filepath.getOutputTopicWord(type, data), topiclist)
-    corpus.writeArticleTopic(filepath.getOutputArticleTopic(type, date))
-
 
 # ---------- MAIN ----------
-if __name__ == '__main__' :
-    type = '4'
-    date = '20150714'
-else :
+if len(sys.argv) == 3 :
     type = sys.argv[1]
     date = sys.argv[2]
-# classifying(type, date)
-# titleSimplifying(type, date)
-constrTree(type, date)
+else :
+    type = '4'
+    date = '20150722'
+classifying(type, date)
+titleSimplifying(type, date)

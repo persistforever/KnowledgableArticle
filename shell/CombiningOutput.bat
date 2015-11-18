@@ -1,0 +1,1 @@
+copy E:\file\knowledgable\lucene\input\4\2015* E:\file\knowledgable\lucene\input\4\combine
