@@ -261,5 +261,6 @@ class Article :
         line += self.id + u'\t'
         line += self.url + u'\t'
         line += self.title + u'\t'
-        line += self.printOriginFeatureSet()
+        line += self.content + u'\t'
+        line += self.testlabel + u'\t'
         return line.strip()

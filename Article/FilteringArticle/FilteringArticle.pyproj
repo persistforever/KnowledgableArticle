@@ -6,7 +6,7 @@
     <ProjectGuid>cd7445f1-befb-4724-baaa-6e1043271308</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>Frame.py</StartupFile>
+    <StartupFile>TopicModel.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>

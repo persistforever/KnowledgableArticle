@@ -1,1 +1,1 @@
-python E:\github\KnowledgableArticle\Article\FilteringArticle\Frame.py 4 20150722
+python E:\github\KnowledgableArticle\Article\FilteringArticle\Frame.py 4 20150724

@@ -29,6 +29,16 @@ public class BOWReducer extends Reducer<Text, Text, Text, Text> {
 
 		HadoopFileOperation.ReducerReadFile(context, "wordset", idfMapReader);
 	}
+	
+	public boolean allZeros(String [] bowvector) {
+		boolean allzeros = true ;
+		for(int i=0 ; i<bowvector.length ; i++) {
+			if (bowvector[i] != "0") {
+				allzeros = false;
+			}
+		}
+		return allzeros;
+	}
 
 	protected void reduce(Text key, Iterable<Text> value,
 			Reducer<Text, Text, Text, Text>.Context context)
@@ -44,10 +54,12 @@ public class BOWReducer extends Reducer<Text, Text, Text, Text> {
 				bowvector[this.wordindex.get(word)-1] = num;
 			}
 		}
-		String outstr = "";
-		for (int i=0 ; i<bowvector.length ; i++) {
-			outstr += bowvector[i] + " ";
+		if (!allZeros(bowvector)) {
+			String outstr = "";
+			for (int i=0 ; i<bowvector.length ; i++) {
+				outstr += bowvector[i] + " ";
+			}
+			context.write(new Text(key), new Text(outstr.trim()));
 		}
-		context.write(new Text(key), new Text(outstr.trim()));
 	}
 }
