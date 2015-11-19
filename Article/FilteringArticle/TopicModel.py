@@ -11,9 +11,6 @@ import csv
 from BasicClass import Article
 
 
-class TreeNode :
-    pass
-
 class LDA :
     # ----- import methods -----
     def importWordIDF(self, datapath) :
@@ -110,12 +107,11 @@ class LDA :
         self.constrSubTree(np.array(negabow), indexword, level+1)
     
     def process(self) :
-        '''
         worddict2 = self.importWordIDF('E:\\download\\2_idf')
         worddict4 = self.importWordIDF('E:\\download\\4_idf')
         worddict5 = self.importWordIDF('E:\\download\\5_idf')
         worddict6 = self.importWordIDF('E:\\download\\6_idf')
-        wordlist = self.compare(worddict4, [worddict2, worddict5, worddict6])
+        wordlist = self.compare(worddict2, [worddict4, worddict5, worddict6])
         self.writeKeyWord('E:\\download\\cmpidf', wordlist)
         '''
         bagofword = self.importBOW('E:\\download\\bagofword')
@@ -128,12 +124,15 @@ class LDA :
         self.constrSubTree(bagofword, indexword, 0)
         #wordlist = self.constrTree(bagofword)
         #self.writeWordTopic('E:\\download\\wordtopic.csv', wordlist)
+        '''
 
     # ----- write methods -----
     def writeKeyWord(self, datapath, wordlist) :
         with open(datapath, 'w') as fw :
-            for word, score in wordlist :
-                fw.writelines(word.encode('gb18030') + '\t' + str(score).encode('gb18030') + '\n')
+            index = 1
+            for word, score in wordlist[0:5000] :
+                fw.writelines(word.encode('gb18030') + '\t' + str(index).encode('gb18030') + '\n')
+                index += 1
 
     def writeWordTopic(self, datapath, wordlist) :
         with open(datapath, 'wb') as fw :

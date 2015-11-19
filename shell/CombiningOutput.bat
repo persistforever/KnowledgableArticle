@@ -1,1 +1,1 @@
-copy E:\file\knowledgable\lucene\input\4\2015* E:\file\knowledgable\lucene\input\4\combine
+copy E:\file\knowledgable\output\4\knowledgeable\2015* E:\file\knowledgable\lucene\input\4\knowledgeable

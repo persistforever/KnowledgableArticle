@@ -6,7 +6,7 @@
     <ProjectGuid>cd7445f1-befb-4724-baaa-6e1043271308</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>TopicModel.py</StartupFile>
+    <StartupFile>Tag.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -28,15 +28,24 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BasicClass.py" />
+    <Compile Include="Basic\Article.py" />
+    <Compile Include="Basic\Word.py" />
+    <Compile Include="Basic\__init__.py" />
     <Compile Include="Classifier.py" />
     <Compile Include="FeatureSelector.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Frame.py" />
     <Compile Include="Simplifier.py" />
+    <Compile Include="Tag.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TopicModel.py">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Basic\" />
   </ItemGroup>
   <Import Condition="Exists($(PtvsTargetsFile))" Project="$(PtvsTargetsFile)" />
   <Import Condition="!Exists($(PtvsTargetsFile))" Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />

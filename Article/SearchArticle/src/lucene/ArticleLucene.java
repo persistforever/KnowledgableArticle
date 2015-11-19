@@ -51,6 +51,7 @@ public class ArticleLucene {
                 }
             }
         }
+        System.out.println(this.artlist.size());
         System.out.println("importing article finished ...");
 	}
 
@@ -63,14 +64,15 @@ public class ArticleLucene {
         IndexWriter indexWriter = new IndexWriter(dir,iwc);
         for (Article article: this.artlist) {
             Document document = new Document();
-            Field idfield = new Field("id", article.id, Field.Store.YES, Field.Index.NO);  
-            Field urlfield = new Field("url", article.url, Field.Store.YES, Field.Index.NO);   
-            Field cpltlfield = new Field("cpltitle", article.completetitle, Field.Store.YES, Field.Index.NO);
+            Field idfield = new Field("id", article.id, Field.Store.YES, Field.Index.NO);
+            Field urlfield = new Field("url", article.url, Field.Store.YES, Field.Index.NO);
+            Field titlefield = new Field("title", article.title, Field.Store.YES, 
+            		Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);  
             Field contentfield = new Field("content", article.content, Field.Store.YES, 
             		Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);  
             document.add(idfield); 
             document.add(urlfield);
-            document.add(cpltlfield);
+            document.add(titlefield);
             document.add(contentfield);
             indexWriter.addDocument(document);
         }
@@ -87,13 +89,13 @@ public class ArticleLucene {
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);  
         ArrayList<Article> resultlist = new ArrayList<Article>();
         try {
-        	String[] fields = {"cpltitle", "content"};
+        	String[] fields = {"title", "content"};
         	QueryParser qp = new MultiFieldQueryParser(Version.LUCENE_36, fields, analyzer);
             query = qp.parse(querystring);  
         } catch (ParseException e) {  
         }  
         if (searcher != null) {  
-            TopDocs results = searcher.search(query, 10);
+            TopDocs results = searcher.search(query, 100);
             hits = results.scoreDocs;
             if (hits.length > 0) { 
                 System.out.println("找到:" + hits.length + " 个结果!");
@@ -104,7 +106,7 @@ public class ArticleLucene {
     		         ArrayList<String> attributeslist = new ArrayList<String>();
     		         attributeslist.add(doc.get("id").toString());
     		         attributeslist.add(doc.get("url").toString());
-    		         attributeslist.add(doc.get("cpltitle").toString());
+    		         attributeslist.add(doc.get("title").toString());
     		         attributeslist.add(doc.get("content").toString());
     		         resultlist.add(new Article(attributeslist));
                 }    
@@ -112,5 +114,6 @@ public class ArticleLucene {
             searcher.close();
         }
         FileOperator.ArticleCSVWriter(this.outputDir.getPath(), resultlist, "gb18030");
+        System.out.println("writing article finished ...");
     }
 }
