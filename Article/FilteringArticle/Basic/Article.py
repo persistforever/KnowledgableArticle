@@ -1,21 +1,13 @@
 ﻿# -*- encoding = gb18030 -*-
 '''
 Basic module
-	Article class
+    Article class
 '''
+from file.file_operator import CSVFileOperator
 
 
 class Article :
-
-    # ----- init method -----
-    def __init__(self, id='', url='', title='', content='', sptitle=[], spcontent=[]) :
-        self.id = id
-        self.url = url
-        self.title = title
-        self.content = content
-        self.sptitle = []
-        self.spcontent = []
-
+    """
     # ----- features -----
     # --- 1. token level ---
     artlength = 0 # length of article
@@ -52,6 +44,23 @@ class Article :
     mvar = 0.0 # varance of mood word
     qavg = 0.0 # average number of quantity word
     qvar = 0.0 # varance of quantity word
+    """
+
+    def __init__(self) :
+        pass
+
+    def set_params(self, **params) :
+        """ Set parameters of the article. """
+        for key, value in params.iteritems() :
+            setattr(self, key, value)
+
+    def import_article(self, data) :
+        """ Import article from. 
+        The attributes of article is [id, url, title, content]. """
+        self.id = data[0]
+        self.url = data[1]
+        self.title = data[2]
+        self.content = data[3]
                 
     # ----- import methods -----
     def importInfo(self, data) :

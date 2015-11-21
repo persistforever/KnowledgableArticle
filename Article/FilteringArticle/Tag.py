@@ -6,10 +6,17 @@ tag article
 import codecs
 import math
 import numpy as np
-import lda
 import os
 import csv
 from Basic import Article
+
+
+class TagNode :
+    # ----- init method -----
+    def __init__(self, word) :
+        self.word = word
+        self.posichild = None
+        self.negachild = None
 
 
 class Tag :
@@ -62,7 +69,10 @@ class Tag :
             self.indexid[index] = id
         print 'constructing idindexdict finished ...'
 
-    def constrSubTree(self, condidatearticle) :
+    def constrTagTree(self) :
+        pass
+
+    def findArticleSet(self, condidatearticle) :
         if len(condidatearticle) <= 1 :
             return condidatearticle, True
         bagofword = []
@@ -110,7 +120,7 @@ class Tag :
         condidatearticle, stop = self.constrSubTree(self.artlist)
         while stop == False :
             print condidatearticle[0].id
-            condidatearticle, stop = self.constrSubTree(condidatearticle)
+            condidatearticle, stop = self.findArticleSet(condidatearticle)
 
     # ----- write methods -----
     def writeKeyWord(self, datapath, wordlist) :
