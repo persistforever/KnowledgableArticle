@@ -6,7 +6,7 @@
     <ProjectGuid>cd7445f1-befb-4724-baaa-6e1043271308</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>file\test.py</StartupFile>
+    <StartupFile>wechat\main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -28,42 +28,42 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BasicClass.py" />
-    <Compile Include="basic\article.py" />
-    <Compile Include="basic\corpus.py">
+    <Compile Include="wechat\basic\article.py" />
+    <Compile Include="wechat\basic\corpus.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="basic\test.py" />
-    <Compile Include="basic\word.py" />
-    <Compile Include="basic\__init__.py" />
+    <Compile Include="wechat\basic\test_basic.py" />
+    <Compile Include="wechat\basic\word.py" />
+    <Compile Include="wechat\basic\__init__.py" />
     <Compile Include="Classifier.py" />
-    <Compile Include="classifier\base.py">
+    <Compile Include="wechat\classifier\base.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="classifier\supervised_classifier.py">
+    <Compile Include="wechat\classifier\supervised_classifier.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="classifier\unsupervised_classifier.py">
+    <Compile Include="wechat\classifier\unsupervised_classifier.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="classifier\__init__.py">
+    <Compile Include="wechat\classifier\__init__.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FeatureSelector.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="file\base.py">
+    <Compile Include="wechat\file\base.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="file\file_operator.py">
+    <Compile Include="wechat\file\file_operator.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="file\path_manager.py">
+    <Compile Include="wechat\file\path_manager.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="file\test.py">
+    <Compile Include="wechat\file\test_file.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="file\__init__.py">
+    <Compile Include="wechat\file\__init__.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Frame.py" />
@@ -74,11 +74,15 @@
     <Compile Include="TopicModel.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="wechat\main.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="basic\" />
-    <Folder Include="classifier\" />
-    <Folder Include="file\" />
+    <Folder Include="wechat\basic\" />
+    <Folder Include="wechat\classifier\" />
+    <Folder Include="wechat\file\" />
+    <Folder Include="wechat\" />
   </ItemGroup>
   <Import Condition="Exists($(PtvsTargetsFile))" Project="$(PtvsTargetsFile)" />
   <Import Condition="!Exists($(PtvsTargetsFile))" Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />

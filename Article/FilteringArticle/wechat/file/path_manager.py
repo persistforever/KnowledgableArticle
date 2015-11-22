@@ -1,4 +1,4 @@
-# -*- encoding = gb18030 -*-
+﻿# -*- encoding = gb18030 -*-
 """ Manager of project's global path """
 
 import os
@@ -41,9 +41,9 @@ class PathManager :
         path = os.path.join(path, 'input', type, date, 'info')
         return path
     
-    def get_input_traindataset(self, type) :
+    def get_input_traindataset(self) :
         path = os.path.abspath(self.project_dir) 
-        path = os.path.join(path, 'input', type, 'traindataset')
+        path = os.path.join(path, 'input', self.type, 'traindataset')
         return path
     
     def get_output_origindata(self) :
@@ -76,9 +76,9 @@ class PathManager :
         path = os.path.join(path, 'output', type, date, 'keyword_title')
         return path
     
-    def get_output_testdataset(self, type, date) :
+    def get_output_testdataset(self) :
         path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'output', type, date, 'testdataset')
+        path = os.path.join(path, 'output', self.type, self.date, 'testdataset')
         return path
     
     def get_output_knowledgablearticle(self, type, date) :

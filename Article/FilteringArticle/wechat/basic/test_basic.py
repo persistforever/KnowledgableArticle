@@ -2,6 +2,7 @@
 """ Test of basic """
 
 import sys
+import os
 import unittest
 from corpus import Corpus
 
@@ -10,7 +11,7 @@ class TestCorpus(unittest.TestCase) :
 
     def test_path(self) :
         corpus = Corpus()
-        print 
+        corpus.read_article_list()
         raw_input()
 
 

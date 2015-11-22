@@ -1,8 +1,5 @@
 ﻿# -*- encoding = gb18030 -*-
-'''
-Basic module 
-	Word class
-'''
+""" Class word """
 
 
 class Word :
