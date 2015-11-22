@@ -1,4 +1,4 @@
-# -*- encoding = gb18030 -*-
+﻿# -*- encoding = gb18030 -*-
 """
 Main entry of the project
     first step: filtering knowledgeable article.
@@ -11,8 +11,8 @@ def classifying() :
     corpus.read_train_dataset()
     corpus.read_article_list()
     corpus.read_test_dataset()
-    #sortedlist = corpus.classifying(2)
-    #corpus.writeKnowledgableArticle(filepath.getOutputKnowledgablearticle(type, date), sortedlist, rate=0.2)
+    corpus.classifying(2)
+    corpus.write_knowledgeable_article(rate=0.2)
 
 
 if __name__ == '__main__' :

@@ -1,13 +1,17 @@
-# -*- encoding = gb18030 -*-
-""" Basic class of Classifier """
+﻿# -*- encoding = gb18030 -*-
+""" unsupervised classifier 
+    1. MultiConditionClassifier 
+"""
 from base import BaseClassifier
 
 
 class MultiConditionClassifier(BaseClassifier) :
 
-    def classifying(self, article_list) :
+    def sorting(self, article_list) :
         """ Sort the article list within multiple condition. """
-        sortedlist = sorted(article_list, key=lambda x: ( \
-            x.featureset[21], x.featureset[23], x.featureset[25], x.featureset[27], \
-            -x.featureset[15], -x.featureset[13], -x.featureset[1]), reverse=True)
+        sorted_article_list = sorted(article_list, key=lambda article: ( \
+            article.feature_set[21], article.feature_set[23], \
+            article.feature_set[25], article.feature_set[27], \
+            -article.feature_set[15], -article.feature_set[13], \
+            -article.feature_set[1]), reverse=True)
         return sorted_article_list

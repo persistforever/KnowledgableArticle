@@ -64,9 +64,9 @@ class Article :
     def get_article(self) :
         """ get basic attributes of article. 
         The attributes of article is [id, url, title, content]. """
-        line = ''
-        line += self.id + u'\t'
-        line += self.url + u'\t'
-        line += self.title + u'\t'
-        line += self.content + u'\t'
-        return line.strip()
+        line = []
+        line.append(self.id)
+        line.append(self.url)
+        line.append(self.title)
+        line.append(self.content)
+        return line

@@ -27,7 +27,6 @@
     <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="BasicClass.py" />
     <Compile Include="wechat\basic\article.py" />
     <Compile Include="wechat\basic\corpus.py">
       <SubType>Code</SubType>
@@ -35,7 +34,6 @@
     <Compile Include="wechat\basic\test_basic.py" />
     <Compile Include="wechat\basic\word.py" />
     <Compile Include="wechat\basic\__init__.py" />
-    <Compile Include="Classifier.py" />
     <Compile Include="wechat\classifier\base.py">
       <SubType>Code</SubType>
     </Compile>
@@ -46,9 +44,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="wechat\classifier\__init__.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FeatureSelector.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="wechat\file\base.py">
@@ -66,12 +61,7 @@
     <Compile Include="wechat\file\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Frame.py" />
-    <Compile Include="Simplifier.py" />
     <Compile Include="Tag.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TopicModel.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="wechat\main.py">

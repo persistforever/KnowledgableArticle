@@ -19,18 +19,6 @@ class PathManager :
         self.type = _cfg.get('corpus', 'type')
         self.date = _cfg.get('corpus', 'date')
 
-    def csv_file(self, file_path) :
-        _parent_dir = os.path.pardir
-        (file_name, file_type) = os.path.splitext(file_path)
-        path = file_name + '.csv'
-        return path
-
-    def text_file(self, file_path) :
-        _parent_dir = os.path.pardir
-        (file_name, file_type) = os.path.splitext(file_path)
-        path = file_name + '.txt'
-        return path
-
     def get_input_article(self) :
         path = os.path.abspath(self.project_dir) 
         path = os.path.join(path, 'input', self.type, self.date, 'article')
@@ -81,7 +69,7 @@ class PathManager :
         path = os.path.join(path, 'output', self.type, self.date, 'testdataset')
         return path
     
-    def get_output_knowledgablearticle(self, type, date) :
+    def get_output_knowledgable(self) :
         path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'output', type, date, 'knowledgablearticle')
+        path = os.path.join(path, 'output', self.type, self.date, 'knowledgeable')
         return path
