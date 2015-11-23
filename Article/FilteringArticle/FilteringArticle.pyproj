@@ -59,15 +59,16 @@
     <Compile Include="wechat\file\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Tag.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="wechat\main.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="wechat\tag\filter_word.py">
+    <Compile Include="wechat\tag\tag_tree.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="wechat\tag\word_bag.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="wechat\tag\__init__.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wechat\basic\" />

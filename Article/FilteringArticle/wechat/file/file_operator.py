@@ -3,6 +3,7 @@
 import codecs
 import csv
 import os
+import xml.dom.minidom
 from base import BaseFileOperator
 
 
@@ -54,4 +55,32 @@ class TextFileOperator(BaseFileOperator) :
         _parent_dir = os.path.pardir
         (file_name, file_type) = os.path.splitext(file_path)
         path = file_name + '.txt'
+        return path
+
+
+class XmlFileOperator(BaseFileOperator) :
+
+    def writing(self, root, file_name):
+        """ Write the file as xml file. """
+        impl = xml.dom.minidom.getDOMImplementation()
+        dom = impl.createDocument(None, 'xml', None)
+        doc = dom.documentElement
+        self._sub_writing(root, doc, dom)
+        with codecs.open(self._xml_file(file_name), mode='w', encoding='gb18030') as fw :
+            dom.writexml(fw, addindent='  ', newl='\n', encoding='gb18030')
+
+    def _sub_writing(self, node, parentdom, dom) :
+        nd = dom.createElement('node')
+        item = dom.createElement('text')
+        itemtext = dom.createTextNode(node.text)
+        item.appendChild(itemtext)
+        nd.appendChild(item)
+        for child in node.child_list :
+            self._sub_writing(child, nd, dom)
+        parentdom.appendChild(nd)
+
+    def _xml_file(self, file_path) :
+        _parent_dir = os.path.pardir
+        (file_name, file_type) = os.path.splitext(file_path)
+        path = file_name + '.xml'
         return path

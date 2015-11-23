@@ -15,10 +15,21 @@ class Word :
         elif len(line.split(':')) == 2 :
             self.name = line.split(':')[0]
             self.feature = line.split(':')[1]
+        elif len(line.split(':')) > 2 :
+            self.name = ''
+            for part in line.split(':')[0:-2] :
+                self.name += part + ':'
+            self.name += line.split(':')[-2]
+            self.feature = line.split(':')[-1]
         else :
             self.name = None
             self.feature = None
 
 
     def toString(self) :
-        return self.name + ':' + self.feature
+        name, feature = '', ''
+        if self.name != None :
+            name = self.name
+        if self.feature != None :
+            feature = self.feature
+        return name + ':' + feature

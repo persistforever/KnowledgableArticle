@@ -40,9 +40,7 @@ public class TFMapper extends Mapper<Object, Text, Text, Text> {
 				}
 			}
 			for (Map.Entry<String, Integer> entry : wordmap.entrySet()) {
-				if (!LineSplit.split(entry.getKey(), ":", 1).equals("w")) {
-					context.write(new Text(id), new Text(entry.getKey() + "\t" + entry.getValue()));
-				}
+				context.write(new Text(id), new Text(entry.getKey() + "\t" + entry.getValue()));
 			}
 		}
 	}

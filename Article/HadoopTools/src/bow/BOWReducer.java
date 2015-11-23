@@ -2,6 +2,7 @@ package bow;
 
 import java.io.IOException;
 import java.util.HashMap;
+
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
@@ -44,6 +45,7 @@ public class BOWReducer extends Reducer<Text, Text, Text, Text> {
 			Reducer<Text, Text, Text, Text>.Context context)
 			throws IOException, InterruptedException {
 		String [] bowvector = new String [this.wordindex.size()];
+		System.out.println(this.wordindex.size());
 		for (int i=0 ; i<bowvector.length ; i++) {
 			bowvector[i] = "0";
 		}

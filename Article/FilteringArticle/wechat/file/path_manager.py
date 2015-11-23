@@ -39,6 +39,11 @@ class PathManager :
         path = os.path.join(path, 'input', self.type, 'wordbag')
         return path
     
+    def get_input_bagofword(self) :
+        path = os.path.abspath(self.project_dir) 
+        path = os.path.join(path, 'input', self.type, 'bagofword')
+        return path
+    
     def get_output_origindata(self) :
         path = os.path.abspath(self.project_dir) 
         path = os.path.join(path, 'output', self.type, self.date, 'origindata')
@@ -77,4 +82,14 @@ class PathManager :
     def get_output_knowledgable(self) :
         path = os.path.abspath(self.project_dir)
         path = os.path.join(path, 'output', self.type, self.date, 'knowledgeable')
+        return path
+    
+    def get_output_wordtopic(self) :
+        path = os.path.abspath(self.project_dir)
+        path = os.path.join(path, 'output', self.type, self.date, 'wordtopic')
+        return path
+    
+    def get_output_tagtree(self) :
+        path = os.path.abspath(self.project_dir)
+        path = os.path.join(path, 'output', self.type, self.date, 'tagtree')
         return path

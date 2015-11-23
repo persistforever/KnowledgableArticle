@@ -2,6 +2,7 @@
 """ Class article """
 
 from word import Word
+import numpy as np
 
 
 class Article :
@@ -60,6 +61,14 @@ class Article :
         self.feature_set = []
         for value in data :
             self.feature_set.append(float(value))
+            
+    def import_bagofword(self, data) :
+        """ Import bagofword vector of article. 
+        The entry of vecotr is N words. """
+        self.bagofword_vector = []
+        for value in data :
+            self.bagofword_vector.append(int(value))
+        self.bagofword_vector = np.array(self.bagofword_vector)
     
     def get_article(self) :
         """ get basic attributes of article. 

@@ -4,7 +4,7 @@ Main entry of the project
     first step: filtering knowledgeable article.
 """
 from basic.corpus import Corpus
-from tag.filter_word import WordBag
+from tag.word_bag import WordBag
 
 
 def classifying() :
@@ -16,7 +16,8 @@ def classifying() :
     corpus.write_knowledgeable_article(rate=0.2)
 
 def simplifying_article() :
-    word_bag = WordBag.get_word_bag()
+    wordbag = WordBag()
+    wordbag.get_word_bag()
 
 
 if __name__ == '__main__' :
