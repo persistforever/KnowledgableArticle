@@ -34,6 +34,11 @@ class PathManager :
         path = os.path.join(path, 'input', self.type, 'traindataset')
         return path
     
+    def get_input_wordbag(self) :
+        path = os.path.abspath(self.project_dir) 
+        path = os.path.join(path, 'input', self.type, 'wordbag')
+        return path
+    
     def get_output_origindata(self) :
         path = os.path.abspath(self.project_dir) 
         path = os.path.join(path, 'output', self.type, self.date, 'origindata')

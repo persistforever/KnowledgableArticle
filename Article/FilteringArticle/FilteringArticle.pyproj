@@ -28,9 +28,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="wechat\basic\article.py" />
-    <Compile Include="wechat\basic\corpus.py">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="wechat\basic\corpus.py" />
     <Compile Include="wechat\basic\test_basic.py" />
     <Compile Include="wechat\basic\word.py" />
     <Compile Include="wechat\basic\__init__.py" />
@@ -67,12 +65,16 @@
     <Compile Include="wechat\main.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="wechat\tag\filter_word.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wechat\basic\" />
     <Folder Include="wechat\classifier\" />
     <Folder Include="wechat\file\" />
     <Folder Include="wechat\" />
+    <Folder Include="wechat\tag\" />
   </ItemGroup>
   <Import Condition="Exists($(PtvsTargetsFile))" Project="$(PtvsTargetsFile)" />
   <Import Condition="!Exists($(PtvsTargetsFile))" Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
