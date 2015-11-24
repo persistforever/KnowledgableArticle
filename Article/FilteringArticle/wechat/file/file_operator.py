@@ -12,10 +12,10 @@ class CSVFileOperator(BaseFileOperator) :
     def reading(self, file_name):
         """ Read the file as csv file. """
         self.data_list = []
-        with codecs.open(file_name, mode='r', encoding='gb18030') as fo :
+        with open(self._csv_file(file_name), mode='rb') as fo :
             csv_reader = csv.reader(fo)
             for line in csv_reader :
-                self.data_list.append(line)
+                self.data_list.append([entry.decode('gb18030') for entry in line])
         return self.data_list
 
     def writing(self, data_list, file_name):
@@ -59,6 +59,16 @@ class TextFileOperator(BaseFileOperator) :
 
 
 class XmlFileOperator(BaseFileOperator) :
+
+    def reading(self, file_name):
+        """ Read the file as xml file. """
+        dom = xml.dom.minidom.parse(file_name)
+        root = dom.documentElement
+        nodeset = root.getElementsByTagName('text')
+        textset = []
+        for node in nodeset :
+            urlset.append(node.firstChild.data.strip().split('\t'))
+        return urlset
 
     def writing(self, root, file_name):
         """ Write the file as xml file. """

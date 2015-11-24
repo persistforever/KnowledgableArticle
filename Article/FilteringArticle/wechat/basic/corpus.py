@@ -65,6 +65,22 @@ class Corpus :
             if id in self._id_article :
                 self._id_article[id].import_feature_set(list(self.test_dataset[idx]))
         print 'reading test dataset finished ...'
+
+    def read_keyword(self) :
+        """ Read key_word from input/keyword.
+        Each row of the file is a article.
+        column[0] of the file is the id of the article.
+        Each column[1:] of the file is the keyword of the article. """
+
+        self.file_operator = TextFileOperator()
+        data_list = self.file_operator.reading(self.path_manager.get_output_keyword())
+        for data in data_list :
+            article = Article()
+            article.set_params(id=data[0])
+            article.import_keyword(data, length=100)
+            self.article_list.append(article)
+        print 'reading keyword finished ...'
+        self._constr_dict_id()
     
     def classifying(self, seq=1) :
         """ Classify the article_list into knowledgeable and unknowledgeable.
@@ -90,6 +106,17 @@ class Corpus :
             data_list.append(article.get_article())
         self.file_operator.writing(data_list, self.path_manager.get_output_knowledgable())
         print 'wrirting knowledgeable article finished ...'
+
+    def write_tag_list(self) :
+        """ Write tag list of article.
+        Each row of file is an article.
+        Each column of file is the tags of the article. """
+        self.file_operator = CSVFileOperator()
+        data_list = []
+        for article in self.article_list :
+            data_list.append(article.get_tag_list())
+        self.file_operator.writing(data_list, self.path_manager.get_output_article_tag())
+        print 'wrirting article tag_list finished ...'
 
     def _constr_dict_id(self) :
         """ Construct id_article dict.

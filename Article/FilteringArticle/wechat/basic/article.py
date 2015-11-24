@@ -44,15 +44,15 @@ class Article :
             word = Word(part)
             self.split_content.append(word)
             
-    def import_keyword(self, data) :
+    def import_keyword(self, data, length=100) :
         """ Import key words(highest tf-idf) of the content. 
         The attributes of keyword is 
         [id, keyword]. """
-        self.keyword = []
-        for part in data[1:] :
+        self.keyword_list = []
+        for part in data[1:length+1] :
             word = Word(part.split('<#>')[0])
             tfidf = float(part.split('<#>')[1])
-            self.keyword.append([word, tfidf])
+            self.keyword_list.append([word, tfidf])
             
     def import_feature_set(self, data) :
         """ Import feature set of article. 
@@ -78,4 +78,14 @@ class Article :
         line.append(self.url)
         line.append(self.title)
         line.append(self.content)
+        return line
+    
+    def get_tag_list(self) :
+        """ get tag list of article. """
+        line = []
+        line.append(self.id)
+        tagstr = ''
+        for tag in self.tag_list :
+            tagstr += str(tag) + ' '
+        line.append(tagstr.strip())
         return line

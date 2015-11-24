@@ -3,9 +3,6 @@
 
 
 class Word :
-    # attributes
-    name = ''
-    feature = ''
 
     # methods
     def __init__(self, line) :

@@ -4,6 +4,7 @@
 import numpy as np
 import lda
 
+
 class TreeNode :
 
     def __init__(self, level, child_num) :
@@ -75,3 +76,17 @@ class TreeNode :
                 num += 1
                 outstr += word.name + '\t'
         return outstr.strip()
+
+    def get_word_list(self) :
+        """ Get word list. """
+        
+        word_list = []
+        num = 0
+        self.word_list = sorted(self.word_list, key=lambda x: x[1], reverse=True)
+        for word, dp_value in self.word_list :
+            if num >= 10 :
+                break
+            if word.feature == u'n' :
+                num += 1
+                word_list.append(word)
+        return word_list

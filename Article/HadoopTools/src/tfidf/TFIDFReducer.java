@@ -59,7 +59,7 @@ public class TFIDFReducer extends Reducer<Text, Text, Text, Text> {
 			}
 		});
 		String v = "";
-		for (int i = 0; i < Math.min(wordlist.size(), 300); ++i) {
+		for (int i = 0; i < Math.min(wordlist.size(), 100); ++i) {
 			String word = wordlist.get(i).getKey();
 			String num = String.valueOf(wordlist.get(i).getValue());
 			v = v + word + "<#>" + num + "\t";

@@ -34,16 +34,6 @@ class PathManager :
         path = os.path.join(path, 'input', self.type, 'traindataset')
         return path
     
-    def get_input_wordbag(self) :
-        path = os.path.abspath(self.project_dir) 
-        path = os.path.join(path, 'input', self.type, 'wordbag')
-        return path
-    
-    def get_input_bagofword(self) :
-        path = os.path.abspath(self.project_dir) 
-        path = os.path.join(path, 'input', self.type, 'bagofword')
-        return path
-    
     def get_output_origindata(self) :
         path = os.path.abspath(self.project_dir) 
         path = os.path.join(path, 'output', self.type, self.date, 'origindata')
@@ -64,14 +54,14 @@ class PathManager :
         path = os.path.join(path, 'output', type, date, 'split')
         return path
     
-    def get_output_keyword(self, type, date) :
+    def get_output_keyword(self) :
         path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'output', type, date, 'keyword')
+        path = os.path.join(path, 'output', self.type, self.date, 'keyword')
         return path
     
-    def get_output_keywordTitle(self, type, date) :
+    def get_output_keywordTitle(self) :
         path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'output', type, date, 'keyword_title')
+        path = os.path.join(path, 'output', self.type, self.date, 'keyword_title')
         return path
     
     def get_output_testdataset(self) :
@@ -89,7 +79,32 @@ class PathManager :
         path = os.path.join(path, 'output', self.type, self.date, 'wordtopic')
         return path
     
+    def get_output_wordbag(self) :
+        path = os.path.abspath(self.project_dir) 
+        path = os.path.join(path, 'output', self.type, self.date, 'wordbag')
+        return path
+    
+    def get_output_bagofword(self) :
+        path = os.path.abspath(self.project_dir) 
+        path = os.path.join(path, 'output', self.type, self.date, 'bagofword')
+        return path
+    
     def get_output_tagtree(self) :
         path = os.path.abspath(self.project_dir)
         path = os.path.join(path, 'output', self.type, self.date, 'tagtree')
+        return path
+    
+    def get_output_taglist(self) :
+        path = os.path.abspath(self.project_dir)
+        path = os.path.join(path, 'output', self.type, self.date, 'taglist')
+        return path
+    
+    def get_output_article_tag(self) :
+        path = os.path.abspath(self.project_dir)
+        path = os.path.join(path, 'output', self.type, self.date, 'articletag')
+        return path
+    
+    def get_tools_vector(self) :
+        path = os.path.abspath(self.project_dir)
+        path = os.path.join(path, 'input', 'tools', 'vectors.txt')
         return path

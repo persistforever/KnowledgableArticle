@@ -29,6 +29,9 @@
   <ItemGroup>
     <Compile Include="wechat\basic\article.py" />
     <Compile Include="wechat\basic\corpus.py" />
+    <Compile Include="wechat\basic\tag.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="wechat\basic\test_basic.py" />
     <Compile Include="wechat\basic\word.py" />
     <Compile Include="wechat\basic\__init__.py" />
@@ -60,6 +63,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="wechat\main.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="wechat\tag\tag_article.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="wechat\tag\tag_tree.py">
