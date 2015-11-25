@@ -27,7 +27,7 @@ class Tagger :
         Each column[1:] of the file is the word in the tag. """
 
         self.file_operator = fop.CSVFileOperator()
-        data_list = self.file_operator.reading(self.path_manager.get_output_taglist())
+        data_list = self.file_operator.reading(self.path_manager.get_tag_taglist())
         for data in data_list :
             word_list = []
             for wd in data[1:] :

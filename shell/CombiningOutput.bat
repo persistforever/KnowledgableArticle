@@ -1,1 +1,0 @@
-copy E:\file\knowledgable\output\4\2015*\knowledgeablearticle E:\file\knowledgable\output\4\knowledgeable\knowledgeable

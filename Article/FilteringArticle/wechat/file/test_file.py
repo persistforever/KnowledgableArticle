@@ -19,7 +19,7 @@ class TestFileManager(unittest.TestCase) :
 
     def test_csv(self) :
         pm = PathManager()
-        _file_name = pm.get_output_article()
+        _file_name = pm.get_classify_article()
         text = TextFileOperator()
         print len(text.reading(_file_name)[0])
         raw_input()

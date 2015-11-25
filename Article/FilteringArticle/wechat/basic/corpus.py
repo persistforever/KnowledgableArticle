@@ -26,7 +26,7 @@ class Corpus :
         Each column of the file is the attributes of article. """
 
         self.file_operator = TextFileOperator()
-        data_list = self.file_operator.reading(self.path_manager.get_output_article())
+        data_list = self.file_operator.reading(self.path_manager.get_classify_article())
         for data in data_list :
             article = Article()
             if len(data) >= 4 :
@@ -43,7 +43,7 @@ class Corpus :
         column[-1] of the file is the label of the article. """
 
         self.file_operator = TextFileOperator()
-        data_list = self.file_operator.reading(self.path_manager.get_input_traindataset())
+        data_list = self.file_operator.reading(self.path_manager.get_classify_traindataset())
         dataset_list = [np.array(line[3:-1]) for line in data_list]
         label_list = [line[-1] for line in data_list]
         self.train_dataset = self._normalization(np.array(dataset_list, dtype=float))
@@ -57,7 +57,7 @@ class Corpus :
         Each column[1:] of the file is the feature of the article. """
 
         self.file_operator = TextFileOperator()
-        data_list = self.file_operator.reading(self.path_manager.get_output_testdataset())
+        data_list = self.file_operator.reading(self.path_manager.get_classify_testdataset())
         test_dataset = np.array([np.array(line[1:]) for line in data_list], dtype=float)
         self.test_dataset = self._normalization(test_dataset)
         for idx in range(len(data_list)) :
@@ -73,7 +73,7 @@ class Corpus :
         Each column[1:] of the file is the keyword of the article. """
 
         self.file_operator = TextFileOperator()
-        data_list = self.file_operator.reading(self.path_manager.get_output_keyword())
+        data_list = self.file_operator.reading(self.path_manager.get_classify_keyword())
         for data in data_list :
             article = Article()
             article.set_params(id=data[0])
@@ -104,7 +104,7 @@ class Corpus :
         data_list = []
         for article in self.sorted_article_list[0:length] :
             data_list.append(article.get_article())
-        self.file_operator.writing(data_list, self.path_manager.get_output_knowledgable())
+        self.file_operator.writing(data_list, self.path_manager.get_classify_knowledgable())
         print 'wrirting knowledgeable article finished ...'
 
     def write_tag_list(self) :
@@ -115,7 +115,7 @@ class Corpus :
         data_list = []
         for article in self.article_list :
             data_list.append(article.get_tag_list())
-        self.file_operator.writing(data_list, self.path_manager.get_output_article_tag())
+        self.file_operator.writing(data_list, self.path_manager.get_tag_article_tag())
         print 'wrirting article tag_list finished ...'
 
     def _constr_dict_id(self) :

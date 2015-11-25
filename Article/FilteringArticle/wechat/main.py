@@ -17,8 +17,11 @@ def classifying() :
     corpus.write_knowledgeable_article(rate=0.2)
 
 def simplifying_article() :
+    corpus = Corpus()
+    corpus.read_article_list()
     wordbag = WordBag()
-    wordbag.get_word_bag()
+    # wordbag.get_word_bag()
+    wordbag.observe_lda()
 
 def tagging_article() :
     tagger = Tagger()
@@ -32,5 +35,5 @@ def tagging_article() :
 
 if __name__ == '__main__' :
     # classifying()
-    # simplifying_article()
-    tagging_article()
+    simplifying_article()
+    # tagging_article()
