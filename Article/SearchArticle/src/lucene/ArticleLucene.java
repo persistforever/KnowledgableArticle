@@ -3,6 +3,7 @@ package lucene;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -24,15 +25,16 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
+import cas.simhash.Unique;
 import tools.Article;
 import tools.FileOperator;
 
 public class ArticleLucene {
 	/* attributes */
 	ArrayList<Article> artlist = new ArrayList<Article>();
-    File fileDir = new File("E://file/knowledgable/lucene/input/4");
-    File indexDir = new File("E://file/knowledgable/lucene/index"); 
-    File outputDir = new File("E://file/knowledgable/lucene/output/queryresult.csv"); 
+    File inputFile = new File("E://file/knowledge/lucene/input/5/knowledgeable");
+    File indexDir = new File("E://file/knowledge/lucene/index/5"); 
+    File outputDir = new File("E://file/knowledge/lucene/output/5/queryresult"); 
 	
 	/* methods */
     public ArticleLucene() throws IOException {
@@ -41,15 +43,10 @@ public class ArticleLucene {
     
     /* import methods */
 	public void importArticle() throws IOException {
-        File[] textFiles = this.fileDir.listFiles();
-        for (int i = 0; i < textFiles.length; i++) {  
-            if (textFiles[i].isFile()) {
-                ArrayList<Article> subartlist = FileOperator.ArticleFileReader(
-                		textFiles[i].getCanonicalPath(), "GB18030"); 
-                for(Article article: subartlist) {
-                	this.artlist.add(article);
-                }
-            }
+        ArrayList<Article> subartlist = FileOperator.ArticleFileReader(
+        		this.inputFile.getCanonicalPath(), "GB18030"); 
+        for(Article article: subartlist) {
+        	this.artlist.add(article);
         }
         System.out.println(this.artlist.size());
         System.out.println("importing article finished ...");
@@ -95,7 +92,7 @@ public class ArticleLucene {
         } catch (ParseException e) {  
         }  
         if (searcher != null) {  
-            TopDocs results = searcher.search(query, 100);
+            TopDocs results = searcher.search(query, 500);
             hits = results.scoreDocs;
             if (hits.length > 0) { 
                 System.out.println("找到:" + hits.length + " 个结果!");
@@ -109,11 +106,28 @@ public class ArticleLucene {
     		         attributeslist.add(doc.get("title").toString());
     		         attributeslist.add(doc.get("content").toString());
     		         resultlist.add(new Article(attributeslist));
-                }    
+                }
             }
             searcher.close();
         }
-        FileOperator.ArticleCSVWriter(this.outputDir.getPath(), resultlist, "gb18030");
+        resultlist = uniqueResult(resultlist);
+        FileOperator.ArticleTextWriter(this.outputDir.getPath(), resultlist, "gb18030");
         System.out.println("writing article finished ...");
+    }
+    
+    public ArrayList<Article> uniqueResult(ArrayList<Article> attributeslist) {
+    	Unique uniqueObject = new Unique();
+    	List<List<String>> articlelist = new ArrayList<List<String>>();
+    	for(Article article : attributeslist) {
+    		articlelist.add(article.toList());
+    	}
+    	System.out.println(articlelist.size());
+    	List<List<String>> resultlist = uniqueObject.unique(articlelist, 2, 20);
+    	System.out.println(resultlist.size());
+    	ArrayList<Article> arrayarticle = new ArrayList<Article>();
+    	for(List<String> list: resultlist) {
+    		arrayarticle.add(new Article(new ArrayList<String>(list)));
+    	}
+    	return arrayarticle;
     }
 }

@@ -21,7 +21,19 @@ public class Article {
 	
 	public String toString() {
 		String outstring = "";
-		outstring += this.id.toString() ;
+		outstring += this.id.toString() + "\t";
+		outstring += this.url.toString() + "\t";
+		outstring += this.title.toString() + "\t";
+		outstring += this.content.toString() + "\t";
 		return outstring.trim();
+	}
+	
+	public ArrayList<String> toList() {
+		ArrayList<String> arraylist = new ArrayList<String>();
+		arraylist.add(this.id.toString());
+		arraylist.add(this.url.toString());
+		arraylist.add(this.title.toString());
+		arraylist.add(this.content.toString());
+		return arraylist;
 	}
 }

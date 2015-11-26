@@ -7,6 +7,10 @@ import numpy as np
 
 class Article :
 
+    def __init__(self) :
+        self.sub_title = []
+        self.sub_sentence = []
+
     def set_params(self, **params) :
         """ Set parameters of the article. """
         for key, value in params.iteritems() :
@@ -69,6 +73,22 @@ class Article :
         for value in data :
             self.bagofword_vector.append(int(value))
         self.bagofword_vector = np.array(self.bagofword_vector)
+
+    def import_sub_title(self, data) :
+        """ Import sub title of article. """
+        sub = []
+        for part in data[1].split(' ') :
+            word = Word(part)
+            sub.append(word)
+        self.sub_title.append(sub)
+
+    def import_sub_sentence(self, data) :
+        """ Import sub sentence of article. """
+        sub = []
+        for part in data[1].split(' ') :
+            word = Word(part)
+            sub.append(word)
+        self.sub_sentence.append(sub)
     
     def get_article(self) :
         """ get basic attributes of article. 
@@ -88,4 +108,20 @@ class Article :
         for tag in self.tag_list :
             tagstr += str(tag) + ' '
         line.append(tagstr.strip())
+        return line
+
+    def get_feature_set(self) :
+        """ get feature set of article. """
+        line = []
+        for feature in self.feature_set :
+            line.append(str(feature))
+        return line
+
+    def get_simply_article(self) :
+        """ get simply title and other attributes of article. """
+        line = []
+        line.append(self.id)
+        line.append(self.url)
+        line.append(self.simply_title)
+        line.append(self.content)
         return line

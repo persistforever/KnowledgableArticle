@@ -16,6 +16,7 @@ public class FileOperator {
 	/* import methods */
     public static ArrayList<Article> ArticleFileReader(String FileName, String charset)  
             throws IOException {  
+    	System.out.println(FileName);
         BufferedReader reader = new BufferedReader(new InputStreamReader(  
                 new FileInputStream(FileName), charset));  
         String line = new String();  

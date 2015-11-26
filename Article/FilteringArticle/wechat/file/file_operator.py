@@ -44,12 +44,12 @@ class TextFileOperator(BaseFileOperator) :
 
     def writing(self, data_list, file_name):
         """ Write the file as text file. """
-        with open(self._text_file(file_name), mode='wb') as fw :
+        with open(file_name, mode='wb') as fw :
             for data in data_list :
                 line = ''
                 for entry in data :
                     line += entry.encode('gb18030') + '\t'
-                fw.writelines(line.strip())
+                fw.writelines(line.strip() + '\n')
 
     def _text_file(self, file_path) :
         _parent_dir = os.path.pardir

@@ -65,6 +65,17 @@
     <Compile Include="wechat\main.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="wechat\qa\article_tag.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="wechat\qa\word_cluster.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="wechat\qa\__init__.py" />
+    <Compile Include="wechat\simplifier\title_simplifier.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="wechat\simplifier\__init__.py" />
     <Compile Include="wechat\tag\tag_article.py">
       <SubType>Code</SubType>
     </Compile>
@@ -81,6 +92,8 @@
     <Folder Include="wechat\classifier\" />
     <Folder Include="wechat\file\" />
     <Folder Include="wechat\" />
+    <Folder Include="wechat\simplifier\" />
+    <Folder Include="wechat\qa\" />
     <Folder Include="wechat\tag\" />
   </ItemGroup>
   <Import Condition="Exists($(PtvsTargetsFile))" Project="$(PtvsTargetsFile)" />

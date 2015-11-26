@@ -15,11 +15,13 @@ public class IDF {
 	String datapath = "";
 	String idfpath = "";
 	String length = "";
+	String wordpath = "";
 
-	public IDF(String datapath, String idfpath, String length) {
+	public IDF(String datapath, String idfpath, String length, String wordpath) {
 		this.datapath = datapath;
 		this.idfpath = idfpath;
 		this.length = length;
+		this.wordpath = wordpath;
 	}
 
 	public void run() throws IOException, ClassNotFoundException,
@@ -28,6 +30,7 @@ public class IDF {
 		conf.set("mapred.job.queue.name", "searchteam");
 		conf.set("mapred.job.priority", "NORMAL");
 		conf.set("length", this.length);
+		conf.set("wordset", this.wordpath);
 		Job job = new Job(conf);
 		HadoopFileOperation.DeleteDir(this.idfpath, conf);
 
