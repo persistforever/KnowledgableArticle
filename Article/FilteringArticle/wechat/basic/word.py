@@ -22,11 +22,15 @@ class Word :
             self.name = None
             self.feature = None
 
-
-    def toString(self) :
+    def to_string(self) :
         name, feature = '', ''
         if self.name != None :
             name = self.name
         if self.feature != None :
             feature = self.feature
         return name + ':' + feature
+
+    def set_params(self, **params) :
+        """ Set parameters of the word. """
+        for key, value in params.iteritems() :
+            setattr(self, key, value)

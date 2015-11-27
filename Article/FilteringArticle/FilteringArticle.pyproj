@@ -13,6 +13,9 @@
     <OutputPath>.</OutputPath>
     <Name>FilteringArticle</Name>
     <RootNamespace>Article</RootNamespace>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+    <IsWindowsApplication>False</IsWindowsApplication>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -65,6 +68,8 @@
     <Compile Include="wechat\main.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="wechat\main\find_synonymy.py" />
+    <Compile Include="wechat\main\__init__.py" />
     <Compile Include="wechat\qa\article_tag.py">
       <SubType>Code</SubType>
     </Compile>
@@ -76,6 +81,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="wechat\simplifier\__init__.py" />
+    <Compile Include="wechat\synonymy\word2vector.py" />
+    <Compile Include="wechat\synonymy\base.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="wechat\synonymy\__init__.py" />
     <Compile Include="wechat\tag\tag_article.py">
       <SubType>Code</SubType>
     </Compile>
@@ -92,6 +102,8 @@
     <Folder Include="wechat\classifier\" />
     <Folder Include="wechat\file\" />
     <Folder Include="wechat\" />
+    <Folder Include="wechat\main\" />
+    <Folder Include="wechat\synonymy\" />
     <Folder Include="wechat\simplifier\" />
     <Folder Include="wechat\qa\" />
     <Folder Include="wechat\tag\" />

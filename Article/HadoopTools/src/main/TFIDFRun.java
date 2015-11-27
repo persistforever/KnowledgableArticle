@@ -6,27 +6,32 @@ import tfidf.IDF;
 import tfidf.TFIDF;
 
 public class TFIDFRun {
-	String datapath = "";
-	String idfpath = "";
+	String dataPath = "";
+	String idfPath = "";
 	String length = "";
-	String tfidfpath = "";
-	String wordpath = "";
+	String tfidfPath = "";
+	String stopWordPath = "";
+	String wordSetPath = "";
 	
-	public TFIDFRun(String datapath, String idfpath, String length, String tfidfpath, String wordpath) {
-		this.datapath = datapath;
-		this.idfpath = idfpath;
+	public TFIDFRun(String dataPath, String idfPath, String length, String tfidfPath, 
+			String stopWordPath, String wordSetPath) {
+		this.dataPath = dataPath;
+		this.idfPath = idfPath;
 		this.length = length;
-		this.tfidfpath = tfidfpath;
-		this.wordpath = wordpath;
+		this.tfidfPath = tfidfPath;
+		this.stopWordPath = stopWordPath;
+		this.wordSetPath = wordSetPath;
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, IOException, InterruptedException {
-		String datapath = args[0];
-		String idfpath = args[1];
+		String dataPath = args[0];
+		String idfPath = args[1];
 		String length = args[2];
-		String tfidfpath = args[3];
-		String wordpath = args[4];
-		TFIDFRun idfRun = new TFIDFRun(datapath, idfpath, length, tfidfpath, wordpath);
+		String tfidfPath = args[3];
+		String stopWordPath = args[4];
+		String wordSetPath = args[5];
+		TFIDFRun idfRun = new TFIDFRun(dataPath, idfPath, length, tfidfPath, 
+				stopWordPath, wordSetPath);
 		idfRun.run();
 	}
 	
@@ -34,11 +39,12 @@ public class TFIDFRun {
 			InterruptedException {
 		
 		System.out.println("============ calculate IDF value ===============");
-		IDF idf = new IDF(this.datapath, this.idfpath, this.length, this.wordpath);
+		IDF idf = new IDF(this.dataPath, this.idfPath, this.length, 
+				this.stopWordPath, this.wordSetPath);
 		idf.run();
 		
 		System.out.println("============ calculate TFIDF value ===============");
-		TFIDF tfidf = new TFIDF(this.datapath, this.idfpath, this.tfidfpath);
+		TFIDF tfidf = new TFIDF(this.dataPath, this.idfPath, this.tfidfPath);
 		tfidf.run();
 	}
 }

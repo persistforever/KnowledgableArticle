@@ -1,4 +1,4 @@
-# -*- encoding = gb18030 -*-
+﻿# -*- encoding = gb18030 -*-
 """ question and anster system clustering article. """
 import os
 import sys
@@ -24,14 +24,14 @@ class ArticleCluster :
         """ clustering article's keyword accordding to query. """
         while len(article_list) > 1 :
             print len(article_list)
-            word_dict = self._article_tagging(article_list, query_list)
+            word_dict = self._article_tfidf(article_list, query_list)
             for article in article_list :
                 print article.id.encode('gb18030'), 
                 for w in article.tag_list :
                     print w.name.encode('gb18030'), 
                 print
             print len([article for article in article_list if article.tag_list==[]])
-            if len([article for article in article_list if article.tag_list==[]]) <= 1 :
+            if len([article for article in article_list if article.tag_list!=[]]) <= 1 :
                 break
             cls = WordCluster(word_dict, n_cluster=3)
             self.label_list = cls.get_label_list()
@@ -43,8 +43,9 @@ class ArticleCluster :
             query_list.append(self.label_list[seq][0])
             perticular_article_list = []
             for article in article_list :
-                if self.label_list[seq][0] in [w.name for w in article.tag_list] :
-                    perticular_article_list.append(article)
+                for word in self.label_list[seq][1] :
+                    if word in [w.name for w in article.tag_list] :
+                        perticular_article_list.append(article)
                     break
             article_list = perticular_article_list
         if len(article_list) > 0 :

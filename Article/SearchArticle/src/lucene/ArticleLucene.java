@@ -17,6 +17,7 @@ import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -77,22 +78,26 @@ public class ArticleLucene {
         System.out.println("constructing indexer finished ...");
 	}
 	
-    public void searchingQuery(String querystring) 
+    public void searchingQuery() 
     		throws CorruptIndexException, IOException {
     	IndexReader reader = IndexReader.open(FSDirectory.open(this.indexDir));
         IndexSearcher searcher = new IndexSearcher(reader);  
     	ScoreDoc[] hits = null;
-        Query query = null;
+    	Query query = null;
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);  
         ArrayList<Article> resultlist = new ArrayList<Article>();
         try {
-        	String[] fields = {"title", "content"};
-        	QueryParser qp = new MultiFieldQueryParser(Version.LUCENE_36, fields, analyzer);
-            query = qp.parse(querystring);  
+        	String[] querys = {"男", "发型", "女"};
+        	String[] fields = {"content", "content", "content"};
+        	BooleanClause.Occur[] flags = { 
+        			BooleanClause.Occur.SHOULD,  
+        			BooleanClause.Occur.SHOULD,
+        			BooleanClause.Occur.MUST_NOT}; 
+        	query = MultiFieldQueryParser.parse(Version.LUCENE_36, querys, fields, flags, analyzer);
         } catch (ParseException e) {  
         }  
         if (searcher != null) {  
-            TopDocs results = searcher.search(query, 500);
+            TopDocs results = searcher.search(query, 10000);
             hits = results.scoreDocs;
             if (hits.length > 0) { 
                 System.out.println("找到:" + hits.length + " 个结果!");
@@ -122,7 +127,7 @@ public class ArticleLucene {
     		articlelist.add(article.toList());
     	}
     	System.out.println(articlelist.size());
-    	List<List<String>> resultlist = uniqueObject.unique(articlelist, 2, 20);
+    	List<List<String>> resultlist = uniqueObject.unique(articlelist, 2, 5);
     	System.out.println(resultlist.size());
     	ArrayList<Article> arrayarticle = new ArrayList<Article>();
     	for(List<String> list: resultlist) {

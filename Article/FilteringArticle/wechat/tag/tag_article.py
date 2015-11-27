@@ -1,4 +1,4 @@
-# -*- encoding = gb18030 -*-
+﻿# -*- encoding = gb18030 -*-
 """ Tag article use tag_list from the word_bag. """
          
 import os
@@ -42,6 +42,6 @@ class Tagger :
             article.tag_list = []
             for tag in self.tag_list :
                 for article_word, tfidf in article.keyword_list :
-                    if article_word.toString() in [word.toString() for word in tag.word_list] :
+                    if article_word.to_string() in [word.to_string() for word in tag.word_list] :
                         article.tag_list.append(tag.seq)
                         break

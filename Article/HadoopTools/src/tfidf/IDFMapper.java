@@ -20,7 +20,9 @@ public class IDFMapper extends Mapper<Object, Text, Text, IntWritable> {
 		ArrayList<String> wordlist = LineSplit.split(content, " ");
 		HashSet<String> wordset = new HashSet<String>(wordlist);
 		for (String word : wordset) {
-			context.write(new Text(word), new IntWritable(1));
+			if (word.split(":").length >= 2) {
+				context.write(new Text(word), new IntWritable(1));
+			}
 		}
 	}
 }

@@ -34,21 +34,22 @@ class CSVFileOperator(BaseFileOperator) :
 
 class TextFileOperator(BaseFileOperator) :
 
-    def reading(self, file_name):
+    def reading(self, file_name, encoding='gb18030'):
         """ Read the file as text file. """
         self.data_list = []
-        with codecs.open(file_name, mode='rb', encoding='gb18030') as fo :
+        with codecs.open(file_name, mode='rb', encoding=encoding) as fo :
             for line in fo.readlines() :
                 self.data_list.append(line.strip().split('\t'))
         return self.data_list
 
-    def writing(self, data_list, file_name):
+    def writing(self, data_list, file_name, encoding='gb18030'):
         """ Write the file as text file. """
         with open(file_name, mode='wb') as fw :
             for data in data_list :
                 line = ''
                 for entry in data :
-                    line += entry.encode('gb18030') + '\t'
+                    entry = entry if isinstance(entry, str) or isinstance(entry, unicode) else str(entry)
+                    line += entry.encode(encoding) + '\t'
                 fw.writelines(line.strip() + '\n')
 
     def _text_file(self, file_path) :

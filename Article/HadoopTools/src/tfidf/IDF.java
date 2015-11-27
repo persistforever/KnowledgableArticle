@@ -12,16 +12,18 @@ import tools.GbkOutputFormat;
 import tools.HadoopFileOperation;
 
 public class IDF {
-	String datapath = "";
-	String idfpath = "";
+	String dataPath = "";
+	String idfPath = "";
 	String length = "";
-	String wordpath = "";
+	String wordSetPath = "";
+	String stopWordPath = "";
 
-	public IDF(String datapath, String idfpath, String length, String wordpath) {
-		this.datapath = datapath;
-		this.idfpath = idfpath;
+	public IDF(String datapath, String idfpath, String length, String stopWordPath, String wordSetPath) {
+		this.dataPath = datapath;
+		this.idfPath = idfpath;
 		this.length = length;
-		this.wordpath = wordpath;
+		this.stopWordPath = stopWordPath;
+		this.wordSetPath = wordSetPath;
 	}
 
 	public void run() throws IOException, ClassNotFoundException,
@@ -30,9 +32,10 @@ public class IDF {
 		conf.set("mapred.job.queue.name", "searchteam");
 		conf.set("mapred.job.priority", "NORMAL");
 		conf.set("length", this.length);
-		conf.set("wordset", this.wordpath);
+		conf.set("stopwords", this.stopWordPath);
+		conf.set("wordsets", this.wordSetPath);
 		Job job = new Job(conf);
-		HadoopFileOperation.DeleteDir(this.idfpath, conf);
+		HadoopFileOperation.DeleteDir(this.idfPath, conf);
 
 		job.setJarByClass(IDF.class);
 		job.setMapperClass(IDFMapper.class);
@@ -45,8 +48,8 @@ public class IDF {
 		job.setNumReduceTasks(100);
 
 		FileInputFormat.setInputPaths(job,
-				new Path[] { new Path(this.datapath) });
-		FileOutputFormat.setOutputPath(job, new Path(this.idfpath));
+				new Path[] { new Path(this.dataPath) });
+		FileOutputFormat.setOutputPath(job, new Path(this.idfPath));
 		job.waitForCompletion(true);
 	}
 }

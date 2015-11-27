@@ -108,8 +108,9 @@ class PathManager :
         path = os.path.join(path, 'qa', self.type, 'subsentence')
         return path
     
-    def get_tools_vector(self) :
-        path = os.path.abspath(self.project_dir)
+    @staticmethod
+    def get_tools_word2vector() :
+        path = os.path.abspath('E:/file/knowledge/')
         path = os.path.join(path, 'tools', 'vectors.txt')
         return path
     

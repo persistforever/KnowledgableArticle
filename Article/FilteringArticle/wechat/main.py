@@ -3,11 +3,17 @@
 Main entry of the project
     first step: filtering knowledgeable article.
 """
+
+# package importing start
+import os
+import sys
+
 from basic.corpus import Corpus
 from basic.word import Word
 from tag.word_bag import WordBag
 from tag.tag_article import Tagger
 from qa.article_tag import ArticleCluster
+# package importing end
 
 
 def classifying() :
@@ -46,9 +52,17 @@ def qa_system() :
     corpus = Corpus()
     corpus.read_qa_article()
     corpus.read_keyword()
-    corpus.read_sub_sentence()
+    # corpus.read_sub_sentence()
     cluster = ArticleCluster()
-    cluster.article_clustering(corpus.article_list, [u'扎', u'头发'])
+    cluster.article_clustering(corpus.article_list, [u'男装'])
+
+def find_synonymy() :
+    from synonymy.word2vector import Word2Vector
+    synonymy_searcher = Word2Vector(n_most=100, \
+        w2v_path=os.path.abspath('E:/file/knowledge/tools/word2vector/fashion_vectors.txt'))
+    synonymy_searcher.read_querys(os.path.abspath('E:/file/knowledge/synonymys/query'))
+    synonymy_searcher.find_synonymy_words()
+    synonymy_searcher.write_synonymys(os.path.abspath('E:/file/knowledge/synonymys/synonymy'))
 
 
 if __name__ == '__main__' :
@@ -56,4 +70,5 @@ if __name__ == '__main__' :
     # simplifying_title()
     # simplifying_article()
     # tagging_article()
-    qa_system()
+    # qa_system()
+    find_synonymy()
