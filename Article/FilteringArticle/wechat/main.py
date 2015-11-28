@@ -59,11 +59,25 @@ def qa_system() :
     cluster.article_clustering(corpus.article_list, [u'男装'])
 
 def find_synonymy() :
-    from synonymy.word2vector import Word2Vector
-    synonymy_searcher = Word2Vector(n_most=100, w2v_path=PathManager.TOOLS_WORD2VEC)
-    synonymy_searcher.read_querys(PathManager.SYNONYMYS_QUERY)
-    synonymy_searcher.find_synonymy_words()
-    synonymy_searcher.write_synonymys(PathManager.SYNONYMYS_SYNONYMY)
+    from synonymy.bagofword import BagOfWord
+    synonymy_searcher = BagOfWord(n_most=100, bow_path=PathManager.BOWS_BOW)
+    synonymy_searcher.read_word(word_path=PathManager.BOWS_WORD)
+    # synonymy_searcher.read_querys(PathManager.SYNONYMYS_QUERY)
+    # synonymy_searcher.find_synonymy_words()
+    # synonymy_searcher.write_synonymys(PathManager.SYNONYMYS_SYNONYMY)
+
+def create_corpora() :
+    from basic.corpus import Corpus
+    from file.path_manager import PathManager
+    corpus = Corpus()
+    corpus.read_article_list(PathManager.CORPUS_ARTICLE)
+    corpus.read_split_list(PathManager.CORPUS_SPLIT)
+    corpus.read_wordbag(PathManager.BOWS_WORD)
+    texts = corpus.article_to_texts()
+    tokens = corpus.word_to_tokens()
+    dictionary = corpus.create_gensim_dictionary(type='load', path=PathManager.CORPORA_DICTIONARY)
+    # dictionary = corpus.create_gensim_dictionary(type='init', texts=texts, tokens=tokens)
+    # dictionary.save(PathManager.CORPORA_DICTIONARY)
 
 
 if __name__ == '__main__' :
@@ -72,4 +86,5 @@ if __name__ == '__main__' :
     # simplifying_article()
     # tagging_article()
     # qa_system()
-    find_synonymy()
+    # find_synonymy()
+    create_corpora()

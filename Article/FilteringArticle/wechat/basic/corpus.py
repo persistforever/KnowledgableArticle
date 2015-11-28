@@ -1,11 +1,11 @@
 ﻿# -*- encoding = gb18030 -*-
-""" Class corpus """
-import os
-import sys
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '..'))
 
+# package importing start
 import math
 import numpy as np
+
+import gensim
+
 from article import Article
 from article import Word
 from file.file_operator import BaseFileOperator, CSVFileOperator, TextFileOperator
@@ -13,6 +13,7 @@ from file.path_manager import PathManager
 from classifier.unsupervised_classifier import MultiConditionClassifier
 from classifier.supervised_classifier import SvmClassifier
 from simplifier.title_simplifier import TitleSimplifier
+# package importing end
 
 
 ############################################################################
@@ -20,23 +21,53 @@ class Corpus :
 
     def __init__(self) :
         self.article_list = []
-        self.path_manager = PathManager()
-        self.file_operator = BaseFileOperator()
 
-    def read_article_list(self) :
-        """ Read article list from output/article.
-        Each row of the file is a article.
-        Each column of the file is the attributes of article. """
-
-        self.file_operator = TextFileOperator()
-        data_list = self.file_operator.reading(self.path_manager.get_classify_article())
+    def read_article_list(self, article_path) :
+        """ Read article list.
+            Each row of the file is a article.
+            column[0] of the file is the id of article.
+            column[1] of the file is the url of article.
+            column[2] of the file is the title of article.
+            column[3] of the file is the content of article.
+            * This function MUST be the first to read article.
+        """
+        file_operator = TextFileOperator()
+        data_list = file_operator.reading(article_path)
         for data in data_list :
             if len(data) >= 4 :
                 article = Article()
                 article.import_article(data)
                 self.article_list.append(article)
-        print 'reading article list finished ...'
         self._constr_dict_id()
+
+    def read_split_list(self, split_path) :
+        """ Read split list.
+            Each row of the file is a article.
+            column[0] of the file is the id of article.
+            column[1] of the file is the split_title of article.
+            column[2] of the file is the split_content of article.
+        """
+        file_operator = TextFileOperator()
+        data_list = file_operator.reading(split_path)
+        for data in data_list :
+            if len(data) >= 3 :
+                id = data[0]
+                if id in self._id_article :
+                    article = self._id_article[id]
+                    article.import_split(data)
+                    
+    def read_wordbag(self, wordbag_path) :
+        """ Read word bag.
+            Each row of the file is a word.
+            column[0] of the file is the word and feature.
+        """
+        file_operator = TextFileOperator()
+        data_list = file_operator.reading(wordbag_path)
+        self.word_bag = []
+        for data in data_list :
+            if len(data[0].split('<:>')) >= 2 :
+                word = Word(data[0], sp_char='<:>')
+                self.word_bag.append(word)
 
     def read_train_dataset(self) :
         """ Read train_dataset from input/traindata.
@@ -256,3 +287,58 @@ class Corpus :
         gzh_list = sorted(gzh_list, key=lambda x: x[2], reverse=True)
         for gzh_id, length, score, avg in gzh_list[-10:] :
             print gzh_id, length, score, avg
+
+    def article_to_texts(self) :
+        """ Transform article to texts accordding to gensim. 
+            Texts is a [list] and each element is a [list].
+            Each element of the texts_list is a article.
+            Each element of the article is a word.
+            Like this [ [word_a, word_b, ...], 
+                        [word_c, word_d, ...], 
+                        ...
+                      ]
+        """
+        texts = []
+        for article in self.article_list :
+            text = []
+            text.extend([word.to_string() for word in article.split_title])
+            text.extend([word.to_string() for word in article.split_content])
+            texts.append(text)
+        return texts
+
+    def word_to_tokens(self) :
+        """ Transform word to tokens accordding to gensim.
+            Tokens is a {dict}.
+            Each <key, value> of the tokens is a word, key is word's token,
+            value is word's id.
+            Like this { word_a: id_a,
+                        word_b: id_b, 
+                      }
+        """
+        tokens = {}
+        idx = 0 
+        for word in self.word_bag :
+            if word.to_string() not in tokens :
+                tokens[word.to_string()] = idx
+                idx += 1
+        return tokens
+
+    def create_gensim_dictionary(self, type='init', texts=[], tokens={}, path='') :
+        """ If type is 'init' refer to initialize the dictionary use
+            Create dictionary in the gensim by the giving texts and tokens. 
+            Texts is to initialize and Tokens is to filter.
+        """
+        if type is 'init' :
+            dictionary = gensim.corpora.Dictionary(texts)
+            bad_ids, good_ids = [], []
+            for word in dictionary.token2id.keys() :
+                if word in tokens :
+                    good_ids.append(dictionary.token2id[word])
+                else :
+                    bad_ids.append(dictionary.token2id[word])
+            dictionary.filter_tokens(bad_ids, good_ids)
+            print dictionary
+            return dictionary
+        elif type is 'load' :
+            dictionary = gensim.corpora.Dictionary.load(path)
+            print dictionary
