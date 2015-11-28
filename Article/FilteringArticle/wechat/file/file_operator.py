@@ -1,14 +1,34 @@
 ﻿# -*- encoding = gb18030 -*-
 """ Sub class of Base File Operator """
+
+# package importing start
 import codecs
 import csv
 import os
 import xml.dom.minidom
+
 from base import BaseFileOperator
+# package importing end
+
+
+def filedecorator(method) :
+    """ This function is the decorator of the file operator. 
+        1. It can print the log of file operator.
+    """
+    def function(*args) :
+        for arg in args :
+            if isinstance(arg, str) and os.path.isfile(arg) :
+                if len(args) == 2 :
+                    print os.path.split(arg)[1], 'file is reading ...'
+                elif len(args) == 3 :
+                    print os.path.split(arg)[1], 'file is writing ...'
+        return method(*args)
+    return function
 
 
 class CSVFileOperator(BaseFileOperator) :
 
+    @filedecorator
     def reading(self, file_name):
         """ Read the file as csv file. """
         self.data_list = []
@@ -18,6 +38,7 @@ class CSVFileOperator(BaseFileOperator) :
                 self.data_list.append([entry.decode('gb18030') for entry in line])
         return self.data_list
 
+    @filedecorator
     def writing(self, data_list, file_name):
         """ Write the file as csv file. """
         with open(self._csv_file(file_name), mode='wb') as fw :
@@ -33,7 +54,8 @@ class CSVFileOperator(BaseFileOperator) :
 
 
 class TextFileOperator(BaseFileOperator) :
-
+    
+    @filedecorator
     def reading(self, file_name, encoding='gb18030'):
         """ Read the file as text file. """
         self.data_list = []
@@ -41,7 +63,8 @@ class TextFileOperator(BaseFileOperator) :
             for line in fo.readlines() :
                 self.data_list.append(line.strip().split('\t'))
         return self.data_list
-
+    
+    @filedecorator
     def writing(self, data_list, file_name, encoding='gb18030'):
         """ Write the file as text file. """
         with open(file_name, mode='wb') as fw :

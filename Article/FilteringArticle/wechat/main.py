@@ -1,7 +1,8 @@
 ﻿# -*- encoding = gb18030 -*-
 """
-Main entry of the project
-    first step: filtering knowledgeable article.
+This python file is noly used to Debug.
+Can call different function to do different tasks.
+If function func_name debug finished, please complete the wechat/main/func_name.py.
 """
 
 # package importing start
@@ -13,6 +14,7 @@ from basic.word import Word
 from tag.word_bag import WordBag
 from tag.tag_article import Tagger
 from qa.article_tag import ArticleCluster
+from file.path_manager import PathManager
 # package importing end
 
 
@@ -58,11 +60,10 @@ def qa_system() :
 
 def find_synonymy() :
     from synonymy.word2vector import Word2Vector
-    synonymy_searcher = Word2Vector(n_most=100, \
-        w2v_path=os.path.abspath('E:/file/knowledge/tools/word2vector/fashion_vectors.txt'))
-    synonymy_searcher.read_querys(os.path.abspath('E:/file/knowledge/synonymys/query'))
+    synonymy_searcher = Word2Vector(n_most=100, w2v_path=PathManager.TOOLS_WORD2VEC)
+    synonymy_searcher.read_querys(PathManager.SYNONYMYS_QUERY)
     synonymy_searcher.find_synonymy_words()
-    synonymy_searcher.write_synonymys(os.path.abspath('E:/file/knowledge/synonymys/synonymy'))
+    synonymy_searcher.write_synonymys(PathManager.SYNONYMYS_SYNONYMY)
 
 
 if __name__ == '__main__' :

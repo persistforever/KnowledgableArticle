@@ -108,6 +108,9 @@
     <Folder Include="wechat\qa\" />
     <Folder Include="wechat\tag\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="wechat\file\configuration.ini" />
+  </ItemGroup>
   <Import Condition="Exists($(PtvsTargetsFile))" Project="$(PtvsTargetsFile)" />
   <Import Condition="!Exists($(PtvsTargetsFile))" Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

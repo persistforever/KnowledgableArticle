@@ -11,7 +11,7 @@ from basic.word import Word
 
 class Word2Vector(SynonymySearcherBase) :
 
-    def __init__(self, n_most=10, w2v_path=PathManager.get_tools_word2vector()) :
+    def __init__(self, n_most=10, w2v_path=PathManager.TOOLS_WORD2VEC) :
         SynonymySearcherBase.__init__(self)
 
         self.w2v_path = w2v_path

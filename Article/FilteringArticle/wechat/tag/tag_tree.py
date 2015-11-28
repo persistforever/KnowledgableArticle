@@ -1,8 +1,8 @@
-# -*- encoding = gb18030 -*-
+﻿# -*- encoding = gb18030 -*-
 """ Class tree of the tag. """
 
 import numpy as np
-import lda
+# import lda
 
 
 class TreeNode :

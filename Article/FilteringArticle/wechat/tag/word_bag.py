@@ -14,7 +14,7 @@ from basic.article import Article
 import file.file_operator as fop
 from file.path_manager import PathManager
 from tag_tree import TreeNode
-import lda
+# import lda
 
 
 class WordBag :

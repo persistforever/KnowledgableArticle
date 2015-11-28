@@ -1,125 +1,27 @@
 ﻿# -*- encoding = gb18030 -*-
 """ Manager of project's global path """
 
+# package importing start
 import os
 import ConfigParser
+# package importing end
 
 
 class PathManager :
 
-    def __init__(self) :
-        self.project_dir = os.path.abspath('E:/file/knowledge/')
-        self._get_configuration()
-
-    def _get_configuration(self) :
-        """ Get basic configuration of path manager. """
-        _cfg = ConfigParser.ConfigParser()
-        _cfg.read(self.get_tools_config())
-        self.type = _cfg.get('corpus', 'type')
-        self.date = _cfg.get('corpus', 'date')
-    
-    def get_classify_traindataset(self) :
-        path = os.path.abspath(self.project_dir) 
-        path = os.path.join(path, 'train', self.type, 'traindataset')
-        return path
-    
-    def get_classify_article(self) :
-        path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'classify', self.type, self.date, 'article')
-        return path
-    
-    def get_classify_keyword(self) :
-        path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'classify', self.type, self.date, 'keyword')
-        return path
-    
-    def get_classify_testdataset(self) :
-        path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'classify', self.type, self.date, 'testdataset')
-        return path
-    
-    def get_classify_knowledgeable(self) :
-        path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'classify', self.type, self.date, 'knowledgeable')
-        return path
-    
-    def get_classify_supportvector(self) :
-        path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'classify', self.type, self.date, 'supportvector')
-        return path
-    
-    def get_classify_simplyknowledgeable(self) :
-        path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'classify', self.type, self.date, 'simplyknowledgeable')
-        return path
-    
-    def get_classify_subtitle(self) :
-        path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'classify', self.type, self.date, 'subtitle')
-        return path
-    
-    def get_classify_subsentence(self) :
-        path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'classify', self.type, self.date, 'subsentence')
-        return path
-    
-    def get_tag_wordtopic(self) :
-        path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'qa', self.type, 'wordtopic')
-        return path
-    
-    def get_tag_articletopic(self) :
-        path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'qa', self.type, 'articletopic')
-        return path
-    
-    def get_tag_wordbag(self) :
-        path = os.path.abspath(self.project_dir) 
-        path = os.path.join(path, 'qa', self.type, 'wordbag')
-        return path
-    
-    def get_tag_bagofword(self) :
-        path = os.path.abspath(self.project_dir) 
-        path = os.path.join(path, 'qa', self.type, 'bagofword')
-        return path
-    
-    def get_tag_tagtree(self) :
-        path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'qa', self.type, 'tagtree')
-        return path
-    
-    def get_tag_taglist(self) :
-        path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'qa', self.type, 'taglist')
-        return path
-    
-    def get_tag_article_tag(self) :
-        path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'qa', self.type, 'articletag')
-        return path
-    
-    def get_qa_articl(self) :
-        path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'qa', self.type, 'article')
-        return path
-    
-    def get_qa_subsentence(self) :
-        path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'qa', self.type, 'subsentence')
-        return path
-    
+    # a list of path
+    TOOLS_WORD2VECTOR = 'word2vector initial file in the tools'
+    SYNONYMYS_QUERY = 'query in the synonymys'
+    SYNONYMYS_SYNONYMY = 'synonymy in the synonymys'
+        
     @staticmethod
-    def get_tools_word2vector() :
-        path = os.path.abspath('E:/file/knowledge/')
-        path = os.path.join(path, 'tools', 'vectors.txt')
-        return path
-    
-    def get_tools_config(self) :
-        path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'tools', 'configuration.ini')
-        return path
-    
-    def get_tools_titlespst(self) :
-        path = os.path.abspath(self.project_dir)
-        path = os.path.join(path, 'tools', 'titlespst')
-        return path
+    def _get_configuration() :
+        """ Get FILE_PATH of path manager. """
+        cfg = ConfigParser.ConfigParser()
+        cfg.read('wechat/file/configuration.ini')
+        PathManager.TOOLS_WORD2VEC = cfg.get('tools', 'WORD2VEC')
+        PathManager.SYNONYMYS_QUERY = cfg.get('synonymys', 'QUERY')
+        PathManager.SYNONYMYS_SYNONYMY = cfg.get('synonymys', 'SYNONYMY')
+
+
+PathManager._get_configuration()
