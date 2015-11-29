@@ -8,6 +8,8 @@ import numpy as np
 class Article :
 
     def __init__(self) :
+        self.simply_title = []
+        self.split_content = []
         self.sub_title = []
         self.sub_sentence = []
 

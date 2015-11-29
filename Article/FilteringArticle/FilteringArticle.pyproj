@@ -6,7 +6,7 @@
     <ProjectGuid>cd7445f1-befb-4724-baaa-6e1043271308</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>wechat\main.py</StartupFile>
+    <StartupFile>wechat\main\corpora\create_mmcopus.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -68,8 +68,8 @@
     <Compile Include="wechat\main.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="wechat\main\corpora\create_mmcopus.py" />
     <Compile Include="wechat\main\find_synonymy.py" />
-    <Compile Include="wechat\main\__init__.py" />
     <Compile Include="wechat\qa\article_tag.py">
       <SubType>Code</SubType>
     </Compile>
@@ -104,6 +104,7 @@
     <Folder Include="wechat\file\" />
     <Folder Include="wechat\" />
     <Folder Include="wechat\main\" />
+    <Folder Include="wechat\main\corpora\" />
     <Folder Include="wechat\synonymy\" />
     <Folder Include="wechat\simplifier\" />
     <Folder Include="wechat\qa\" />

@@ -17,7 +17,9 @@ class PathManager :
     BOWS_WORD = 'word set in bows'
     CORPUS_ARTICLE = 'article list in corpus'
     CORPUS_SPLIT = 'split list in corpus'
-    CORPORA_DICTIONARY = 'dictionary in copora accorrding to gensim'
+    CORPORA_DICTIONARY = 'dictionary in corpora accorrding to gensim'
+    CORPORA_MMCORPUS = 'corpus in corpora stored as mmcorpus'
+    CORPORA_TFIDF = 'tfidf model in corpora'
         
     @staticmethod
     def _get_configuration() :
@@ -32,6 +34,8 @@ class PathManager :
         PathManager.CORPUS_ARTICLE = cfg.get('corpus', 'ARTICLE')
         PathManager.CORPUS_SPLIT = cfg.get('corpus', 'SPLIT')
         PathManager.CORPORA_DICTIONARY = cfg.get('corpora', 'DICTIONARY')
+        PathManager.CORPORA_MMCORPUS = cfg.get('corpora', 'MMCORPUS')
+        PathManager.CORPORA_TFIDF = cfg.get('corpora', 'TFIDF')
 
 
 PathManager._get_configuration()

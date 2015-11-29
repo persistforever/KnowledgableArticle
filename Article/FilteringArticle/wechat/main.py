@@ -6,15 +6,6 @@ If function func_name debug finished, please complete the wechat/main/func_name.
 """
 
 # package importing start
-import os
-import sys
-
-from basic.corpus import Corpus
-from basic.word import Word
-from tag.word_bag import WordBag
-from tag.tag_article import Tagger
-from qa.article_tag import ArticleCluster
-from file.path_manager import PathManager
 # package importing end
 
 
@@ -59,11 +50,12 @@ def qa_system() :
     cluster.article_clustering(corpus.article_list, [u'男装'])
 
 def find_synonymy() :
+    from file.path_manager import PathManager
     from synonymy.bagofword import BagOfWord
-    synonymy_searcher = BagOfWord(n_most=100, bow_path=PathManager.BOWS_BOW)
-    synonymy_searcher.read_word(word_path=PathManager.BOWS_WORD)
+    synonymy_searcher = BagOfWord(mmcps_path=PathManager.CORPORA_MMCORPUS, \
+        dict_path=PathManager.CORPORA_DICTIONARY, n_most=100)
     # synonymy_searcher.read_querys(PathManager.SYNONYMYS_QUERY)
-    # synonymy_searcher.find_synonymy_words()
+    synonymy_searcher.find_synonymy_words()
     # synonymy_searcher.write_synonymys(PathManager.SYNONYMYS_SYNONYMY)
 
 def create_corpora() :
@@ -75,9 +67,12 @@ def create_corpora() :
     corpus.read_wordbag(PathManager.BOWS_WORD)
     texts = corpus.article_to_texts()
     tokens = corpus.word_to_tokens()
-    dictionary = corpus.create_gensim_dictionary(type='load', path=PathManager.CORPORA_DICTIONARY)
-    # dictionary = corpus.create_gensim_dictionary(type='init', texts=texts, tokens=tokens)
-    # dictionary.save(PathManager.CORPORA_DICTIONARY)
+    dictionary = corpus.create_gensim_dictionary(type='init', texts=texts, tokens=tokens, \
+        path=PathManager.CORPORA_DICTIONARY)
+    mmcorpus = corpus.create_gensim_corpus(type='init', texts=texts, dictionary=dictionary, \
+        path=PathManager.CORPORA_MMCORPUS)
+    tfidf_model = corpus.create_gensim_tfidf(type='init', mmcorpus=mmcorpus, \
+        path=PathManager.CORPORA_TFIDF)
 
 
 if __name__ == '__main__' :
@@ -88,3 +83,4 @@ if __name__ == '__main__' :
     # qa_system()
     # find_synonymy()
     create_corpora()
+    # find_synonymy()

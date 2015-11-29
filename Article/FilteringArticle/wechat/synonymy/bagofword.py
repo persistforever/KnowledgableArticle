@@ -12,39 +12,28 @@ from basic.word import Word
 
 class BagOfWord(SynonymySearcherBase) :
 
-    def __init__(self, n_most=10, bow_path=PathManager.TOOLS_WORD2VEC, \
-        word_path=PathManager.TOOLS_WORD2VEC) :
+    def __init__(self, mmcps_path='', dict_path='', n_most=10) :
         SynonymySearcherBase.__init__(self)
 
-        self.bow_path = bow_path
+        self.mmcps_path = mmcps_path
+        self.dict_path = dict_path
         self.n_most = n_most
         self.n_condidate = 5 * self.n_most
+        self.mmcorpus, self.dictionary = self._read_model()
 
     def _read_model(self) :
         """ Read bagofword models. """
-        vector_model = gensim.models.Word2Vec.load(self.w2v_path)
-        return vector_model
-
-    def read_word(self, word_path=PathManager.BOWS_WORD) :
-        """ Read word bag. 
-            Each row of the file is a word.
-            column[0] of the file is the word and feature
-        """
-        file_operator = TextFileOperator()
-        data_list = file_operator.reading(word_path)
-        for data in data_list :
-            if len(data[0].split(':')) >= 2 :
-                word = Word(data[0])
-                data[0] = word.to_string()
-            else :
-                del data
-        file_operator.writing(word_path)
+        mmcorpus = gensim.corpora.MmCorpus(self.mmcps_path)
+        dictionary = gensim.corpora.Dictionary.load(self.dict_path)
+        return mmcorpus, dictionary
 
     def find_synonymy_words(self) :
         """ find synonymy words of the query_list. 
             This is a abstract function and MUST override (now overriding).
             Return the synonymy word list. 
         """
+        tfidf_model = gensim.models.TfidfModel(self.mmcorpus)
+        '''
         condidate_dict = dict()
         for query_word in self.query_list :
             synonymy_list = self.vector_model.most_similar( \
@@ -63,3 +52,9 @@ class BagOfWord(SynonymySearcherBase) :
             word = Word(condidate)
             word.set_params(score=sc)
             self.synonymy_list.append(word)
+        '''
+
+    def similarity(self, worda, wordb) :
+        ida = self.dictionary.token2id[worda]
+        idb = self.dictionary.token2id[wordb]
+        

@@ -9,10 +9,9 @@ import gensim
 from article import Article
 from article import Word
 from file.file_operator import BaseFileOperator, CSVFileOperator, TextFileOperator
-from file.path_manager import PathManager
-from classifier.unsupervised_classifier import MultiConditionClassifier
-from classifier.supervised_classifier import SvmClassifier
-from simplifier.title_simplifier import TitleSimplifier
+# from classifier.unsupervised_classifier import MultiConditionClassifier
+# from classifier.supervised_classifier import SvmClassifier
+# from simplifier.title_simplifier import TitleSimplifier
 # package importing end
 
 
@@ -324,9 +323,11 @@ class Corpus :
         return tokens
 
     def create_gensim_dictionary(self, type='init', texts=[], tokens={}, path='') :
-        """ If type is 'init' refer to initialize the dictionary use
-            Create dictionary in the gensim by the giving texts and tokens. 
-            Texts is to initialize and Tokens is to filter.
+        """ If type is 'init' :
+                Initialize the dictionary using texts and tokens.
+                Texts is to initialize and Tokens is to filter.
+            If type is 'load' :
+                Initialize the dictionary from the file.
         """
         if type is 'init' :
             dictionary = gensim.corpora.Dictionary(texts)
@@ -337,8 +338,31 @@ class Corpus :
                 else :
                     bad_ids.append(dictionary.token2id[word])
             dictionary.filter_tokens(bad_ids, good_ids)
-            print dictionary
-            return dictionary
+            dictionary.save(path)
         elif type is 'load' :
             dictionary = gensim.corpora.Dictionary.load(path)
-            print dictionary
+        print dictionary
+        return dictionary
+
+    def create_gensim_corpus(self, type='init', texts=[], dictionary=None, path='') :
+        """ If type is 'init' :
+                Initialize the doc2bow using texts and dictionary
+            If type is 'load' :
+                Initialize the doc2bow from the file.
+        """
+        if type is 'init' :
+            corpus = [dictionary.doc2bow(text) for text in texts]
+            gensim.corpora.MmCorpus.serialize(path, corpus)
+        elif type is 'load' :
+            corpus = gensim.corpora.MmCorpus(path)
+        print len(corpus)
+        return corpus
+
+    def create_gensim_tfidf(self,  type='init', mmcorpus=None, path='') :
+        if type is 'init' :
+            tfidf_model = gensim.models.TfidfModel(mmcorpus)
+            tfidf_model.save(path)
+        elif type is 'load' :
+            tfidf_model = gensim.models.TfidfModel.load(path)
+        print tfidf_model
+        return tfidf_model
