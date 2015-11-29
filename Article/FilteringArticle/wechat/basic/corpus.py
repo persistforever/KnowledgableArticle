@@ -54,6 +54,21 @@ class Corpus :
                 if id in self._id_article :
                     article = self._id_article[id]
                     article.import_split(data)
+
+    def read_sentence_list(self, sentence_path) :
+        """ Read sentence list.
+            Each row of the file is a sentence.
+            column[0] of the file is the id of article.
+            column[1] of the file is the sub_sentence of article.
+        """
+        file_operator = TextFileOperator()
+        data_list = file_operator.reading(sentence_path)
+        for data in data_list :
+            if len(data) >= 2 :
+                id = data[0]
+                if id in self._id_article :
+                    article = self._id_article[id]
+                    article.import_sub_sentence()
                     
     def read_wordbag(self, wordbag_path) :
         """ Read word bag.
@@ -304,6 +319,24 @@ class Corpus :
             text.extend([word.to_string() for word in article.split_content])
             texts.append(text)
         return texts
+    
+    def article_to_sentences(self) :
+        """ Transform article to sentences accordding to gensim. 
+            Texts is a [list] and each element is a [list].
+            Each element of the texts_list is a article.
+            Each element of the article is a word.
+            Like this [ [word_a, word_b, ...], 
+                        [word_c, word_d, ...], 
+                        ...
+                      ]
+        """
+        texts = []
+        for article in self.article_list :
+            text = []
+            text.extend([word.to_string() for word in article.split_title])
+            text.extend([word.to_string() for word in article.split_content])
+            texts.append(text)
+        return texts
 
     def word_to_tokens(self) :
         """ Transform word to tokens accordding to gensim.
@@ -359,6 +392,11 @@ class Corpus :
         return corpus
 
     def create_gensim_tfidf(self,  type='init', mmcorpus=None, path='') :
+        """ If type is 'init' :
+                Initialize the tfidf model using mmcorpus
+            If type is 'load' :
+                Initialize the tfidf model from the file.
+        """
         if type is 'init' :
             tfidf_model = gensim.models.TfidfModel(mmcorpus)
             tfidf_model.save(path)
@@ -366,3 +404,53 @@ class Corpus :
             tfidf_model = gensim.models.TfidfModel.load(path)
         print tfidf_model
         return tfidf_model
+
+    def create_wordsim_tfidf(self,  type='init', mmcorpus=None, dictionary=None, \
+        tfidf_model=None, path='') :
+        """ If type is 'init' :
+                Initialize the tfidf wordsim using mmcorpus
+            If type is 'load' :
+                Initialize the tfidf wordsim from the file.
+        """
+        if type is 'init' :
+            tfidf_model = gensim.models.TfidfModel(mmcorpus)
+            similarities = self._create_word_similarity(mmcorpus, dictionary, tfidf_model)
+            gensim.corpora.SvmLightCorpus.serialize(path, similarities)
+        elif type is 'load' :
+            similarities = gensim.corpora.SvmLightCorpus(path)
+        print len(similarities)
+        return similarities
+
+    def _create_word_similarity(self, mmcorpus, dictionary, tfidf_model) :
+        """ create word similarities list. 
+            Similarities is a [list] and each element is a [list].
+            Each row in similarities is a word.
+            Each column in word is the list of (word, similarity).
+            Like this [ [(word_id, similarity), ...]
+                        ...
+                      ]
+        """
+        word_similarity = np.zeros([len(dictionary), len(dictionary)], dtype=float)
+        word_mod = np.array([0] * len(dictionary))
+        texts = [tfidf_model[text] for text in mmcorpus]
+        for doc_id, text in enumerate(texts) :
+            for idx_a in range(0, len(text)) :
+                id_a = text[idx_a][0]
+                for idx_b in range(idx_a+1, len(text)) :
+                    id_b = text[idx_b][0]
+                    word_similarity[id_a, id_b] += text[idx_a][1] * text[idx_b][1]
+                word_mod[id_a] += text[idx_a][1] * text[idx_a][1]
+        similarities = []
+        for row in range(word_similarity.shape[0]) :
+            for col in range(word_similarity.shape[1]) :
+                if math.sqrt(word_mod[row]) != 0 and math.sqrt(word_mod[col]) != 0 :
+                    word_similarity[row, col] = \
+                        word_similarity[row, col] / (math.sqrt(word_mod[row]) * math.sqrt(word_mod[col]))
+        for row in range(word_similarity.shape[0]) :
+            similarity = []
+            for col in range(row+1, word_similarity.shape[1]) :
+                word_similarity[col, row] = word_similarity[row, col]
+            for word_id, sim in enumerate(word_similarity[row, :].tolist()) :
+                similarity.append((word_id, sim))
+            similarities.append(similarity)
+        return similarities

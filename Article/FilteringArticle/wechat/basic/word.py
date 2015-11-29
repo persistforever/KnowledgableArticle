@@ -8,8 +8,12 @@ class Word :
 
     # methods
     def __init__(self, line, sp_char=':') :
-        self.name = ':'.join(line.split(sp_char)[0:-1])
-        self.feature = line.split(sp_char)[-1]
+        if len(line.split(sp_char)) > 1 :
+            self.name = ':'.join(line.split(sp_char)[0:-1])
+            self.feature = line.split(sp_char)[-1]
+        else :
+            self.name = line.split(sp_char)[0]
+            self.feature = None
 
     def set_params(self, **params) :
         """ Set parameters of the word. """
@@ -17,4 +21,7 @@ class Word :
             setattr(self, key, value)
 
     def to_string(self) :
-        return self.name + '<:>' + self.feature
+        if self.feature == None :
+            return self.name + '<:>'
+        else :
+            return self.name + '<:>' + self.feature

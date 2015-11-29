@@ -10,16 +10,18 @@ import ConfigParser
 class PathManager :
 
     # a list of path
-    TOOLS_WORD2VECTOR = 'word2vector initial file in the tools'
+    TOOLS_WORD2VEC = 'word2vector initial file in the tools'
     SYNONYMYS_QUERY = 'query in the synonymys'
     SYNONYMYS_SYNONYMY = 'synonymy in the synonymys'
     BOWS_BOW = 'bag of word in bows'
     BOWS_WORD = 'word set in bows'
     CORPUS_ARTICLE = 'article list in corpus'
     CORPUS_SPLIT = 'split list in corpus'
+    CORPUS_SENTENCE = 'sentence list in corpus'
     CORPORA_DICTIONARY = 'dictionary in corpora accorrding to gensim'
     CORPORA_MMCORPUS = 'corpus in corpora stored as mmcorpus'
     CORPORA_TFIDF = 'tfidf model in corpora'
+    CORPORA_WORD2TFIDF = 'word2sim by tfidf model initial file in the corpora'
         
     @staticmethod
     def _get_configuration() :
@@ -33,9 +35,11 @@ class PathManager :
         PathManager.BOWS_WORD = cfg.get('bows', 'WORD')
         PathManager.CORPUS_ARTICLE = cfg.get('corpus', 'ARTICLE')
         PathManager.CORPUS_SPLIT = cfg.get('corpus', 'SPLIT')
+        PathManager.CORPUS_SENTENCE = cfg.get('corpus', 'SENTENCE')
         PathManager.CORPORA_DICTIONARY = cfg.get('corpora', 'DICTIONARY')
         PathManager.CORPORA_MMCORPUS = cfg.get('corpora', 'MMCORPUS')
         PathManager.CORPORA_TFIDF = cfg.get('corpora', 'TFIDF')
+        PathManager.CORPORA_WORD2TFIDF = cfg.get('corpora', 'WORD2TFIDF')
 
 
 PathManager._get_configuration()

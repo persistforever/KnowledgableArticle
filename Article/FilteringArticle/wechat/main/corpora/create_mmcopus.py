@@ -16,7 +16,7 @@ from basic.corpus import Corpus
 
 
 def create_corpora(artice_path, split_path, wordbag_path, \
-    dictionary_path, mmcorpu_path, tfidf_path) :
+    dictionary_path, mmcorpu_path, tfidf_path, w2t_path) :
     corpus = Corpus()
     corpus.read_article_list(artice_path)
     corpus.read_split_list(split_path)
@@ -29,6 +29,8 @@ def create_corpora(artice_path, split_path, wordbag_path, \
         path=mmcorpu_path)
     tfidf_model = corpus.create_gensim_tfidf(type='init', mmcorpus=mmcorpus, \
         path=tfidf_path)
+    word2tfidf = corpus.create_wordsim_tfidf(type='init', mmcorpus=mmcorpus, dictionary=dictionary, \
+        tfidf_model=tfidf_model, path=w2t_path)
 
 
 if __name__ == '__main__' :
@@ -38,4 +40,5 @@ if __name__ == '__main__' :
     dictionary = sys.argv[4]
     mmcorpus = sys.argv[5]
     tfidf_model = sys.argv[6]
-    create_corpora(article, split, wordbag, dictionary, mmcorpus, tfidf_model)
+    word2tfidf = sys.argv[7]
+    create_corpora(article, split, wordbag, dictionary, mmcorpus, tfidf_model, word2tfidf)

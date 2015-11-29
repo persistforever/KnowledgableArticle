@@ -1,4 +1,4 @@
-# -*- encoding = gb18030 -*-
+﻿# -*- encoding = gb18030 -*-
 
 # package importing start
 from file.file_operator import TextFileOperator
@@ -20,7 +20,7 @@ class SynonymySearcherBase :
         data_list = file_operator.reading(querys_path)
         for data in data_list :
             if len(data) >= 1 :
-                self.query_list.append(Word(data[0]))
+                self.query_list.append(Word(data[0], sp_char='<:>'))
 
     def find_synonymy_words(self) :
         """ find synonymy words of the query_list. 

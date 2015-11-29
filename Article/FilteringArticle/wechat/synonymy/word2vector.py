@@ -11,7 +11,7 @@ from basic.word import Word
 
 class Word2Vector(SynonymySearcherBase) :
 
-    def __init__(self, n_most=10, w2v_path=PathManager.TOOLS_WORD2VEC) :
+    def __init__(self, n_most=10, w2v_path='') :
         SynonymySearcherBase.__init__(self)
 
         self.w2v_path = w2v_path
@@ -31,22 +31,19 @@ class Word2Vector(SynonymySearcherBase) :
         """
         condidate_dict = dict()
         for query_word in self.query_list :
-            try :
-                synonymy_list = self.vector_model.most_similar( \
-                    query_word.name.encode('utf8'), topn=self.n_condidate)
-                for word_name, similarity in synonymy_list :
-                    word = Word(word_name.decode('utf8'))
-                    if word.to_string() not in condidate_dict :
-                        condidate_dict[word.to_string()] = []
-                    condidate_dict[word.to_string()].append(similarity)
-            except Exception, e :
-                pass
+            synonymy_list = self.vector_model.most_similar( \
+                query_word.name.encode('utf8'), topn=self.n_condidate)
+            for word_name, similarity in synonymy_list :
+                word = Word(word_name.decode('utf8'), sp_char='<:>')
+                if word.to_string() not in condidate_dict :
+                    condidate_dict[word.to_string()] = []
+                condidate_dict[word.to_string()].append(similarity)
         for condidate in condidate_dict.keys() :
             value_list = condidate_dict[condidate]
             condidate_dict[condidate] = 1.0 * sum(value_list) / len(value_list)
         condidate_list = sorted(condidate_dict.iteritems(), \
             key=lambda x: x[1], reverse=True)
         for condidate, sc in condidate_list[0:self.n_most] :
-            word = Word(condidate)
+            word = Word(condidate, sp_char='<:>')
             word.set_params(score=sc)
             self.synonymy_list.append(word)

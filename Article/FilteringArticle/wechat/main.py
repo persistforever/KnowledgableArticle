@@ -51,12 +51,14 @@ def qa_system() :
 
 def find_synonymy() :
     from file.path_manager import PathManager
-    from synonymy.bagofword import BagOfWord
-    synonymy_searcher = BagOfWord(mmcps_path=PathManager.CORPORA_MMCORPUS, \
-        dict_path=PathManager.CORPORA_DICTIONARY, n_most=100)
-    # synonymy_searcher.read_querys(PathManager.SYNONYMYS_QUERY)
+    from synonymy.word2vector import Word2Vector
+    # from synonymy.bagofword import BagOfWord
+    # synonymy_searcher = BagOfWord(n_most=100, w2t_path=PathManager.CORPORA_WORD2TFIDF, \
+    #     dict_path=PathManager.CORPORA_DICTIONARY)
+    synonymy_searcher = Word2Vector(n_most=100, w2v_path=PathManager.TOOLS_WORD2VEC)
+    synonymy_searcher.read_querys(PathManager.SYNONYMYS_QUERY)
     synonymy_searcher.find_synonymy_words()
-    # synonymy_searcher.write_synonymys(PathManager.SYNONYMYS_SYNONYMY)
+    synonymy_searcher.write_synonymys(PathManager.SYNONYMYS_SYNONYMY)
 
 def create_corpora() :
     from basic.corpus import Corpus
@@ -73,6 +75,17 @@ def create_corpora() :
         path=PathManager.CORPORA_MMCORPUS)
     tfidf_model = corpus.create_gensim_tfidf(type='init', mmcorpus=mmcorpus, \
         path=PathManager.CORPORA_TFIDF)
+    word2tfidf = corpus.create_wordsim_tfidf(type='init', mmcorpus=mmcorpus, dictionary=dictionary, \
+        tfidf_model=tfidf_model, path=PathManager.CORPORA_WORD2TFIDF)
+    print 'finished ...'
+
+def create_word2vector() :
+    from basic.corpus import Corpus
+    from file.path_manager import PathManager
+    corpus = Corpus()
+    corpus.read_article_list(PathManager.CORPUS_ARTICLE)
+    corpus.read_sentence_list(PathManager.CORPUS_SENTENCE)
+    print 'finished ...'
 
 
 if __name__ == '__main__' :
@@ -81,6 +94,6 @@ if __name__ == '__main__' :
     # simplifying_article()
     # tagging_article()
     # qa_system()
-    # find_synonymy()
-    create_corpora()
-    # find_synonymy()
+    # create_corpora()
+    # create_word2vec()
+    find_synonymy()
