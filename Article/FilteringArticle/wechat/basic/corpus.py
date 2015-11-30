@@ -70,18 +70,19 @@ class Corpus :
                     article = self._id_article[id]
                     article.import_sub_sentence(data)
                     
-    def read_wordbag(self, wordbag_path) :
+    def read_wordbag(self, wordbag_path, sp_char=':') :
         """ Read word bag.
             Each row of the file is a word.
             column[0] of the file is the word and feature.
         """
         file_operator = TextFileOperator()
         data_list = file_operator.reading(wordbag_path)
-        self.word_bag = []
+        wordbag = []
         for data in data_list :
-            if len(data[0].split('<:>')) >= 2 :
-                word = Word(data[0], sp_char='<:>')
-                self.word_bag.append(word)
+            if len(data[0].split(sp_char)) >= 2 :
+                word = Word(data[0], sp_char=sp_char)
+                wordbag.append(word)
+        return wordbag
 
     def read_train_dataset(self) :
         """ Read train_dataset from input/traindata.
@@ -257,7 +258,17 @@ class Corpus :
             data_list.append(data)
         self.file_operator.writing(data_list, self.path_manager.get_classify_supportvector())
         print 'wrirting support vectors finished ...'
-
+                    
+    def write_wordbag(self, wordbag, wordbag_path) :
+        """ Write word bag.
+            Each row of the file is a word.
+            column[0] of the file is the word and feature.
+        """
+        file_operator = TextFileOperator()
+        data_list = []
+        for word in wordbag :
+            data_list.append([word.to_string()])
+        data_list = file_operator.writing(data_list, wordbag_path)
 
     def _constr_dict_id(self) :
         """ Construct id_article dict.
@@ -337,7 +348,7 @@ class Corpus :
                     sentences.append([word.to_string() for word in sentence])
         return sentences
 
-    def word_to_tokens(self) :
+    def word_to_tokens(self, wordbag) :
         """ Transform word to tokens accordding to gensim.
             Tokens is a {dict}.
             Each <key, value> of the tokens is a word, key is word's token,
@@ -348,7 +359,7 @@ class Corpus :
         """
         tokens = {}
         idx = 0 
-        for word in self.word_bag :
+        for word in wordbag :
             if word.to_string() not in tokens :
                 tokens[word.to_string()] = idx
                 idx += 1
@@ -467,3 +478,16 @@ class Corpus :
             word2vec_model = gensim.models.Word2Vec.load(path)
         print word2vec_model
         return word2vec_model
+
+    def filter_word(self, wordbag, topn=10000) :
+        remain_pos = [u'z', u'vn', u'v', u's', u'nz', u'nt', u'ns', u'nv', u'nrg', \
+            u'nrf', u'ng', u'n', u'j', u'd', u'b', u'an', u'ad', u'a']
+        filtered_wordbag = []
+        num = 0
+        for word in wordbag :
+            if num >= topn :
+                break
+            if word.feature in remain_pos :
+                filtered_wordbag.append(word)
+                num += 1
+        return filtered_wordbag

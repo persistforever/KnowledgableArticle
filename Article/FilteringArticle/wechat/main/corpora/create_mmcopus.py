@@ -20,7 +20,7 @@ def create_corpora(artice_path, split_path, wordbag_path, \
     corpus = Corpus()
     corpus.read_article_list(artice_path)
     corpus.read_split_list(split_path)
-    corpus.read_wordbag(wordbag_path)
+    corpus.read_wordbag(wordbag_path, sp_char='<:>')
     texts = corpus.article_to_texts()
     tokens = corpus.word_to_tokens()
     dictionary = corpus.create_gensim_dictionary(type='init', texts=texts, tokens=tokens, \

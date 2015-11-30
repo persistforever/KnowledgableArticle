@@ -14,6 +14,7 @@ class PathManager :
     SYNONYMYS_SYNONYMY = 'synonymy in the synonymys'
     BOWS_BOW = 'bag of word in bows'
     BOWS_WORD = 'word set in bows'
+    BOWS_IDF = 'word idf in bows'
     CORPUS_ARTICLE = 'article list in corpus'
     CORPUS_SPLIT = 'split list in corpus'
     CORPUS_SENTENCE = 'sentence list in corpus'
@@ -32,6 +33,7 @@ class PathManager :
         PathManager.SYNONYMYS_SYNONYMY = cfg.get('synonymys', 'SYNONYMY')
         PathManager.BOWS_BOW = cfg.get('bows', 'BOW')
         PathManager.BOWS_WORD = cfg.get('bows', 'WORD')
+        PathManager.BOWS_IDF= cfg.get('bows', 'IDF')
         PathManager.CORPUS_ARTICLE = cfg.get('corpus', 'ARTICLE')
         PathManager.CORPUS_SPLIT = cfg.get('corpus', 'SPLIT')
         PathManager.CORPUS_SENTENCE = cfg.get('corpus', 'SENTENCE')

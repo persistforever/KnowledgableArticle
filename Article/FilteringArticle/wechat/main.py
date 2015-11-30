@@ -69,9 +69,9 @@ def create_corpora() :
     corpus = Corpus()
     corpus.read_article_list(PathManager.CORPUS_ARTICLE)
     corpus.read_split_list(PathManager.CORPUS_SPLIT)
-    corpus.read_wordbag(PathManager.BOWS_WORD)
+    wordbag = corpus.read_wordbag(PathManager.BOWS_WORD, sp_char='<:>')
     texts = corpus.article_to_texts()
-    tokens = corpus.word_to_tokens()
+    tokens = corpus.word_to_tokens(wordbag)
     dictionary = corpus.create_gensim_dictionary(type='init', texts=texts, tokens=tokens, \
         path=PathManager.CORPORA_DICTIONARY)
     mmcorpus = corpus.create_gensim_corpus(type='init', texts=texts, dictionary=dictionary, \
@@ -92,13 +92,23 @@ def create_word2vec() :
     corpus.create_wordsim_word2vec(type='init', sentences=sentences, path=PathManager.CORPORA_WORD2VEC)
     print 'finished ...'
 
+def filter_word() :
+    from basic.corpus import Corpus
+    from file.path_manager import PathManager
+    corpus = Corpus()
+    wordbag = corpus.read_wordbag(PathManager.BOWS_IDF, sp_char=':')
+    wordbag = corpus.filter_word(wordbag, topn=10000)
+    corpus.write_wordbag(wordbag, PathManager.BOWS_WORD)
+    print 'finished ...'
+
 
 if __name__ == '__main__' :
     # classifying()
     # simplifying_title()
     # simplifying_article()
     # tagging_article()
-    qa_system()
-    # create_corpora()
+    # qa_system()
+    create_corpora()
     # create_word2vec()
     # find_synonymy()
+    # filter_word()
