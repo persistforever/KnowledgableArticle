@@ -6,7 +6,6 @@ import numpy as np
 import re
 import gensim
 from basic.article import Article
-from file.path_manager import PathManager
 from file.file_operator import TextFileOperator
 
 
@@ -15,14 +14,15 @@ class TitleSimplifier :
     spdict = dict()
     
     # methods    
-    def __init__(self) :
-        self.path_manager = PathManager()
+    def __init__(self, w2v_path='', spst_path='') :
+        self.w2v_path = w2v_path
+        self.spst_path = spst_path
         self.spdict = self.importSpDict()
-        self.vecmodel = gensim.models.Word2Vec.load(self.path_manager.get_tools_vector())
+        self.vecmodel = gensim.models.Word2Vec.load(self.w2v_path)
         
     def importSpDict(self) :
         self.file_operator = TextFileOperator()
-        data_list = self.file_operator.reading(self.path_manager.get_tools_titlespst())
+        data_list = self.file_operator.reading(self.spst_path)
         spdict = dict()
         for data in data_list :
             if len(data) >= 1 :

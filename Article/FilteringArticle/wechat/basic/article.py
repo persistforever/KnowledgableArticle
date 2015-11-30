@@ -12,6 +12,7 @@ class Article :
         self.split_content = []
         self.sub_title = []
         self.sub_sentence = []
+        self.keyword_list = []
 
     def set_params(self, **params) :
         """ Set parameters of the article. """

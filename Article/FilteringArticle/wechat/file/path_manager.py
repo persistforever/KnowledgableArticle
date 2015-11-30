@@ -10,6 +10,7 @@ import ConfigParser
 class PathManager :
 
     # a list of path
+    TOOLS_TITLESPST = 'title splist sentence in the synonymys'
     SYNONYMYS_QUERY = 'query in the synonymys'
     SYNONYMYS_SYNONYMY = 'synonymy in the synonymys'
     BOWS_BOW = 'bag of word in bows'
@@ -32,6 +33,7 @@ class PathManager :
         """ Get FILE_PATH of path manager. """
         cfg = ConfigParser.ConfigParser()
         cfg.read('wechat/file/configuration.ini')
+        PathManager.TOOLS_TITLESPST = cfg.get('tools', 'TITLESPST')
         PathManager.SYNONYMYS_QUERY = cfg.get('synonymys', 'QUERY')
         PathManager.SYNONYMYS_SYNONYMY = cfg.get('synonymys', 'SYNONYMY')
         PathManager.BOWS_BOW = cfg.get('bows', 'BOW')

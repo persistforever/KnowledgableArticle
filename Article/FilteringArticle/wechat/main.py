@@ -24,7 +24,8 @@ def simplifying_title() :
     corpus.read_article_list(PathManager.CORPUS_ARTICLE)
     corpus.read_sub_title(PathManager.CORPUS_SUBTITLE)
     corpus.read_keyword(PathManager.CORPUS_KEYWORD)
-    corpus.title_simplifying()
+    corpus.title_simplifying(w2v_path=PathManager.CORPORA_WORD2VEC, \
+        spst_path=PathManager.TOOLS_TITLESPST)
     corpus.write_simply_article(PathManager.CORPUS_SIMPLYARTICLE)
 
 def simplifying_article() :
@@ -53,7 +54,7 @@ def qa_system() :
         tfidf_path=PathManager.CORPORA_TFIDF, \
         dict_path=PathManager.CORPORA_DICTIONARY, \
         w2v_path=PathManager.CORPORA_WORD2VEC)
-    word_dict = cluster.article_tfidf(corpus.article_list, [u'瑜伽<:>nz'])
+    word_dict = cluster.article_tfidf(corpus.article_list, [u'发型<:>nz'])
     cluster.word_clustering(word_dict)
     # cluster.article_clustering(corpus.article_list, [u'瑜伽<:>nz'])
 
@@ -109,11 +110,11 @@ def filter_word() :
 
 if __name__ == '__main__' :
     # classifying()
-    simplifying_title()
+    # simplifying_title()
     # simplifying_article()
     # tagging_article()
     # qa_system()
     # create_corpora()
-    # create_word2vec()
+    create_word2vec()
     # find_synonymy()
     # filter_word()

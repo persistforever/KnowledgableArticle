@@ -16,7 +16,6 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
@@ -39,20 +38,18 @@ public class ArticleLucene {
 	
 	/* methods */
     public ArticleLucene() throws IOException {
-    	this.importArticle();
     }
     
     /* import methods */
-	public void importArticle() throws IOException {
+	public ArrayList<Article> importArticle(String inputPath) throws IOException {
         ArrayList<Article> subartlist = FileOperator.ArticleFileReader(
-        		this.inputFile.getCanonicalPath(), "GB18030"); 
+        		new File(inputPath).getCanonicalPath(), "GB18030"); 
         for(Article article: subartlist) {
         	this.artlist.add(article);
         }
         System.out.println(this.artlist.size());
         System.out.println("importing article finished ...");
-        // this.artlist = uniqueResult(this.artlist);
-        // FileOperator.ArticleTextWriter(this.outputDir.getPath(), this.artlist, "gb18030");
+        return this.artlist;
 	}
 
     /* process methods */

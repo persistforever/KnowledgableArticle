@@ -6,24 +6,29 @@ Find synonymys of the query word and can clustering word with the same topic.
 """
 
 # package importing start
-from synonymy.word2vector import Word2Vector
-from file.path_manager import PathManager 
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/..'))
+
 from basic.corpus import Corpus
 # package importing end
 
 
-def find_synonymy(article_path, subtitle_path, keyword_path, simply_path) :
+def find_synonymy(article_path, subtitle_path, keyword_path, simply_path, \
+    w2v_path, spst_path) :
     corpus = Corpus()
     corpus.read_article_list(article_path)
     corpus.read_sub_title(subtitle_path)
     corpus.read_keyword(keyword_path)
-    corpus.title_simplifying()
+    corpus.title_simplifying(w2v_path=w2v_path, spst_path=spst_path)
     corpus.write_simply_article(simply_path)
 
 
 if __name__ == '__main__' :
-    article = os.path.abspath(sys.argv[1])
-    subtitle = os.path.abspath(sys.argv[2])
-    keyword = os.path.abspath(sys.argv[3])
-    simply = os.path.abspath(sys.argv[4])
-    find_synonymy(article, subtitle, keyword, simply)
+    article = sys.argv[1].strip()
+    subtitle = sys.argv[2].strip()
+    keyword = sys.argv[3].strip()
+    simply = sys.argv[4].strip()
+    word2vec = sys.argv[5].strip()
+    titlespst = sys.argv[6].strip()
+    find_synonymy(article, subtitle, keyword, simply, word2vec, titlespst)

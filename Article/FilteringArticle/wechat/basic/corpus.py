@@ -204,10 +204,10 @@ class Corpus :
             self._gzh_sorting()
         print 'classifying article_list finished ...'
     
-    def title_simplifying(self, seq=1) :
+    def title_simplifying(self, w2v_path='', spst_path='', seq=1) :
         """ Simplify the title of the article. """
 
-        simplifier = TitleSimplifier()
+        simplifier = TitleSimplifier(w2v_path=w2v_path, spst_path=spst_path)
         simplifier.model_simplifying(self.article_list)
         print 'simplifying title finished ...'
 
@@ -223,7 +223,7 @@ class Corpus :
         self.file_operator.writing(data_list, self.path_manager.get_classify_knowledgable())
         print 'wrirting knowledgeable article finished ...'
 
-    def write_simply_knowledgeable_article(self, rate=0.1) :
+    def write_simply_article(self, simply_path) :
         """ Write simplified knowledgeable article.
         Each row of file is article.
         Each column of file is the attributes of the article. """
@@ -231,7 +231,7 @@ class Corpus :
         data_list = []
         for article in self.article_list :
             data_list.append(article.get_simply_article())
-        self.file_operator.writing(data_list, self.path_manager.get_classify_simplyknowledgeable())
+        self.file_operator.writing(data_list, simply_path)
         print 'wrirting knowledgeable article finished ...'
 
     def write_tag_list(self) :

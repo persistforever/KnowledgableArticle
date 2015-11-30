@@ -82,6 +82,9 @@
     <Compile Include="wechat\simplifier\title_simplifier.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="wechat\simplifier\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="wechat\synonymy\bagofword.py" />
     <Compile Include="wechat\synonymy\word2vector.py" />
     <Compile Include="wechat\synonymy\base.py">
