@@ -42,12 +42,15 @@ def tagging_article() :
     corpus.write_tag_list()
 
 def qa_system() :
+    from file.path_manager import PathManager
+    from basic.corpus import Corpus
+    from qa.article_tag import ArticleCluster
     corpus = Corpus()
-    corpus.read_qa_article()
-    corpus.read_keyword()
-    # corpus.read_sub_sentence()
-    cluster = ArticleCluster()
-    cluster.article_clustering(corpus.article_list, [u'男装'])
+    corpus.read_article_list(PathManager.CORPUS_ARTICLE)
+    cluster = ArticleCluster(corpus_path=PathManager.CORPORA_MMCORPUS,  \
+        tfidf_path=PathManager.CORPORA_TFIDF, \
+        dict_path=PathManager.CORPORA_DICTIONARY)
+    cluster.article_clustering(corpus.article_list, [u'男装<:>n'])
 
 def find_synonymy() :
     from file.path_manager import PathManager
@@ -95,7 +98,7 @@ if __name__ == '__main__' :
     # simplifying_title()
     # simplifying_article()
     # tagging_article()
-    # qa_system()
+    qa_system()
     # create_corpora()
     # create_word2vec()
-    find_synonymy()
+    # find_synonymy()

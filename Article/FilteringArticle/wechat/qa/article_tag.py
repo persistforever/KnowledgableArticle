@@ -1,27 +1,38 @@
 ﻿# -*- encoding = gb18030 -*-
 """ question and anster system clustering article. """
-import os
-import sys
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '..'))
 
+# package importing start
 import codecs
 import numpy as np
-import re
+
 import gensim
+
 from basic.article import Article
 from basic.word import Word
 from file.path_manager import PathManager
 from file.file_operator import TextFileOperator
 from qa.word_cluster import WordCluster
+# package importing end
 
 
 class ArticleCluster :
 
-    def __init__(self) :
-        pass
+    def __init__(self, corpus_path='', tfidf_path='', dict_path='') :
+        self.corpus_path = corpus_path
+        self.tfidf_path = tfidf_path
+        self.dict_path = dict_path
+        self.tfidf_model, self.dictionary = self._read_model()
+
+    def _read_model(self) :
+        """ Read tfidf models. """
+        mmcorpus = gensim.corpora.MmCorpus(self.corpus_path)
+        tfidf_model = gensim.models.TfidfModel.load(self.tfidf_path)
+        dictionary = gensim.corpora.Dictionary.load(self.dict_path)
+        return tfidf_model, dictionary
 
     def article_clustering(self, article_list, query_list) :
         """ clustering article's keyword accordding to query. """
+        '''
         while len(article_list) > 1 :
             print len(article_list)
             word_dict = self._article_tfidf(article_list, query_list)
@@ -50,6 +61,7 @@ class ArticleCluster :
             article_list = perticular_article_list
         if len(article_list) > 0 :
             print [article.id for article in article_list][0]
+        '''
 
     def _article_tagging(self, article_list, query_list) :
         """ tagging each article. """
