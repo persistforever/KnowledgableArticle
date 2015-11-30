@@ -33,7 +33,7 @@ import tools.FileOperator;
 public class ArticleLucene {
 	/* attributes */
 	ArrayList<Article> artlist = new ArrayList<Article>();
-    File inputFile = new File("E://file/knowledge/lucene/input/5/knowledgeable");
+    File inputFile = new File("E://file/knowledge/lucene/input/5/article");
     File indexDir = new File("E://file/knowledge/lucene/index/5"); 
     File outputDir = new File("E://file/knowledge/lucene/output/5/queryresult"); 
 	
@@ -51,6 +51,8 @@ public class ArticleLucene {
         }
         System.out.println(this.artlist.size());
         System.out.println("importing article finished ...");
+        // this.artlist = uniqueResult(this.artlist);
+        // FileOperator.ArticleTextWriter(this.outputDir.getPath(), this.artlist, "gb18030");
 	}
 
     /* process methods */

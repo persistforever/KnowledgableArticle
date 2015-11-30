@@ -18,12 +18,14 @@ def classifying() :
     corpus.write_knowledgeable_article(rate=0.2)
 
 def simplifying_title() :
+    from file.path_manager import PathManager
+    from basic.corpus import Corpus
     corpus = Corpus()
-    corpus.read_knowledgeable()
-    corpus.read_sub_title()
-    corpus.read_keyword()
+    corpus.read_article_list(PathManager.CORPUS_ARTICLE)
+    corpus.read_sub_title(PathManager.CORPUS_SUBTITLE)
+    corpus.read_keyword(PathManager.CORPUS_KEYWORD)
     corpus.title_simplifying()
-    corpus.write_simply_knowledgeable_article()
+    corpus.write_simply_article(PathManager.CORPUS_SIMPLYARTICLE)
 
 def simplifying_article() :
     corpus = Corpus()
@@ -107,10 +109,10 @@ def filter_word() :
 
 if __name__ == '__main__' :
     # classifying()
-    # simplifying_title()
+    simplifying_title()
     # simplifying_article()
     # tagging_article()
-    qa_system()
+    # qa_system()
     # create_corpora()
     # create_word2vec()
     # find_synonymy()

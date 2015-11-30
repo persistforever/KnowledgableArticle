@@ -18,6 +18,9 @@ class PathManager :
     CORPUS_ARTICLE = 'article list in corpus'
     CORPUS_SPLIT = 'split list in corpus'
     CORPUS_SENTENCE = 'sentence list in corpus'
+    CORPUS_SUBTITLE = 'subtitle list in corpus'
+    CORPUS_KEYWORD = 'keyword list in corpus'
+    CORPUS_SIMPLYARTICLE = 'simply article list in corpus'
     CORPORA_DICTIONARY = 'dictionary in corpora accorrding to gensim'
     CORPORA_MMCORPUS = 'corpus in corpora stored as mmcorpus'
     CORPORA_TFIDF = 'tfidf model in corpora'
@@ -37,6 +40,9 @@ class PathManager :
         PathManager.CORPUS_ARTICLE = cfg.get('corpus', 'ARTICLE')
         PathManager.CORPUS_SPLIT = cfg.get('corpus', 'SPLIT')
         PathManager.CORPUS_SENTENCE = cfg.get('corpus', 'SENTENCE')
+        PathManager.CORPUS_SUBTITLE = cfg.get('corpus', 'SUBTITLE')
+        PathManager.CORPUS_KEYWORD = cfg.get('corpus', 'KEYWORD')
+        PathManager.CORPUS_SIMPLYARTICLE = cfg.get('corpus', 'SIMPLYARTICLE')
         PathManager.CORPORA_DICTIONARY = cfg.get('corpora', 'DICTIONARY')
         PathManager.CORPORA_MMCORPUS = cfg.get('corpora', 'MMCORPUS')
         PathManager.CORPORA_TFIDF = cfg.get('corpora', 'TFIDF')

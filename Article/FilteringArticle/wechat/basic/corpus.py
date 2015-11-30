@@ -11,7 +11,7 @@ from article import Word
 from file.file_operator import BaseFileOperator, CSVFileOperator, TextFileOperator
 # from classifier.unsupervised_classifier import MultiConditionClassifier
 # from classifier.supervised_classifier import SvmClassifier
-# from simplifier.title_simplifier import TitleSimplifier
+from simplifier.title_simplifier import TitleSimplifier
 # package importing end
 
 
@@ -145,28 +145,28 @@ class Corpus :
         print 'wrirting simply knowledgeable article finished ...'
         self._constr_dict_id()
 
-    def read_keyword(self) :
+    def read_keyword(self, keyword_path) :
         """ Read key_word from input/keyword.
         Each row of the file is a article.
         column[0] of the file is the id of the article.
         Each column[1:] of the file is the keyword of the article. """
 
         self.file_operator = TextFileOperator()
-        data_list = self.file_operator.reading(self.path_manager.get_classify_keyword())
+        data_list = self.file_operator.reading(keyword_path)
         for data in data_list :
             id = data[0]
             if id in self._id_article :
                 self._id_article[id].import_keyword(data, length=100)
         print 'reading keyword finished ...'
 
-    def read_sub_title(self) :
+    def read_sub_title(self, subtitle_path) :
         """ Read sub title of a article.
         Each row of the file is a sub title.
         column[0] of the file is the id of the article.
         column[1] of the file is the sub title. """
 
         self.file_operator = TextFileOperator()
-        data_list = self.file_operator.reading(self.path_manager.get_classify_subtitle())
+        data_list = self.file_operator.reading(subtitle_path)
         for data in data_list :
             if len(data) >= 2 :
                 id = data[0]

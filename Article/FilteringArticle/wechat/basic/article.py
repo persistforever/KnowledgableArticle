@@ -80,7 +80,7 @@ class Article :
         """ Import sub title of article. """
         sub = []
         for part in data[1].split(' ') :
-            word = Word(part)
+            word = Word(part, sp_char=':')
             sub.append(word)
         self.sub_title.append(sub)
 
@@ -88,7 +88,7 @@ class Article :
         """ Import sub sentence of article. """
         sub = []
         for part in data[1].split(' ') :
-            word = Word(part)
+            word = Word(part, sp_char=':')
             sub.append(word)
         self.sub_sentence.append(sub)
     
