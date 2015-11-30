@@ -98,7 +98,7 @@ class ArticleCluster :
         word_dict = dict()
         for idx, text in enumerate(self.mmcorpus) :
             for query in query_list :
-                for keyword, tfidf in filter(lambda x: x[1] > 0.1, self.tfidf_model[text]) :
+                for keyword, tfidf in filter(lambda x: x[1] > 0.2, self.tfidf_model[text]) :
                     if self.dictionary[keyword] in self.word2vec.vocab and \
                         query in self.word2vec.vocab :
                         if self.dictionary[keyword] not in word_dict :
@@ -114,7 +114,7 @@ class ArticleCluster :
         for word in word_dict.keys() :
             word_set.append(self.word2vec[word])
         word_set = np.array(word_set)
-        cls = KMeans(n_clusters=2, max_iter=300).fit(word_set)
+        cls = KMeans(n_clusters=3, max_iter=300).fit(word_set)
         for idx in range(cls.labels_.shape[0]) :
             print word_dict.keys()[idx], cls.labels_[idx]
 

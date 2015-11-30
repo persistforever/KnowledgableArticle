@@ -54,7 +54,7 @@ def qa_system() :
         tfidf_path=PathManager.CORPORA_TFIDF, \
         dict_path=PathManager.CORPORA_DICTIONARY, \
         w2v_path=PathManager.CORPORA_WORD2VEC)
-    word_dict = cluster.article_tfidf(corpus.article_list, [u'发型<:>nz'])
+    word_dict = cluster.article_tfidf(corpus.article_list, [u'发型<:>n'])
     cluster.word_clustering(word_dict)
     # cluster.article_clustering(corpus.article_list, [u'瑜伽<:>nz'])
 
@@ -113,8 +113,8 @@ if __name__ == '__main__' :
     # simplifying_title()
     # simplifying_article()
     # tagging_article()
-    # qa_system()
+    qa_system()
     # create_corpora()
-    create_word2vec()
+    # create_word2vec()
     # find_synonymy()
     # filter_word()
