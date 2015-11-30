@@ -49,8 +49,11 @@ def qa_system() :
     corpus.read_article_list(PathManager.CORPUS_ARTICLE)
     cluster = ArticleCluster(corpus_path=PathManager.CORPORA_MMCORPUS,  \
         tfidf_path=PathManager.CORPORA_TFIDF, \
-        dict_path=PathManager.CORPORA_DICTIONARY)
-    cluster.article_clustering(corpus.article_list, [u'男装<:>n'])
+        dict_path=PathManager.CORPORA_DICTIONARY, \
+        w2v_path=PathManager.CORPORA_WORD2VEC)
+    word_dict = cluster.article_tfidf(corpus.article_list, [u'瑜伽<:>nz'])
+    cluster.word_clustering(word_dict)
+    # cluster.article_clustering(corpus.article_list, [u'瑜伽<:>nz'])
 
 def find_synonymy() :
     from file.path_manager import PathManager
@@ -107,8 +110,8 @@ if __name__ == '__main__' :
     # simplifying_title()
     # simplifying_article()
     # tagging_article()
-    # qa_system()
-    create_corpora()
+    qa_system()
+    # create_corpora()
     # create_word2vec()
     # find_synonymy()
     # filter_word()
