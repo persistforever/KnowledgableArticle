@@ -14,7 +14,7 @@ public class TFMapper extends Mapper<Object, Text, Text, Text> {
 			Mapper<Object, Text, Text, Text>.Context context)
 			throws IOException, InterruptedException {
 		String line = new String(value.getBytes(), 0, value.getLength(), "GB18030");
-		if (LineSplit.split(line, "\t").size() >= 3) {
+		if (line.split("\t").length >= 3) {
 			String id = LineSplit.split(line, "\t", 0);
 			String title = LineSplit.split(line, "\t", 1);
 			String content = LineSplit.split(line, "\t", 2);

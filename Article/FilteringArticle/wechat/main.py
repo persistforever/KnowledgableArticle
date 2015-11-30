@@ -55,7 +55,7 @@ def find_synonymy() :
     # from synonymy.bagofword import BagOfWord
     # synonymy_searcher = BagOfWord(n_most=100, w2t_path=PathManager.CORPORA_WORD2TFIDF, \
     #     dict_path=PathManager.CORPORA_DICTIONARY)
-    synonymy_searcher = Word2Vector(n_most=100, w2v_path=PathManager.TOOLS_WORD2VEC)
+    synonymy_searcher = Word2Vector(n_most=100, w2v_path=PathManager.CORPORA_WORD2VEC)
     synonymy_searcher.read_querys(PathManager.SYNONYMYS_QUERY)
     synonymy_searcher.find_synonymy_words()
     synonymy_searcher.write_synonymys(PathManager.SYNONYMYS_SYNONYMY)
@@ -79,12 +79,14 @@ def create_corpora() :
         tfidf_model=tfidf_model, path=PathManager.CORPORA_WORD2TFIDF)
     print 'finished ...'
 
-def create_word2vector() :
+def create_word2vec() :
     from basic.corpus import Corpus
     from file.path_manager import PathManager
     corpus = Corpus()
     corpus.read_article_list(PathManager.CORPUS_ARTICLE)
     corpus.read_sentence_list(PathManager.CORPUS_SENTENCE)
+    sentences = corpus.article_to_sentences()
+    corpus.create_wordsim_word2vec(type='init', sentences=sentences, path=PathManager.CORPORA_WORD2VEC)
     print 'finished ...'
 
 

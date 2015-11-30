@@ -10,7 +10,6 @@ import ConfigParser
 class PathManager :
 
     # a list of path
-    TOOLS_WORD2VEC = 'word2vector initial file in the tools'
     SYNONYMYS_QUERY = 'query in the synonymys'
     SYNONYMYS_SYNONYMY = 'synonymy in the synonymys'
     BOWS_BOW = 'bag of word in bows'
@@ -22,13 +21,13 @@ class PathManager :
     CORPORA_MMCORPUS = 'corpus in corpora stored as mmcorpus'
     CORPORA_TFIDF = 'tfidf model in corpora'
     CORPORA_WORD2TFIDF = 'word2sim by tfidf model initial file in the corpora'
+    CORPORA_WORD2VEC = 'word2sim by word2vec model initial file in the corpora'
         
     @staticmethod
     def _get_configuration() :
         """ Get FILE_PATH of path manager. """
         cfg = ConfigParser.ConfigParser()
         cfg.read('wechat/file/configuration.ini')
-        PathManager.TOOLS_WORD2VEC = cfg.get('tools', 'WORD2VEC')
         PathManager.SYNONYMYS_QUERY = cfg.get('synonymys', 'QUERY')
         PathManager.SYNONYMYS_SYNONYMY = cfg.get('synonymys', 'SYNONYMY')
         PathManager.BOWS_BOW = cfg.get('bows', 'BOW')
@@ -40,6 +39,7 @@ class PathManager :
         PathManager.CORPORA_MMCORPUS = cfg.get('corpora', 'MMCORPUS')
         PathManager.CORPORA_TFIDF = cfg.get('corpora', 'TFIDF')
         PathManager.CORPORA_WORD2TFIDF = cfg.get('corpora', 'WORD2TFIDF')
+        PathManager.CORPORA_WORD2VEC = cfg.get('corpora', 'WORD2VEC')
 
 
 PathManager._get_configuration()

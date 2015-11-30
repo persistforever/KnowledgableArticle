@@ -32,9 +32,9 @@ class Word2Vector(SynonymySearcherBase) :
         condidate_dict = dict()
         for query_word in self.query_list :
             synonymy_list = self.vector_model.most_similar( \
-                query_word.name.encode('utf8'), topn=self.n_condidate)
+                query_word.to_string(), topn=self.n_condidate)
             for word_name, similarity in synonymy_list :
-                word = Word(word_name.decode('utf8'), sp_char='<:>')
+                word = Word(word_name, sp_char='<:>')
                 if word.to_string() not in condidate_dict :
                     condidate_dict[word.to_string()] = []
                 condidate_dict[word.to_string()].append(similarity)

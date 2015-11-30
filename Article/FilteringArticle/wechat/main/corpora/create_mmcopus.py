@@ -34,11 +34,11 @@ def create_corpora(artice_path, split_path, wordbag_path, \
 
 
 if __name__ == '__main__' :
-    article = sys.argv[1]
-    split = sys.argv[2]
-    wordbag = sys.argv[3]
-    dictionary = sys.argv[4]
-    mmcorpus = sys.argv[5]
-    tfidf_model = sys.argv[6]
-    word2tfidf = sys.argv[7]
+    article = sys.argv[1].strip()
+    split = sys.argv[2].strip()
+    wordbag = sys.argv[3].strip()
+    dictionary = sys.argv[4].strip()
+    mmcorpus = sys.argv[5].strip()
+    tfidf_model = sys.argv[6].strip()
+    word2tfidf = sys.argv[7].strip()
     create_corpora(article, split, wordbag, dictionary, mmcorpus, tfidf_model, word2tfidf)

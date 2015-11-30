@@ -2,7 +2,7 @@ package main;
 
 import java.io.IOException;
 
-import bop.BOP;
+import bow.BOW;
 
 
 public class BOWRun {
@@ -20,14 +20,14 @@ public class BOWRun {
 		String datapath = args[0];
 		String wordpath = args[1];
 		String bowpath = args[2];
-		BOWRun idfRun = new BOWRun(datapath, wordpath, bowpath);
-		idfRun.run();
+		BOWRun bowRun = new BOWRun(datapath, wordpath, bowpath);
+		bowRun.run();
 	}
 	
 	public void run() throws IOException, ClassNotFoundException,
 			InterruptedException {
 		System.out.println("============ construct article bag of word ===============");
-		BOP bow = new BOP(this.datapath, this.wordpath, this.bowpath);
+		BOW bow = new BOW(this.datapath, this.wordpath, this.bowpath);
 		bow.run();
 	}
 }

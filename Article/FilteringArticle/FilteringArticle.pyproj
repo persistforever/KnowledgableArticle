@@ -68,6 +68,7 @@
     <Compile Include="wechat\main.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="wechat\main\corpora\create_word2vec.py" />
     <Compile Include="wechat\main\corpora\create_mmcopus.py" />
     <Compile Include="wechat\main\find_synonymy.py" />
     <Compile Include="wechat\qa\article_tag.py">

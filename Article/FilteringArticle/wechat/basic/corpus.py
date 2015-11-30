@@ -68,7 +68,7 @@ class Corpus :
                 id = data[0]
                 if id in self._id_article :
                     article = self._id_article[id]
-                    article.import_sub_sentence()
+                    article.import_sub_sentence(data)
                     
     def read_wordbag(self, wordbag_path) :
         """ Read word bag.
@@ -322,21 +322,20 @@ class Corpus :
     
     def article_to_sentences(self) :
         """ Transform article to sentences accordding to gensim. 
-            Texts is a [list] and each element is a [list].
-            Each element of the texts_list is a article.
-            Each element of the article is a word.
+            Sentences is a [list] and each element is a [list].
+            Each element of the Sentences is a sentence.
+            Each element of the sentence is a word.
             Like this [ [word_a, word_b, ...], 
                         [word_c, word_d, ...], 
                         ...
                       ]
         """
-        texts = []
+        sentences = []
         for article in self.article_list :
-            text = []
-            text.extend([word.to_string() for word in article.split_title])
-            text.extend([word.to_string() for word in article.split_content])
-            texts.append(text)
-        return texts
+            for sentence in article.sub_sentence :
+                if len(sentence) > 10 :
+                    sentences.append([word.to_string() for word in sentence])
+        return sentences
 
     def word_to_tokens(self) :
         """ Transform word to tokens accordding to gensim.
@@ -454,3 +453,17 @@ class Corpus :
                 similarity.append((word_id, sim))
             similarities.append(similarity)
         return similarities
+
+    def create_wordsim_word2vec(self,  type='init', sentences=[], path='') :
+        """ If type is 'init' :
+                Initialize the word2vec wordsim using sentences
+            If type is 'load' :
+                Initialize the word2vec wordsim from the file.
+        """
+        if type is 'init' :
+            word2vec_model = gensim.models.Word2Vec(sentences, size=100)
+            word2vec_model.save(path)
+        elif type is 'load' :
+            word2vec_model = gensim.models.Word2Vec.load(path)
+        print word2vec_model
+        return word2vec_model
