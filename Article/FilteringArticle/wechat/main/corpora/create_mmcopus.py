@@ -16,21 +16,19 @@ from basic.corpus import Corpus
 
 
 def create_corpora(artice_path, split_path, wordbag_path, \
-    dictionary_path, mmcorpu_path, tfidf_path, w2t_path) :
+    dictionary_path, mmcorpu_path, tfidf_path) :
     corpus = Corpus()
     corpus.read_article_list(artice_path)
     corpus.read_split_list(split_path)
-    corpus.read_wordbag(wordbag_path, sp_char='<:>')
+    wordbag = corpus.read_wordbag(wordbag_path, sp_char='<:>')
     texts = corpus.article_to_texts()
-    tokens = corpus.word_to_tokens()
+    tokens = corpus.word_to_tokens(wordbag)
     dictionary = corpus.create_gensim_dictionary(type='init', texts=texts, tokens=tokens, \
         path=dictionary_path)
     mmcorpus = corpus.create_gensim_corpus(type='init', texts=texts, dictionary=dictionary, \
         path=mmcorpu_path)
     tfidf_model = corpus.create_gensim_tfidf(type='init', mmcorpus=mmcorpus, \
         path=tfidf_path)
-    word2tfidf = corpus.create_wordsim_tfidf(type='init', mmcorpus=mmcorpus, dictionary=dictionary, \
-        tfidf_model=tfidf_model, path=w2t_path)
 
 
 if __name__ == '__main__' :
@@ -40,5 +38,4 @@ if __name__ == '__main__' :
     dictionary = sys.argv[4].strip()
     mmcorpus = sys.argv[5].strip()
     tfidf_model = sys.argv[6].strip()
-    word2tfidf = sys.argv[7].strip()
-    create_corpora(article, split, wordbag, dictionary, mmcorpus, tfidf_model, word2tfidf)
+    create_corpora(article, split, wordbag, dictionary, mmcorpus, tfidf_model)
