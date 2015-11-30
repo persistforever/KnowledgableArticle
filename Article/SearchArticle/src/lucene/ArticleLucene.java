@@ -31,10 +31,7 @@ import tools.FileOperator;
 
 public class ArticleLucene {
 	/* attributes */
-	ArrayList<Article> artlist = new ArrayList<Article>();
-    File inputFile = new File("E://file/knowledge/lucene/input/5/article");
-    File indexDir = new File("E://file/knowledge/lucene/index/5"); 
-    File outputDir = new File("E://file/knowledge/lucene/output/5/queryresult"); 
+	ArrayList<Article> artlist = new ArrayList<Article>(); 
 	
 	/* methods */
     public ArticleLucene() throws IOException {
@@ -53,8 +50,8 @@ public class ArticleLucene {
 	}
 
     /* process methods */
-	public void constructIndexer() throws IOException {
-        Directory dir = FSDirectory.open(indexDir);
+	public void constructIndexer(String indexPath) throws IOException {
+        Directory dir = FSDirectory.open(new File(indexPath));
         Analyzer luceneAnalyzer = new StandardAnalyzer(Version.LUCENE_36);
         IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_36,luceneAnalyzer);
         iwc.setOpenMode(OpenMode.CREATE);
@@ -77,26 +74,24 @@ public class ArticleLucene {
         System.out.println("constructing indexer finished ...");
 	}
 	
-    public void searchingQuery() 
+    public void searchingQuery(String indexPath, String resultPath) 
     		throws CorruptIndexException, IOException {
-    	IndexReader reader = IndexReader.open(FSDirectory.open(this.indexDir));
+    	IndexReader reader = IndexReader.open(FSDirectory.open(new File(indexPath)));
         IndexSearcher searcher = new IndexSearcher(reader);  
     	ScoreDoc[] hits = null;
     	Query query = null;
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);  
         ArrayList<Article> resultlist = new ArrayList<Article>();
         try {
-        	String[] querys = {"男", "发型", "女"};
-        	String[] fields = {"content", "content", "content"};
+        	String[] querys = {"发型"};
+        	String[] fields = {"content"};
         	BooleanClause.Occur[] flags = { 
-        			BooleanClause.Occur.SHOULD,  
-        			BooleanClause.Occur.SHOULD,
-        			BooleanClause.Occur.MUST_NOT}; 
+        			BooleanClause.Occur.SHOULD}; 
         	query = MultiFieldQueryParser.parse(Version.LUCENE_36, querys, fields, flags, analyzer);
         } catch (ParseException e) {  
         }  
         if (searcher != null) {  
-            TopDocs results = searcher.search(query, 10000);
+            TopDocs results = searcher.search(query, 100);
             hits = results.scoreDocs;
             if (hits.length > 0) { 
                 System.out.println("找到:" + hits.length + " 个结果!");
@@ -114,8 +109,8 @@ public class ArticleLucene {
             }
             searcher.close();
         }
-        resultlist = uniqueResult(resultlist);
-        FileOperator.ArticleTextWriter(this.outputDir.getPath(), resultlist, "gb18030");
+        // resultlist = uniqueResult(resultlist);
+        FileOperator.ArticleTextWriter(new File(resultPath).getPath(), resultlist, "gb18030");
         System.out.println("writing article finished ...");
     }
     

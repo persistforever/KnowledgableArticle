@@ -12,7 +12,8 @@ from basic.word import Word
 from file.path_manager import PathManager
 from file.file_operator import TextFileOperator
 from qa.word_cluster import WordCluster
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans, SpectralClustering
+from sklearn import metrics
 # package importing end
 
 
@@ -64,7 +65,7 @@ class ArticleCluster :
         if len(article_list) > 0 :
             print [article.id for article in article_list][0]
 
-    def _article_tagging(self, article_list, query_list) :
+    def _article_tagging(self, lucene_list, query_list) :
         """ tagging each article. """
         word_dict = dict()
         for article in article_list :
@@ -93,30 +94,61 @@ class ArticleCluster :
                         word_dict[word_object.name] += 1
         return word_dict
 
-    def article_tfidf(self, article_list, query_list) :
+    def user_choosing(self, lucene_list, query_list) :
+        word_dict, tag_list = self._article_tfidf(lucene_list, query_list)
+        word_dict = self._word_clustering(word_dict)
+        word_num = {}.fromkeys(0, )
+
+    def _article_tfidf(self, lucene_list, query_list) :
         """ tagging each article. """
         word_dict = dict()
-        for idx, text in enumerate(self.mmcorpus) :
+        tag_list = []
+        for idx, text in enumerate([self.mmcorpus[index] for index in lucene_list]) :
+            tag = []
             for query in query_list :
-                for keyword, tfidf in filter(lambda x: x[1] > 0.2, self.tfidf_model[text]) :
+                for keyword, tfidf in filter(lambda x: x[1] > 0.6, self.tfidf_model[text]) :
                     if self.dictionary[keyword] in self.word2vec.vocab and \
                         query in self.word2vec.vocab :
                         if self.dictionary[keyword] not in word_dict :
                             word_dict[self.dictionary[keyword]] = []
                         word_dict[self.dictionary[keyword]].append( \
                             tfidf * self.word2vec.similarity(self.dictionary[keyword], query))
+                        tag.append(keyword)
+            tag_list.append(tag)
         word_dict = {word:None for word, lst in word_dict.iteritems() if sum(lst)>0}
-        return word_dict
+        return word_dict, tag_list
 
-    def word_clustering(self, word_dict) :
+    def _word_clustering(self, word_dict) :
         """ clustering the word. """
         word_set = []
         for word in word_dict.keys() :
             word_set.append(self.word2vec[word])
         word_set = np.array(word_set)
-        cls = KMeans(n_clusters=3, max_iter=300).fit(word_set)
-        for idx in range(cls.labels_.shape[0]) :
-            print word_dict.keys()[idx], cls.labels_[idx]
+        max_labels_, max_evaluation = np.zeros([len(word_dict), 1]), 0.2
+        for n in range(2, 5) :
+            cls = SpectralClustering(n_clusters=n, assign_labels='discretize').fit(word_set)
+            score = metrics.silhouette_score(word_set, cls.labels_, metric='cosine')
+            if score > max_evaluation :
+                max_evaluation = score
+                max_labels_ = cls.labels_
+        for idx in range(max_labels_.shape[0]) :
+            word_dict[word_dict.keys()[idx]] = max_labels_[idx]
+        for word in word_dict :
+            print word, word_dict[word]
+        return word_dict
+
+    def ploting(self, word_set, labels) :
+        """ Plot word_dict. """
+        from sklearn.manifold import TSNE
+        import matplotlib.pyplot as plt
+        tsne = TSNE(n_components=2, random_state=0)
+        color = ['r', 'g', 'b', 'y', 'm']
+        for point, label in zip(tsne.fit_transform(word_set), labels)  :
+            plt.scatter(point[0], point[1], color=color[label])
+        plt.show()
+
+    def _cluster_likelihood(self, word_set, labels_) :
+        """ Calculate the likelihood of cluster. """
 
     def _keyword_query_distance(self, keyword, query, sub_sentence) :
         """ calculate distance between keyword and query. """

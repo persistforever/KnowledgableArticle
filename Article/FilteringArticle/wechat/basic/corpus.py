@@ -38,6 +38,7 @@ class Corpus :
                 article.import_article(data)
                 self.article_list.append(article)
         self._constr_dict_id()
+        self._constr_dict_index()
 
     def read_split_list(self, split_path) :
         """ Read split list.
@@ -83,6 +84,24 @@ class Corpus :
                 word = Word(data[0], sp_char=sp_char)
                 wordbag.append(word)
         return wordbag
+
+    def read_lucene_list(self, lucene_path) :
+        """ Read lucene list.
+            Each row of the file is a article.
+            column[0] of the file is the id of article.
+            column[1] of the file is the url of article.
+            column[2] of the file is the title of article.
+            column[3] of the file is the content of article.
+        """
+        file_operator = TextFileOperator()
+        data_list = file_operator.reading(lucene_path)
+        lucene_list = []
+        for data in data_list :
+            if len(data) >= 4 :
+                id = data[0]
+                if id in self._id_index :
+                    lucene_list.append(self._id_index[id])
+        return lucene_list
 
     def read_train_dataset(self) :
         """ Read train_dataset from input/traindata.
@@ -273,11 +292,14 @@ class Corpus :
     def _constr_dict_id(self) :
         """ Construct id_article dict.
         key is id, value is Article object. """
-        self._id_article = dict()
-        for article in self.article_list :
-            if article.id not in self._id_article :
-                self._id_article[article.id] = article
+        self._id_article = {article.id: article for article in self.article_list}
         print 'constructing _id_article dict finished ...'
+
+    def _constr_dict_index(self) :
+        """ Construct id_index dict of article.
+        key is id, value is index object. """
+        self._id_index = {article.id: index for index, article in enumerate(self.article_list)}
+        print 'constructing _id_index dict finished ...'
 
     def _normalization(self, dataset) :
         """ Normalize dataset using mapminmax method. """

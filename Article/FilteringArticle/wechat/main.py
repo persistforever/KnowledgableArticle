@@ -49,14 +49,13 @@ def qa_system() :
     from basic.corpus import Corpus
     from qa.article_tag import ArticleCluster
     corpus = Corpus()
-    corpus.read_article_list(PathManager.CORPUS_ARTICLE)
+    corpus.read_article_list(PathManager.CORPUS_UNIQUEARTICLE)
+    lucene_list = corpus.read_lucene_list(PathManager.CORPUS_LUCENE)
     cluster = ArticleCluster(corpus_path=PathManager.CORPORA_MMCORPUS,  \
         tfidf_path=PathManager.CORPORA_TFIDF, \
         dict_path=PathManager.CORPORA_DICTIONARY, \
         w2v_path=PathManager.CORPORA_WORD2VEC)
-    word_dict = cluster.article_tfidf(corpus.article_list, [u'发型<:>n'])
-    cluster.word_clustering(word_dict)
-    # cluster.article_clustering(corpus.article_list, [u'瑜伽<:>nz'])
+    word_dict = cluster.user_choosing(lucene_list, [u'发型<:>n'])
 
 def find_synonymy() :
     from file.path_manager import PathManager
