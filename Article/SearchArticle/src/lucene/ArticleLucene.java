@@ -83,9 +83,10 @@ public class ArticleLucene {
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);  
         ArrayList<Article> resultlist = new ArrayList<Article>();
         try {
-        	String[] querys = {"发型"};
-        	String[] fields = {"content"};
+        	String[] querys = {"发型", "发型"};
+        	String[] fields = {"title", "content"};
         	BooleanClause.Occur[] flags = { 
+        			BooleanClause.Occur.SHOULD,  
         			BooleanClause.Occur.SHOULD}; 
         	query = MultiFieldQueryParser.parse(Version.LUCENE_36, querys, fields, flags, analyzer);
         } catch (ParseException e) {  

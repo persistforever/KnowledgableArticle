@@ -97,7 +97,6 @@ class ArticleCluster :
     def user_choosing(self, lucene_list, query_list) :
         word_dict, tag_list = self._article_tfidf(lucene_list, query_list)
         word_dict = self._word_clustering(word_dict)
-        word_num = {}.fromkeys(0, )
 
     def _article_tfidf(self, lucene_list, query_list) :
         """ tagging each article. """
