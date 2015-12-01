@@ -9,9 +9,8 @@ import gensim
 from article import Article
 from article import Word
 from file.file_operator import BaseFileOperator, CSVFileOperator, TextFileOperator
-# from classifier.unsupervised_classifier import MultiConditionClassifier
-# from classifier.supervised_classifier import SvmClassifier
 from simplifier.title_simplifier import TitleSimplifier
+import classifier.unsupervised_classifier as unspclf
 # package importing end
 
 
@@ -32,11 +31,13 @@ class Corpus :
         """
         file_operator = TextFileOperator()
         data_list = file_operator.reading(article_path)
-        for data in data_list :
-            if len(data) >= 4 :
-                article = Article()
-                article.import_article(data)
-                self.article_list.append(article)
+        entry_list = data_list[0]
+        for data in data_list[1:] :
+            article = Article()
+            for idx in range(len(data)) :
+                cmd = entry_list[idx] + '<=>' + data[idx]
+                article.set_attributes(cmd)
+            self.article_list.append(article)
         self._constr_dict_id()
         self._constr_dict_index()
 
@@ -221,6 +222,9 @@ class Corpus :
                 self.train_dataset, self.train_label, self.article_list)
             self.write_support_vecotrs(classifier.support_index_list)
             self._gzh_sorting()
+        elif seq == 'single_condition' :
+            classifier = unspclf.SingleConditionClassifier()
+            self.sorted_article_list = classifier.sorting(self.article_list)
         print 'classifying article_list finished ...'
     
     def title_simplifying(self, w2v_path='', spst_path='', seq=1) :
@@ -230,17 +234,15 @@ class Corpus :
         simplifier.model_simplifying(self.article_list)
         print 'simplifying title finished ...'
 
-    def write_knowledgeable_article(self, rate=0.1) :
-        """ Write knowledgeable article into output/knowledgeable.
+    def write_knowledgeable_article(self, knowledge_path, num=10000) :
+        """ Write knowledgeable article.
         Each row of file is article.
-        Each column of file is the attributes of the article. """
-        self.file_operator = CSVFileOperator()
-        length = int(len(self.sorted_article_list) * rate)
-        data_list = []
-        for article in self.sorted_article_list[0:length] :
-            data_list.append(article.get_article())
-        self.file_operator.writing(data_list, self.path_manager.get_classify_knowledgable())
-        print 'wrirting knowledgeable article finished ...'
+        Each column[0] of file is the id of the article. """
+        file_operator = TextFileOperator()
+        data_list = [['id']]
+        for article in self.sorted_article_list[0:num] :
+            data_list.append([article.id])
+        file_operator.writing(data_list, knowledge_path)
 
     def write_simply_article(self, simply_path) :
         """ Write simplified knowledgeable article.

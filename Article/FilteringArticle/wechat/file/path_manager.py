@@ -24,6 +24,7 @@ class PathManager :
     CORPUS_SIMPLYARTICLE = 'simply article list in corpus'
     CORPUS_UNIQUEARTICLE = 'unique article list in corpus'
     CORPUS_LUCENE = 'lucene result article list in corpus'
+    CORPUS_KNOWLEDGE = 'knowledgeable article list in corpus'
     CORPORA_DICTIONARY = 'dictionary in corpora accorrding to gensim'
     CORPORA_MMCORPUS = 'corpus in corpora stored as mmcorpus'
     CORPORA_TFIDF = 'tfidf model in corpora'
@@ -49,6 +50,7 @@ class PathManager :
         PathManager.CORPUS_SIMPLYARTICLE = cfg.get('corpus', 'SIMPLYARTICLE')
         PathManager.CORPUS_UNIQUEARTICLE = cfg.get('corpus', 'UNIQUEARTICLE')
         PathManager.CORPUS_LUCENE = cfg.get('corpus', 'LUCENE')
+        PathManager.CORPUS_KNOWLEDGE = cfg.get('corpus', 'KNOWLEDGE')
         PathManager.CORPORA_DICTIONARY = cfg.get('corpora', 'DICTIONARY')
         PathManager.CORPORA_MMCORPUS = cfg.get('corpora', 'MMCORPUS')
         PathManager.CORPORA_TFIDF = cfg.get('corpora', 'TFIDF')

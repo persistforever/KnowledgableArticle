@@ -1,8 +1,8 @@
-package main;
-
-import gzh_avg_collectnum.GAC;
+package article.main;
 
 import java.io.IOException;
+
+import article.gzh_avg_collectnum.GAC;
 
 
 public class GACRun {

@@ -10,12 +10,14 @@ If function func_name debug finished, please complete the wechat/main/func_name.
 
 
 def classifying() :
+    from basic.corpus import Corpus
+    from file.path_manager import PathManager
     corpus = Corpus()
-    corpus.read_train_dataset()
-    corpus.read_article_list()
-    corpus.read_test_dataset()
-    corpus.classifying(2)
-    corpus.write_knowledgeable_article(rate=0.2)
+    # corpus.read_train_dataset()
+    # corpus.read_test_dataset()
+    corpus.read_article_list(PathManager.CORPUS_ARTICLE)
+    corpus.classifying('single_condition')
+    corpus.write_knowledgeable_article(PathManager.CORPUS_KNOWLEDGE, num=10000)
 
 def simplifying_title() :
     from file.path_manager import PathManager
@@ -108,11 +110,11 @@ def filter_word() :
 
 
 if __name__ == '__main__' :
-    # classifying()
+    classifying()
     # simplifying_title()
     # simplifying_article()
     # tagging_article()
-    qa_system()
+    # qa_system()
     # create_corpora()
     # create_word2vec()
     # find_synonymy()

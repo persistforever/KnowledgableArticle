@@ -59,7 +59,7 @@ class TextFileOperator(BaseFileOperator) :
     def reading(self, file_name, encoding='gb18030'):
         """ Read the file as text file. """
         self.data_list = []
-        with codecs.open(file_name, mode='rb', encoding=encoding) as fo :
+        with codecs.open(file_name, mode='r', encoding=encoding) as fo :
             for line in fo.readlines() :
                 self.data_list.append(line.strip().split('\t'))
         return self.data_list

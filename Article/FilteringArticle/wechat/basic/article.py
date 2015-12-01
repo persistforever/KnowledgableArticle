@@ -19,6 +19,16 @@ class Article :
         for key, value in params.iteritems() :
             setattr(self, key, value)
 
+    def set_attributes(self, *params) :
+        """ Set attributes of the article. """
+        for cmd in params :
+            key, value = cmd.split('<=>')
+            setattr(self, key, value)
+
+    def get_attribute(self, param) :
+        """ Get attribute of the article. """
+        return getattr(self, param)
+
     def import_article(self, data) :
         """ Import basic attributes of article. 
         The attributes of article is [id, url, title, content]. """
