@@ -2,29 +2,29 @@ package article.main;
 
 import java.io.IOException;
 
-import article.article_collectnum.AC;
+import article.collect_click_rate.CCR;
 
 
-public class ACRun {
+public class CCRRun {
 	String dataPath = "";
-	String acPath = "";
+	String ccrPath = "";
 	
-	public ACRun(String dataPath, String acPath) {
+	public CCRRun(String dataPath, String acPath) {
 		this.dataPath = dataPath;
-		this.acPath = acPath;
+		this.ccrPath = acPath;
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, IOException, InterruptedException {
 		String dataPath = args[0];
 		String acPath = args[1];
-		ACRun acRun = new ACRun(dataPath, acPath);
+		CCRRun acRun = new CCRRun(dataPath, acPath);
 		acRun.run();
 	}
 	
 	public void run() throws IOException, ClassNotFoundException,
 			InterruptedException {
 		System.out.println("============ calculate article average collect number ===============");
-		AC ac = new AC(this.dataPath, this.acPath);
+		CCR ac = new CCR(this.dataPath, this.ccrPath);
 		ac.run();
 	}
 }

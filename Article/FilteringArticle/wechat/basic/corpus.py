@@ -50,7 +50,7 @@ class Corpus :
         """
         file_operator = TextFileOperator()
         data_list = file_operator.reading(split_path)
-        for data in data_list :
+        for data in data_list[1:] :
             if len(data) >= 3 :
                 id = data[0]
                 if id in self._id_article :
@@ -289,7 +289,24 @@ class Corpus :
         data_list = []
         for word in wordbag :
             data_list.append([word.to_string()])
-        data_list = file_operator.writing(data_list, wordbag_path)
+        file_operator.writing(data_list, wordbag_path)
+
+    def write_feature_list(self, feature_path) :
+        """ Write feature list.
+            Each row of the file is a article.
+            column[0] of the file is the id.
+            column[1:] of the file is the feature.
+        """
+        file_operator = TextFileOperator()
+        data_list = [['id', 'url', 'title', 'n_click', 'n_collect']]
+        for name, value in self.article_list[0].feature_set :
+            data_list[0].append(name)
+        for article in self.article_list :
+            data = [article.id, article.url, article.title, article.n_click, article.n_collect]
+            for name, value in article.feature_set :
+                data.append(value)
+            data_list.append(data)
+        file_operator.writing(data_list, feature_path)
 
     def _constr_dict_id(self) :
         """ Construct id_article dict.

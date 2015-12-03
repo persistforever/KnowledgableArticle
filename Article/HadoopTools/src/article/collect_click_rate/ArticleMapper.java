@@ -1,4 +1,4 @@
-package article.article_collectnum;
+package article.collect_click_rate;
 
 import java.io.IOException;
 
@@ -12,8 +12,9 @@ public class ArticleMapper extends Mapper<Object, Text, Text, Text> {
 		String line = new String(value.getBytes(), 0, value.getLength(), "GB18030");
 		if (line.split("\t").length >= 11) {
 			String id = line.split("\t")[0];
-			String collect = line.split("\t")[8];
-			context.write(new Text(id), new Text(collect));
+			double click = Double.parseDouble(line.split("\t")[7]);
+			double collect = Double.parseDouble(line.split("\t")[8]);
+			context.write(new Text(id), new Text(String.valueOf(collect/click)));
 		}
 	}
 }

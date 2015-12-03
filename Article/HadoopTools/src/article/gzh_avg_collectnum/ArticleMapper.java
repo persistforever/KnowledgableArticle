@@ -12,12 +12,11 @@ public class ArticleMapper extends Mapper<Object, Text, Text, Text> {
 		String line = new String(value.getBytes(), 0, value.getLength(), "GB18030");
 		if (line.split("\t").length >= 11) {
 			String id = line.split("\t")[0];
-			String url = line.split("\t")[1];
-			String title = line.split("\t")[3];
-			String collect = line.split("\t")[8];
+			double click = Double.parseDouble(line.split("\t")[7]);
+			double collect = Double.parseDouble(line.split("\t")[8]);
 			if (id.split("_").length >= 3) {
-				context.write(new Text(id.split("_")[0]), new Text(id + "\t" +
-			url + "\t" + title + "<#>" + collect));
+				context.write(new Text(id.split("_")[0]), 
+						new Text(id + "<#>" + String.valueOf(collect/click)));
 			}
 		}
 	}

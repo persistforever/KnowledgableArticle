@@ -25,5 +25,5 @@ class SingleConditionClassifier(BaseClassifier) :
     def sorting(self, article_list) :
         """ Sort the article list within single condition. """
         sorted_article_list = sorted(article_list, \
-            key=lambda article: float(article.featured), reverse=True)
+            key=lambda article: float(article.collectnum), reverse=True)
         return sorted_article_list

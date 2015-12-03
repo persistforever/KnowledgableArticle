@@ -10,7 +10,10 @@ import ConfigParser
 class PathManager :
 
     # a list of path
-    TOOLS_TITLESPST = 'title splist sentence in the synonymys'
+    TOOLS_TITLESPST = 'title splist sentence in the tools'
+    TOOLS_FIRSTPRO = 'first pronoun in the tools'
+    TOOLS_SECONDPRO = 'second pronoun in the tools'
+    TOOLS_THIRDPRO = 'third pronoun in the tools'
     SYNONYMYS_QUERY = 'query in the synonymys'
     SYNONYMYS_SYNONYMY = 'synonymy in the synonymys'
     BOWS_BOW = 'bag of word in bows'
@@ -18,6 +21,7 @@ class PathManager :
     BOWS_IDF = 'word idf in bows'
     CORPUS_ARTICLE = 'article list in corpus'
     CORPUS_SPLIT = 'split list in corpus'
+    CORPUS_FEATURE = 'feature list in corpus'
     CORPUS_SENTENCE = 'sentence list in corpus'
     CORPUS_SUBTITLE = 'subtitle list in corpus'
     CORPUS_KEYWORD = 'keyword list in corpus'
@@ -37,6 +41,9 @@ class PathManager :
         cfg = ConfigParser.ConfigParser()
         cfg.read('wechat/file/configuration.ini')
         PathManager.TOOLS_TITLESPST = cfg.get('tools', 'TITLESPST')
+        PathManager.TOOLS_FIRSTPRO = cfg.get('tools', 'FIRSTPRO')
+        PathManager.TOOLS_SECONDPRO = cfg.get('tools', 'SECONDPRO')
+        PathManager.TOOLS_THIRDPRO = cfg.get('tools', 'THIRDPRO')
         PathManager.SYNONYMYS_QUERY = cfg.get('synonymys', 'QUERY')
         PathManager.SYNONYMYS_SYNONYMY = cfg.get('synonymys', 'SYNONYMY')
         PathManager.BOWS_BOW = cfg.get('bows', 'BOW')
@@ -44,6 +51,7 @@ class PathManager :
         PathManager.BOWS_IDF= cfg.get('bows', 'IDF')
         PathManager.CORPUS_ARTICLE = cfg.get('corpus', 'ARTICLE')
         PathManager.CORPUS_SPLIT = cfg.get('corpus', 'SPLIT')
+        PathManager.CORPUS_FEATURE = cfg.get('corpus', 'FEATURE')
         PathManager.CORPUS_SENTENCE = cfg.get('corpus', 'SENTENCE')
         PathManager.CORPUS_SUBTITLE = cfg.get('corpus', 'SUBTITLE')
         PathManager.CORPUS_KEYWORD = cfg.get('corpus', 'KEYWORD')

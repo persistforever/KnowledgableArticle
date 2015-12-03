@@ -1,8 +1,10 @@
 ﻿# -*- encoding = gb18030 -*-
-""" Class article """
+
+# package importing start
+import numpy as np
 
 from word import Word
-import numpy as np
+# package importing end
 
 
 class Article :
@@ -13,6 +15,7 @@ class Article :
         self.sub_title = []
         self.sub_sentence = []
         self.keyword_list = []
+        self.feature_set = []
 
     def set_params(self, **params) :
         """ Set parameters of the article. """
@@ -25,29 +28,10 @@ class Article :
             key, value = cmd.split('<=>')
             setattr(self, key, value)
 
-    def get_attribute(self, param) :
-        """ Get attribute of the article. """
-        return getattr(self, param)
-
-    def import_article(self, data) :
-        """ Import basic attributes of article. 
-        The attributes of article is [id, url, title, content]. """
-        self.id = data[0]
-        self.url = data[1]
-        self.title = data[2]
-        self.content = data[3]
-                
-    def import_info(self, data) :
-        """ Import infomation of article. 
-        The attributes of info is 
-        [id, time_pub, n_forward, n_zan, n_click, n_collect, time_read, finish_ratio]. """
-        self.time_pub = int(data[1])
-        self.n_forward = int(data[2])
-        self.n_zan = int(data[3])
-        self.n_click = int(data[4])
-        self.n_collect = int(data[5])
-        self.time_read = float(data[6])
-        self.finish_ratio = float(data[7])
+    def set_features(self, **params) :
+        """ Set features of the article. """
+        for key, value in params.iteritems() :
+            self.feature_set.append((key, float(value)))
 
     def import_split(self, data) :
         """ Import word splited title and content. 

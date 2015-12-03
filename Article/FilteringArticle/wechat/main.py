@@ -19,6 +19,19 @@ def classifying() :
     corpus.classifying('single_condition')
     corpus.write_knowledgeable_article(PathManager.CORPUS_KNOWLEDGE, num=10000)
 
+def feature_select() :
+    from basic.corpus import Corpus
+    from file.path_manager import PathManager
+    from feature.word_feature import NarrativeExtractor
+    corpus = Corpus()
+    corpus.read_article_list(PathManager.CORPUS_ARTICLE)
+    corpus.read_split_list(PathManager.CORPUS_SPLIT)
+    selector = NarrativeExtractor(firpro_path=PathManager.TOOLS_FIRSTPRO, \
+        secpro_path=PathManager.TOOLS_SECONDPRO, thrpro_path=PathManager.TOOLS_THIRDPRO)
+    selector.extractFeature(corpus.article_list)
+    corpus.write_feature_list(PathManager.CORPUS_FEATURE)
+
+
 def simplifying_title() :
     from file.path_manager import PathManager
     from basic.corpus import Corpus
@@ -110,7 +123,7 @@ def filter_word() :
 
 
 if __name__ == '__main__' :
-    classifying()
+    # classifying()
     # simplifying_title()
     # simplifying_article()
     # tagging_article()
@@ -119,3 +132,4 @@ if __name__ == '__main__' :
     # create_word2vec()
     # find_synonymy()
     # filter_word()
+    feature_select()

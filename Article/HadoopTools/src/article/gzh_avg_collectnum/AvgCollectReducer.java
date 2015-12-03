@@ -2,13 +2,15 @@ package article.gzh_avg_collectnum;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
-public class AvgCollectReducer extends Reducer<Text, Text, Text, Text> {
+public class AvgCollectReducer extends Reducer<Text, Text, Text, DoubleWritable> {
 	
 	protected void reduce(Text key, Iterable<Text> value,
-			Reducer<Text, Text, Text, Text>.Context context)
+			Reducer<Text, Text, Text, DoubleWritable>.Context context)
 			throws IOException, InterruptedException {
 		ArrayList<String []> articleList = new ArrayList<String []>();
 		int follow = 0;
@@ -28,8 +30,8 @@ public class AvgCollectReducer extends Reducer<Text, Text, Text, Text> {
 		if (articleList.size() >= Integer.parseInt(context.getConfiguration().get("article")) && 
 				follow > Integer.parseInt(context.getConfiguration().get("user"))) {
 			for (String [] article: articleList) {
-				context.write(new Text(article[0]), 
-						new Text(article[1] + "\t" + String.valueOf(follow)));
+				double collect_num = Double.parseDouble(article[1]); 
+				context.write(new Text(article[0]), new DoubleWritable(collect_num));
 			}
 		}
 	}

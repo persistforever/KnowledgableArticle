@@ -4,13 +4,16 @@ import java.io.IOException;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapred.JobConf;
+import org.apache.hadoop.mapred.lib.TotalOrderPartitioner;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.MultipleInputs;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
-import tools.GbkOutputFormat;
 import tools.HadoopFileOperation;
 
 public class GAC {
@@ -45,13 +48,14 @@ public class GAC {
 		job.setMapOutputValueClass(Text.class);
 		job.setReducerClass(AvgCollectReducer.class);
 		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(Text.class);
-		job.setOutputFormatClass(GbkOutputFormat.class);
+		job.setOutputValueClass(DoubleWritable.class);
+		job.setOutputFormatClass(TextOutputFormat.class);
 		job.setNumReduceTasks(100);
 
 		MultipleInputs.addInputPath(job, new Path(this.dataPath), TextInputFormat.class, ArticleMapper.class);
 		MultipleInputs.addInputPath(job, new Path(this.gzhPath), TextInputFormat.class, GzhMapper.class);
 		FileOutputFormat.setOutputPath(job, new Path(this.gacPath));
+		TotalOrderPartitioner.setPartitionFile(new JobConf(), new Path(this.gacPath));
 		job.waitForCompletion(true);
 	}
 }
