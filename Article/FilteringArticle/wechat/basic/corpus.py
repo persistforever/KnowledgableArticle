@@ -33,11 +33,12 @@ class Corpus :
         data_list = file_operator.reading(article_path)
         entry_list = data_list[0]
         for data in data_list[1:] :
-            article = Article()
-            for idx in range(len(data)) :
-                cmd = entry_list[idx] + '<=>' + data[idx]
-                article.set_attributes(cmd)
-            self.article_list.append(article)
+            if len(data) >= len(entry_list) :
+                article = Article()
+                for idx in range(len(data)) :
+                    cmd = entry_list[idx] + '<=>' + data[idx]
+                    article.set_attributes(cmd)
+                self.article_list.append(article)
         self._constr_dict_id()
         self._constr_dict_index()
 
