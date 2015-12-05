@@ -11,6 +11,11 @@ from article import Word
 from file.file_operator import BaseFileOperator, CSVFileOperator, TextFileOperator
 from simplifier.title_simplifier import TitleSimplifier
 import classifier.unsupervised_classifier as unspclf
+import classifier.supervised_classifier as spclf
+from feature.word_feature import WordExtractor
+from feature.token_feature import TokenExtractor
+from feature.user_feature import UserExtractor
+from feature.pos_feature import PosExtractor
 # package importing end
 
 
@@ -105,7 +110,7 @@ class Corpus :
                     lucene_list.append(self._id_index[id])
         return lucene_list
 
-    def read_train_dataset(self) :
+    def read_train_dataset(self, train_path='') :
         """ Read train_dataset from input/traindata.
         Each row of the file is a article.
         Each column[0:3] of the file is the attributes of the article. 
@@ -113,28 +118,30 @@ class Corpus :
         column[-1] of the file is the label of the article. """
 
         self.file_operator = TextFileOperator()
-        data_list = self.file_operator.reading(self.path_manager.get_classify_traindataset())
-        dataset_list = [np.array(line[3:-1]) for line in data_list]
-        label_list = [line[-1] for line in data_list]
+        data_list = self.file_operator.reading(train_path)
+        dataset_list = [np.array(data[0:-1]) for data in data_list[1:]]
+        label_list = [line[-1] for line in data_list[1:]]
         self.train_dataset = self._normalization(np.array(dataset_list, dtype=float))
         self.train_label = np.array(label_list, dtype=float)
         print 'reading train dataset finished ...'
 
-    def read_test_dataset(self) :
+    def read_test_dataset(self, test_path='') :
         """ Read test_dataset from input/traindata.
         Each row of the file is a article.
         column[0] of the file is the id of the article.
         Each column[1:] of the file is the feature of the article. """
 
         self.file_operator = TextFileOperator()
-        data_list = self.file_operator.reading(self.path_manager.get_classify_testdataset())
-        test_dataset = np.array([np.array(line[1:]) for line in data_list], dtype=float)
+        data_list = self.file_operator.reading(test_path)
+        test_dataset = np.array([np.array(line[3:]) for line in data_list[1:]], dtype=float)
         self.test_dataset = self._normalization(test_dataset)
-        for idx in range(len(data_list)) :
-            id = data_list[idx][0]
-            if id in self._id_article :
-                self._id_article[id].import_feature_set(list(self.test_dataset[idx]))
-        print 'reading test dataset finished ...'
+        entry_list = data_list[0]
+        for data in data_list[1:] :
+            if len(data) >= len(entry_list) :
+                article = Article()
+                article.set_params(id=data[0])
+                self.article_list.append(article)
+        return self.test_dataset
 
     def read_knowledgeable(self) :
         """ Read knowledgeable article.
@@ -210,6 +217,20 @@ class Corpus :
                     self._id_article[id].import_sub_sentence(data)
         print 'reading sub sentence finished ...'
     
+    def feature_selecting(self, firpro_path='', secpro_path='', thrpro_path='', \
+        word_path='', sp_path='', pc_path='', pos_path='') :
+        """ select the feature. """
+        selector = WordExtractor(firpro_path=firpro_path, secpro_path=secpro_path, \
+            thrpro_path=thrpro_path, word_path=word_path)
+        selector.extractFeature(self.article_list)
+        selector = TokenExtractor(sp_path=sp_path, pc_path=pc_path)
+        selector.extractFeature(self.article_list)
+        selector = UserExtractor()
+        selector.extractFeature(self.article_list)
+        selector = PosExtractor(pos_path=pos_path)
+        selector.extractFeature(self.article_list)
+        print 'selecting feature finished ...'
+    
     def classifying(self, seq=1) :
         """ Classify the article_list into knowledgeable and unknowledgeable.
         Return the sorted article_list and top of which is knowledgeable. """
@@ -226,6 +247,10 @@ class Corpus :
         elif seq == 'single_condition' :
             classifier = unspclf.SingleConditionClassifier()
             self.sorted_article_list = classifier.sorting(self.article_list)
+        elif seq == 'train' :
+            classifier = spclf.SvmClassifier()
+            clf = classifier.training(self.train_dataset, self.train_label)
+            classifier.storing(clf, path=clf_path)
         print 'classifying article_list finished ...'
     
     def title_simplifying(self, w2v_path='', spst_path='', seq=1) :
@@ -240,9 +265,10 @@ class Corpus :
         Each row of file is article.
         Each column[0] of file is the id of the article. """
         file_operator = TextFileOperator()
-        data_list = [['id']]
-        for article in self.sorted_article_list[0:num] :
-            data_list.append([article.id])
+        data_list = [['id', 'score']]
+        sorted_article_list = sorted(self.article_list, key=lambda x: x.score, reverse=True)
+        for article in sorted_article_list[0:num] :
+            data_list.append([article.id, article.score])
         file_operator.writing(data_list, knowledge_path)
 
     def write_simply_article(self, simply_path) :
@@ -299,11 +325,11 @@ class Corpus :
             column[1:] of the file is the feature.
         """
         file_operator = TextFileOperator()
-        data_list = [['id', 'url', 'title', 'n_click', 'n_collect']]
+        data_list = [['id', 'url', 'title']]
         for name, value in self.article_list[0].feature_set :
             data_list[0].append(name)
         for article in self.article_list :
-            data = [article.id, article.url, article.title, article.n_click, article.n_collect]
+            data = [article.id, article.url, article.title]
             for name, value in article.feature_set :
                 data.append(value)
             data_list.append(data)

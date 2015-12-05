@@ -51,6 +51,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="wechat\feature\base.py" />
+    <Compile Include="wechat\feature\pos_feature.py" />
+    <Compile Include="wechat\feature\user_feature.py" />
     <Compile Include="wechat\feature\word_feature.py" />
     <Compile Include="wechat\feature\token_feature.py">
       <SubType>Code</SubType>
@@ -77,6 +79,7 @@
     <Compile Include="wechat\main\classify\single_classify.py" />
     <Compile Include="wechat\main\corpora\create_word2vec.py" />
     <Compile Include="wechat\main\corpora\create_mmcopus.py" />
+    <Compile Include="wechat\main\feature\feature_extract.py" />
     <Compile Include="wechat\main\feature\narrative_extract.py" />
     <Compile Include="wechat\main\title_simplify.py" />
     <Compile Include="wechat\main\find_synonymy.py" />

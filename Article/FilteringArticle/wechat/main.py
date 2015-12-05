@@ -12,23 +12,24 @@ If function func_name debug finished, please complete the wechat/main/func_name.
 def classifying() :
     from basic.corpus import Corpus
     from file.path_manager import PathManager
+    from classifier.supervised_classifier import SvmClassifier
     corpus = Corpus()
-    # corpus.read_train_dataset()
-    # corpus.read_test_dataset()
-    corpus.read_article_list(PathManager.CORPUS_ARTICLE)
-    corpus.classifying('single_condition')
+    test_data = corpus.read_test_dataset(PathManager.CORPUS_FEATURE)
+    classifier = SvmClassifier()
+    classifier.sorting(test_data, corpus.article_list, clf_path=PathManager.CLASSIFIER_CLASSIFIER)
     corpus.write_knowledgeable_article(PathManager.CORPUS_KNOWLEDGE, num=10000)
 
 def feature_select() :
     from basic.corpus import Corpus
     from file.path_manager import PathManager
-    from feature.word_feature import NarrativeExtractor
+    from feature.word_feature import WordExtractor
     corpus = Corpus()
     corpus.read_article_list(PathManager.CORPUS_ARTICLE)
     corpus.read_split_list(PathManager.CORPUS_SPLIT)
-    selector = NarrativeExtractor(firpro_path=PathManager.TOOLS_FIRSTPRO, \
-        secpro_path=PathManager.TOOLS_SECONDPRO, thrpro_path=PathManager.TOOLS_THIRDPRO)
-    selector.extractFeature(corpus.article_list)
+    corpus.feature_selecting(firpro_path=PathManager.TOOLS_FIRSTPRO, \
+        secpro_path=PathManager.TOOLS_SECONDPRO, thrpro_path=PathManager.TOOLS_THIRDPRO, \
+        word_path = PathManager.TOOLS_KNOWLEDGEABLEWORD, sp_path=PathManager.TOOLS_SENTENCEPST, \
+        pc_path=PathManager.TOOLS_PUNCTUATION, pos_path=PathManager.TOOLS_POS)
     corpus.write_feature_list(PathManager.CORPUS_FEATURE)
 
 
@@ -121,9 +122,19 @@ def filter_word() :
     corpus.write_wordbag(wordbag, PathManager.BOWS_WORD)
     print 'finished ...'
 
+def create_classifier() :
+    from basic.corpus import Corpus
+    from file.path_manager import PathManager
+    from classifier.supervised_classifier import SvmClassifier
+    corpus = Corpus()
+    corpus.read_train_dataset(train_path=PathManager.CORPUS_TRAINDATA)
+    classifier = SvmClassifier()
+    clf = classifier.training(corpus.train_dataset, corpus.train_label)
+    classifier.storing(clf, path=PathManager.CLASSIFIER_CLASSIFIER)
+
 
 if __name__ == '__main__' :
-    # classifying()
+    classifying()
     # simplifying_title()
     # simplifying_article()
     # tagging_article()
@@ -132,4 +143,5 @@ if __name__ == '__main__' :
     # create_word2vec()
     # find_synonymy()
     # filter_word()
-    feature_select()
+    # feature_select()
+    # create_classifier()

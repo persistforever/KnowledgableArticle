@@ -10,15 +10,22 @@ import ConfigParser
 class PathManager :
 
     # a list of path
-    TOOLS_TITLESPST = 'title splist sentence in the tools'
+    TOOLS_TITLESPST = 'title splist in the tools'
+    TOOLS_SENTENCEPST = 'sentence split in the tools'
+    TOOLS_PUNCTUATION = 'punctuation in the tools'
     TOOLS_FIRSTPRO = 'first pronoun in the tools'
     TOOLS_SECONDPRO = 'second pronoun in the tools'
     TOOLS_THIRDPRO = 'third pronoun in the tools'
+    TOOLS_KNOWLEDGEABLEWORD = 'knowledgeable word in the tools'
+    TOOLS_POS = 'part of speech in the tools'
+    
     SYNONYMYS_QUERY = 'query in the synonymys'
     SYNONYMYS_SYNONYMY = 'synonymy in the synonymys'
+    
     BOWS_BOW = 'bag of word in bows'
     BOWS_WORD = 'word set in bows'
     BOWS_IDF = 'word idf in bows'
+
     CORPUS_ARTICLE = 'article list in corpus'
     CORPUS_SPLIT = 'split list in corpus'
     CORPUS_FEATURE = 'feature list in corpus'
@@ -29,11 +36,15 @@ class PathManager :
     CORPUS_UNIQUEARTICLE = 'unique article list in corpus'
     CORPUS_LUCENE = 'lucene result article list in corpus'
     CORPUS_KNOWLEDGE = 'knowledgeable article list in corpus'
+    CORPUS_TRAINDATA = 'train data in corpus'
+
     CORPORA_DICTIONARY = 'dictionary in corpora accorrding to gensim'
     CORPORA_MMCORPUS = 'corpus in corpora stored as mmcorpus'
     CORPORA_TFIDF = 'tfidf model in corpora'
     CORPORA_WORD2TFIDF = 'word2sim by tfidf model initial file in the corpora'
     CORPORA_WORD2VEC = 'word2sim by word2vec model initial file in the corpora'
+
+    CLASSIFIER_CLASSIFIER = 'classifier in the classifier'
         
     @staticmethod
     def _get_configuration() :
@@ -41,14 +52,21 @@ class PathManager :
         cfg = ConfigParser.ConfigParser()
         cfg.read('wechat/file/configuration.ini')
         PathManager.TOOLS_TITLESPST = cfg.get('tools', 'TITLESPST')
+        PathManager.TOOLS_SENTENCEPST = cfg.get('tools', 'SENTENCEPST')
+        PathManager.TOOLS_PUNCTUATION = cfg.get('tools', 'PUNCTUATION')
         PathManager.TOOLS_FIRSTPRO = cfg.get('tools', 'FIRSTPRO')
         PathManager.TOOLS_SECONDPRO = cfg.get('tools', 'SECONDPRO')
         PathManager.TOOLS_THIRDPRO = cfg.get('tools', 'THIRDPRO')
+        PathManager.TOOLS_KNOWLEDGEABLEWORD = cfg.get('tools', 'KNOWLEDGEABLEWORD')
+        PathManager.TOOLS_POS = cfg.get('tools', 'POS')
+
         PathManager.SYNONYMYS_QUERY = cfg.get('synonymys', 'QUERY')
         PathManager.SYNONYMYS_SYNONYMY = cfg.get('synonymys', 'SYNONYMY')
+
         PathManager.BOWS_BOW = cfg.get('bows', 'BOW')
         PathManager.BOWS_WORD = cfg.get('bows', 'WORD')
         PathManager.BOWS_IDF= cfg.get('bows', 'IDF')
+
         PathManager.CORPUS_ARTICLE = cfg.get('corpus', 'ARTICLE')
         PathManager.CORPUS_SPLIT = cfg.get('corpus', 'SPLIT')
         PathManager.CORPUS_FEATURE = cfg.get('corpus', 'FEATURE')
@@ -59,11 +77,15 @@ class PathManager :
         PathManager.CORPUS_UNIQUEARTICLE = cfg.get('corpus', 'UNIQUEARTICLE')
         PathManager.CORPUS_LUCENE = cfg.get('corpus', 'LUCENE')
         PathManager.CORPUS_KNOWLEDGE = cfg.get('corpus', 'KNOWLEDGE')
+        PathManager.CORPUS_TRAINDATA = cfg.get('corpus', 'TRAINDATA')
+
         PathManager.CORPORA_DICTIONARY = cfg.get('corpora', 'DICTIONARY')
         PathManager.CORPORA_MMCORPUS = cfg.get('corpora', 'MMCORPUS')
         PathManager.CORPORA_TFIDF = cfg.get('corpora', 'TFIDF')
         PathManager.CORPORA_WORD2TFIDF = cfg.get('corpora', 'WORD2TFIDF')
         PathManager.CORPORA_WORD2VEC = cfg.get('corpora', 'WORD2VEC')
+
+        PathManager.CLASSIFIER_CLASSIFIER = cfg.get('classifier', 'CLASSIFIER')
 
 
 PathManager._get_configuration()
