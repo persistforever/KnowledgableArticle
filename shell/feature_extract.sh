@@ -1,0 +1,11 @@
+article='E:/data/knowledge/classify/finance/knowledgeable_article'
+split='E:/data/knowledge/classify/finance/split'
+firpro='E:/data/knowledge/tools/firstperson'
+secpro='E:/data/knowledge/tools/secondperson'
+thrpro='E:/data/knowledge/tools/thirdperson'
+word='E:/data/knowledge/tools/knowledgeableword'
+sp='E:/data/knowledge/tools/contentspst'
+pc='E:/data/knowledge/tools/punctuation'
+pos='E:/data/knowledge/tools/postag'
+feature='E:/data/knowledge/classify/finance/feature_list'
+python E://github/KnowledgableArticle/Article/FilteringArticle/wechat/main/feature/feature_extract.py $article $split $firpro $secpro $thrpro $word $sp $pc $pos $feature
