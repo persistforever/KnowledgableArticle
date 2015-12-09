@@ -123,7 +123,7 @@ class ArticleCluster :
         tag_list = []
         for idx, text in enumerate(self.mmcorpus) :
             tag = []
-            for keyword, tfidf in filter(lambda x: x[1] > 0.3, self.tfidf_model[text]) :
+            for keyword, tfidf in filter(lambda x: x[1] > 0.2, self.tfidf_model[text]) :
                 if self.dictionary[keyword] in self.word2vec.vocab :
                     if self.dictionary[keyword] not in word_dict :
                         word_dict[self.dictionary[keyword]] = []

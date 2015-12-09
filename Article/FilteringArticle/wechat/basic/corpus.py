@@ -209,14 +209,14 @@ class Corpus(object) :
                     self._id_article[id].import_sub_title(data)
         print 'reading sub title finished ...'
 
-    def read_sub_sentence(self) :
+    def read_content_participle_sentence(self, sentence_path) :
         """ Read sub sentence of a article.
         Each row of the file is a sub sentence.
         column[0] of the file is the id of the article.
-        column[1] of the file is the sub sentence. """
+        column[1] of the file is the participle sentence. """
 
         self.file_operator = TextFileOperator()
-        data_list = self.file_operator.reading(self.path_manager.get_qa_subsentence())
+        data_list = self.file_operator.reading(sentence_path)
         for data in data_list :
             if len(data) >= 2 :
                 id = data[0]

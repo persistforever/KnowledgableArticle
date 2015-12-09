@@ -104,12 +104,14 @@ def create_corpora() :
 
 def create_word2vec() :
     from basic.corpus import Corpus
+    from basic.corpora import Corpora
     from file.path_manager import PathManager
     corpus = Corpus()
     corpus.read_article_list(PathManager.CORPUS_ARTICLE)
-    corpus.read_sub_sentence_list(PathManager.CORPUS_SENTENCE)
+    corpus.read_content_participle_sentence(PathManager.CORPUS_SENTENCE)
     sentences = corpus.article_to_sentences()
-    corpus.create_wordsim_word2vec(type='init', sentences=sentences, path=PathManager.CORPORA_WORD2VEC)
+    corpora = Corpora()
+    corpora.create_wordsim_word2vec(type='create', sentences=sentences, path=PathManager.CORPORA_WORD2VEC)
     print 'finished ...'
 
 def filter_word() :
@@ -158,10 +160,10 @@ if __name__ == '__main__' :
     # tagging_article()
     # qa_system()
     # create_corpora()
-    # create_word2vec()
+    create_word2vec()
     # find_synonymy()
     # filter_word()
     # feature_select()
     # create_classifier()
     # content_split_sentence()
-    simplifying_content()
+    # simplifying_content()

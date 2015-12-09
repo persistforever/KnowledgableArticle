@@ -12,16 +12,17 @@ import sys
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/../..'))
 
 from basic.corpus import Corpus
+from basic.corpora import Corpora
 # package importing end
 
 
 def create_corpora(artice_path, sentence_path, w2v_path) :
     corpus = Corpus()
     corpus.read_article_list(artice_path)
-    corpus.read_sub_sentence_list(sentence_path)
+    corpus.read_content_participle_sentence(sentence_path)
     sentences = corpus.article_to_sentences()
-    corpus.create_wordsim_word2vec(type='init', sentences=sentences, path=w2v_path)
-    print 'finished ...'
+    corpora = Corpora()
+    corpora.create_wordsim_word2vec(type='create', sentences=sentences, path=w2v_path)
 
 
 if __name__ == '__main__' :
