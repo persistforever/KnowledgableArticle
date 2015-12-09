@@ -18,7 +18,7 @@ from basic.corpus import Corpus
 def create_corpora(artice_path, sentence_path, w2v_path) :
     corpus = Corpus()
     corpus.read_article_list(artice_path)
-    corpus.read_sentence_list(sentence_path)
+    corpus.read_sub_sentence_list(sentence_path)
     sentences = corpus.article_to_sentences()
     corpus.create_wordsim_word2vec(type='init', sentences=sentences, path=w2v_path)
     print 'finished ...'

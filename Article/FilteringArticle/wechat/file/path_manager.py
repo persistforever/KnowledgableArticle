@@ -18,6 +18,7 @@ class PathManager :
     TOOLS_THIRDPRO = 'third pronoun in the tools'
     TOOLS_KNOWLEDGEABLEWORD = 'knowledgeable word in the tools'
     TOOLS_POS = 'part of speech in the tools'
+    TOOLS_REDUNDANCE = 'content redundance in the tools'
     
     SYNONYMYS_QUERY = 'query in the synonymys'
     SYNONYMYS_SYNONYMY = 'synonymy in the synonymys'
@@ -59,6 +60,7 @@ class PathManager :
         PathManager.TOOLS_THIRDPRO = cfg.get('tools', 'THIRDPRO')
         PathManager.TOOLS_KNOWLEDGEABLEWORD = cfg.get('tools', 'KNOWLEDGEABLEWORD')
         PathManager.TOOLS_POS = cfg.get('tools', 'POS')
+        PathManager.TOOLS_REDUNDANCE = cfg.get('tools', 'REDUNDANCE')
 
         PathManager.SYNONYMYS_QUERY = cfg.get('synonymys', 'QUERY')
         PathManager.SYNONYMYS_SYNONYMY = cfg.get('synonymys', 'SYNONYMY')

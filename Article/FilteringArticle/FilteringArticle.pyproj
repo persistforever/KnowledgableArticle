@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="wechat\basic\article.py" />
+    <Compile Include="wechat\basic\corpora.py" />
     <Compile Include="wechat\basic\corpus.py" />
     <Compile Include="wechat\basic\tag.py">
       <SubType>Code</SubType>
@@ -81,8 +82,14 @@
     <Compile Include="wechat\main\corpora\create_mmcopus.py" />
     <Compile Include="wechat\main\feature\feature_extract.py" />
     <Compile Include="wechat\main\feature\narrative_extract.py" />
-    <Compile Include="wechat\main\title_simplify.py" />
+    <Compile Include="wechat\main\pretreatment\split_sentence.py" />
+    <Compile Include="wechat\main\simplify\content_simplify.py" />
+    <Compile Include="wechat\main\simplify\title_simplify.py" />
     <Compile Include="wechat\main\find_synonymy.py" />
+    <Compile Include="wechat\pretreatment\content_to_sentence.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="wechat\pretreatment\__init__.py" />
     <Compile Include="wechat\qa\article_tag.py">
       <SubType>Code</SubType>
     </Compile>
@@ -90,6 +97,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="wechat\qa\__init__.py" />
+    <Compile Include="wechat\simplifier\sentence_spliter.py" />
+    <Compile Include="wechat\simplifier\content_simplifier.py" />
     <Compile Include="wechat\simplifier\title_simplifier.py">
       <SubType>Code</SubType>
     </Compile>
@@ -123,6 +132,9 @@
     <Folder Include="wechat\main\classify\" />
     <Folder Include="wechat\feature\" />
     <Folder Include="wechat\main\feature\" />
+    <Folder Include="wechat\main\simplify\" />
+    <Folder Include="wechat\main\pretreatment\" />
+    <Folder Include="wechat\pretreatment\" />
     <Folder Include="wechat\synonymy\" />
     <Folder Include="wechat\simplifier\" />
     <Folder Include="wechat\qa\" />

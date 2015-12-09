@@ -32,7 +32,6 @@ def feature_select() :
         pc_path=PathManager.TOOLS_PUNCTUATION, pos_path=PathManager.TOOLS_POS)
     corpus.write_feature_list(PathManager.CORPUS_FEATURE)
 
-
 def simplifying_title() :
     from file.path_manager import PathManager
     from basic.corpus import Corpus
@@ -71,7 +70,7 @@ def qa_system() :
         tfidf_path=PathManager.CORPORA_TFIDF, \
         dict_path=PathManager.CORPORA_DICTIONARY, \
         w2v_path=PathManager.CORPORA_WORD2VEC)
-    word_dict = cluster.user_choosing(lucene_list, [u'发型<:>n'])
+    word_dict = cluster.user_choosing()
 
 def find_synonymy() :
     from file.path_manager import PathManager
@@ -86,20 +85,20 @@ def find_synonymy() :
 
 def create_corpora() :
     from basic.corpus import Corpus
+    from basic.corpora import Corpora
     from file.path_manager import PathManager
     corpus = Corpus()
     corpus.read_article_list(PathManager.CORPUS_ARTICLE)
     corpus.read_split_list(PathManager.CORPUS_SPLIT)
-    wordbag = corpus.read_wordbag(PathManager.BOWS_WORD, sp_char='<:>')
     texts = corpus.article_to_texts()
-    tokens = corpus.word_to_tokens(wordbag)
-    dictionary = corpus.create_gensim_dictionary(type='init', texts=texts, tokens=tokens, \
+    corpora = Corpora()
+    dictionary = corpora.create_gensim_dictionary(type='create', texts=texts, \
         path=PathManager.CORPORA_DICTIONARY)
-    mmcorpus = corpus.create_gensim_corpus(type='init', texts=texts, dictionary=dictionary, \
+    mmcorpus = corpora.create_gensim_corpus(type='create', texts=texts, dictionary=dictionary, \
         path=PathManager.CORPORA_MMCORPUS)
-    tfidf_model = corpus.create_gensim_tfidf(type='init', mmcorpus=mmcorpus, \
+    tfidf_model = corpora.create_gensim_tfidf(type='create', mmcorpus=mmcorpus, \
         path=PathManager.CORPORA_TFIDF)
-    word2tfidf = corpus.create_wordsim_tfidf(type='init', mmcorpus=mmcorpus, dictionary=dictionary, \
+    word2tfidf = corpora.create_wordsim_tfidf(type='create', mmcorpus=mmcorpus, dictionary=dictionary, \
         tfidf_model=tfidf_model, path=PathManager.CORPORA_WORD2TFIDF)
     print 'finished ...'
 
@@ -108,7 +107,7 @@ def create_word2vec() :
     from file.path_manager import PathManager
     corpus = Corpus()
     corpus.read_article_list(PathManager.CORPUS_ARTICLE)
-    corpus.read_sentence_list(PathManager.CORPUS_SENTENCE)
+    corpus.read_sub_sentence_list(PathManager.CORPUS_SENTENCE)
     sentences = corpus.article_to_sentences()
     corpus.create_wordsim_word2vec(type='init', sentences=sentences, path=PathManager.CORPORA_WORD2VEC)
     print 'finished ...'
@@ -131,10 +130,29 @@ def create_classifier() :
     classifier = SvmClassifier()
     clf = classifier.training(corpus.train_dataset, corpus.train_label)
     classifier.storing(clf, path=PathManager.CLASSIFIER_CLASSIFIER)
+    
+def content_split_sentence() :
+    from basic.corpus import Corpus
+    from file.path_manager import PathManager
+    from pretreatment.content_to_sentence import AnotherCorpus
+    corpus = AnotherCorpus()
+    corpus.read_article_list(PathManager.CORPUS_ARTICLE)
+    corpus.content_split_sentence(PathManager.TOOLS_SENTENCEPST)
+    corpus.write_content_sentence_list(PathManager.CORPUS_SENTENCE)
+
+def simplifying_content() :
+    from basic.corpus import Corpus
+    from file.path_manager import PathManager
+    from simplifier.content_simplifier import AnotherCorpus
+    corpus = AnotherCorpus()
+    corpus.read_article_list(PathManager.CORPUS_ARTICLE)
+    corpus.read_content_sentence_list(PathManager.CORPUS_SENTENCE)
+    corpus.simplify_content(rd_path=PathManager.TOOLS_REDUNDANCE)
+    corpus.write_article_list(length=100, article_path=PathManager.CORPUS_SIMPLYARTICLE)
 
 
 if __name__ == '__main__' :
-    classifying()
+    # 5classifying()
     # simplifying_title()
     # simplifying_article()
     # tagging_article()
@@ -145,3 +163,5 @@ if __name__ == '__main__' :
     # filter_word()
     # feature_select()
     # create_classifier()
+    # content_split_sentence()
+    simplifying_content()

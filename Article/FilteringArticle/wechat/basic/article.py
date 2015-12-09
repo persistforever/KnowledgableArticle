@@ -13,7 +13,7 @@ class Article :
         self.split_title = []
         self.split_content = []
         self.sub_title = []
-        self.sub_sentence = []
+        self.sub_sentence_list = []
         self.keyword_list = []
         self.feature_set = []
 
@@ -39,10 +39,10 @@ class Article :
         [id, split_title, split_content]. """
         self.split_title, self.split_content = [], []
         for part in data[1].split(' ') :
-            word = Word(part)
+            word = Word(part, sp_char=':')
             self.split_title.append(word)
         for part in data[2].split(' ') :
-            word = Word(part)
+            word = Word(part, sp_char=':')
             self.split_content.append(word)
             
     def import_keyword(self, data, length=100) :
@@ -85,7 +85,7 @@ class Article :
         for part in data[1].split(' ') :
             word = Word(part, sp_char=':')
             sub.append(word)
-        self.sub_sentence.append(sub)
+        self.sub_sentence_list.append(sub)
     
     def get_article(self) :
         """ get basic attributes of article. 
