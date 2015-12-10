@@ -125,9 +125,6 @@ class Corpora(object) :
                 Initialize the word2vec wordsim from the file.
         """
         if type is 'create' :
-            for sentence in sentences :
-                for idx in range(len(sentence)) :
-                    sentence[idx] = sentence[idx].encode('utf8')
             word2vec_model = gensim.models.Word2Vec(sentences, size=100, window=5, min_count=1)
             word2vec_model.save(path)
         elif type is 'load' :
