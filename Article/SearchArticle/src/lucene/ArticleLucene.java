@@ -83,7 +83,7 @@ public class ArticleLucene {
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);  
         ArrayList<Article> resultlist = new ArrayList<Article>();
         try {
-        	String[] querys = {"发型", "发型"};
+        	String[] querys = {"型男", "型男"};
         	String[] fields = {"title", "content"};
         	BooleanClause.Occur[] flags = { 
         			BooleanClause.Occur.SHOULD,  

@@ -94,8 +94,10 @@ class ArticleCluster :
                         word_dict[word_object.name] += 1
         return word_dict
 
-    def user_choosing(self) :
-        word_dict, tag_list = self._article_keyword()
+    def user_choosing(self, lucene_list, query_list) :
+        # word_dict, tag_list = self._article_keyword()
+        # word_dict = self._word_clustering(word_dict)
+        word_dict, tag_list = self._article_tfidf(lucene_list, query_list)
         word_dict = self._word_clustering(word_dict)
 
     def _article_tfidf(self, lucene_list, query_list) :
@@ -105,7 +107,7 @@ class ArticleCluster :
         for idx, text in enumerate([self.mmcorpus[index] for index in lucene_list]) :
             tag = []
             for query in query_list :
-                for keyword, tfidf in filter(lambda x: x[1] > 0.6, self.tfidf_model[text]) :
+                for keyword, tfidf in filter(lambda x: x[1] > 0.55, self.tfidf_model[text]) :
                     if self.dictionary[keyword] in self.word2vec.vocab and \
                         query in self.word2vec.vocab :
                         if self.dictionary[keyword] not in word_dict :
@@ -140,7 +142,7 @@ class ArticleCluster :
             word_set.append(self.word2vec[word])
         word_set = np.array(word_set)
         max_labels_, max_evaluation = np.zeros([len(word_dict), 1]), 0.08
-        for n in range(2, 10) :
+        for n in range(2, 5) :
             cls = SpectralClustering(n_clusters=n, assign_labels='discretize').fit(word_set)
             score = metrics.silhouette_score(word_set, cls.labels_, metric='cosine')
             if score > max_evaluation :

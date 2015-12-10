@@ -64,13 +64,13 @@ def qa_system() :
     from basic.corpus import Corpus
     from qa.article_tag import ArticleCluster
     corpus = Corpus()
-    corpus.read_article_list(PathManager.CORPUS_UNIQUEARTICLE)
+    corpus.read_article_list(PathManager.CORPUS_ARTICLE)
     lucene_list = corpus.read_lucene_list(PathManager.CORPUS_LUCENE)
     cluster = ArticleCluster(corpus_path=PathManager.CORPORA_MMCORPUS,  \
         tfidf_path=PathManager.CORPORA_TFIDF, \
         dict_path=PathManager.CORPORA_DICTIONARY, \
         w2v_path=PathManager.CORPORA_WORD2VEC)
-    word_dict = cluster.user_choosing()
+    word_dict = cluster.user_choosing(lucene_list, [u'型男<:>n'])
 
 def find_synonymy() :
     from file.path_manager import PathManager
@@ -158,9 +158,9 @@ if __name__ == '__main__' :
     # simplifying_title()
     # simplifying_article()
     # tagging_article()
-    # qa_system()
+    qa_system()
     # create_corpora()
-    create_word2vec()
+    # create_word2vec()
     # find_synonymy()
     # filter_word()
     # feature_select()

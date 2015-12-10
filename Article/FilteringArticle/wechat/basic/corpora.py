@@ -1,6 +1,7 @@
 ﻿# -*- encoding = gb18030 -*-
 
 # package importing start
+import math
 import numpy as np
 
 import gensim
