@@ -83,16 +83,15 @@ public class ArticleLucene {
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);  
         ArrayList<Article> resultlist = new ArrayList<Article>();
         try {
-        	String[] querys = {"型男", "型男"};
-        	String[] fields = {"title", "content"};
+        	String[] querys = {"鞋帽"};
+        	String[] fields = {"title"};
         	BooleanClause.Occur[] flags = { 
-        			BooleanClause.Occur.SHOULD,  
-        			BooleanClause.Occur.SHOULD}; 
+        			BooleanClause.Occur.MUST}; 
         	query = MultiFieldQueryParser.parse(Version.LUCENE_36, querys, fields, flags, analyzer);
         } catch (ParseException e) {  
         }  
         if (searcher != null) {  
-            TopDocs results = searcher.search(query, 100);
+            TopDocs results = searcher.search(query, 1000);
             hits = results.scoreDocs;
             if (hits.length > 0) { 
                 System.out.println("找到:" + hits.length + " 个结果!");

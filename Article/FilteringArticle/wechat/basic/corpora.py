@@ -134,9 +134,25 @@ class Corpora(object) :
         return word2vec_model
 
     def word_remained(self, word) :
-        remain_pos = [u'z', u'vn', u'v', u's', u'nz', u'nt', u'ns', u'nv', u'nrg', \
-            u'nrf', u'ng', u'n', u'j', u'd', u'b', u'an', u'ad', u'a']
+        # remain_pos = [u'z', u'vn', u'v', u's', u'nz', u'nt', u'ns', \
+        #    u'n', u'j', u'd', u'b', u'an', u'ad', u'a']
+        remain_pos = [u'vn', u'nz', u'nt', u'ns', u'n', u'an']
         if word.feature in remain_pos :
             return True
         else :
             return False
+
+    def create_lda_model(self,  type='create', mmcorpus=None, dictionary=None, path='') :
+        """ If type is 'create' :
+                Initialize the lda model using mmcorpus and dictionary.
+            If type is 'load' :
+                Initialize the lda model from the file.
+        """
+        if type is 'create' :
+            lda_model = gensim.models.ldamodel.LdaModel(corpus=mmcorpus, id2word=dictionary, \
+                num_topics=3, iterations=1000)
+            lda_model.save(path)
+        elif type is 'load' :
+            lda_model = gensim.models.ldamodel.LdaModel.load(path)
+        print lda_model
+        return lda_model

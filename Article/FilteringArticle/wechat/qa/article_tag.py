@@ -19,11 +19,12 @@ from sklearn import metrics
 
 class ArticleCluster :
 
-    def __init__(self, corpus_path='', tfidf_path='', dict_path='', w2v_path='') :
+    def __init__(self, corpus_path='', tfidf_path='', dict_path='', w2v_path='', lda_path='') :
         self.corpus_path = corpus_path
         self.tfidf_path = tfidf_path
         self.dict_path = dict_path
         self.w2v_path = w2v_path
+        self.lda_path = lda_path
         self.mmcorpus, self.tfidf_model, self.dictionary, self.word2vec = self._read_model()
 
     def _read_model(self) :
@@ -32,7 +33,8 @@ class ArticleCluster :
         tfidf_model = gensim.models.TfidfModel.load(self.tfidf_path)
         dictionary = gensim.corpora.Dictionary.load(self.dict_path)
         word2vec = gensim.models.Word2Vec.load(self.w2v_path)
-        return mmcorpus, tfidf_model, dictionary, word2vec
+        lda_model = gensim.models.LdaModel.load(self.lda_path)
+        return mmcorpus, tfidf_model, dictionary, word2vec, lda_model
 
     def article_clustering(self, article_list, query_list) :
         """ clustering article's keyword accordding to query. """

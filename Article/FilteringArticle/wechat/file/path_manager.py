@@ -44,6 +44,7 @@ class PathManager :
     CORPORA_TFIDF = 'tfidf model in corpora'
     CORPORA_WORD2TFIDF = 'word2sim by tfidf model initial file in the corpora'
     CORPORA_WORD2VEC = 'word2sim by word2vec model initial file in the corpora'
+    CORPORA_LDA = 'lda model initial file in the corpora'
 
     CLASSIFIER_CLASSIFIER = 'classifier in the classifier'
         
@@ -86,6 +87,7 @@ class PathManager :
         PathManager.CORPORA_TFIDF = cfg.get('corpora', 'TFIDF')
         PathManager.CORPORA_WORD2TFIDF = cfg.get('corpora', 'WORD2TFIDF')
         PathManager.CORPORA_WORD2VEC = cfg.get('corpora', 'WORD2VEC')
+        PathManager.CORPORA_LDA = cfg.get('corpora', 'LDA')
 
         PathManager.CLASSIFIER_CLASSIFIER = cfg.get('classifier', 'CLASSIFIER')
 

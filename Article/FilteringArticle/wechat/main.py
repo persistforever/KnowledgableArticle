@@ -69,7 +69,8 @@ def qa_system() :
     cluster = ArticleCluster(corpus_path=PathManager.CORPORA_MMCORPUS,  \
         tfidf_path=PathManager.CORPORA_TFIDF, \
         dict_path=PathManager.CORPORA_DICTIONARY, \
-        w2v_path=PathManager.CORPORA_WORD2VEC)
+        w2v_path=PathManager.CORPORA_WORD2VEC, \
+        lda_path=PathManager.CORPORA_LDA)
     word_dict = cluster.user_choosing(lucene_list, [u'型男<:>n'])
 
 def find_synonymy() :
@@ -98,8 +99,7 @@ def create_corpora() :
         path=PathManager.CORPORA_MMCORPUS)
     tfidf_model = corpora.create_gensim_tfidf(type='create', mmcorpus=mmcorpus, \
         path=PathManager.CORPORA_TFIDF)
-    word2tfidf = corpora.create_wordsim_tfidf(type='create', mmcorpus=mmcorpus, dictionary=dictionary, \
-        tfidf_model=tfidf_model, path=PathManager.CORPORA_WORD2TFIDF)
+    word2tfidf = corpora.create_wordsim_tfidf(type='create', path=PathManager.CORPORA_WORD2TFIDF)
     print 'finished ...'
 
 def create_word2vec() :
@@ -112,6 +112,23 @@ def create_word2vec() :
     sentences = corpus.article_to_sentences()
     corpora = Corpora()
     corpora.create_wordsim_word2vec(type='create', sentences=sentences, path=PathManager.CORPORA_WORD2VEC)
+    print 'finished ...'
+
+def create_lda() :
+    from basic.corpus import Corpus
+    from basic.corpora import Corpora
+    from file.path_manager import PathManager
+    corpus = Corpus()
+    corpus.read_article_list(PathManager.CORPUS_ARTICLE)
+    corpus.read_split_list(PathManager.CORPUS_SPLIT)
+    texts = corpus.article_to_texts()
+    corpora = Corpora()
+    dictionary = corpora.create_gensim_dictionary(type='create', texts=texts, \
+        path=PathManager.CORPORA_DICTIONARY)
+    mmcorpus = corpora.create_gensim_corpus(type='create', texts=texts, dictionary=dictionary, \
+        path=PathManager.CORPORA_MMCORPUS)
+    corpora.create_lda_model(type='create', mmcorpus=mmcorpus, dictionary=dictionary, \
+        path=PathManager.CORPORA_LDA)
     print 'finished ...'
 
 def filter_word() :
@@ -160,7 +177,8 @@ if __name__ == '__main__' :
     # tagging_article()
     qa_system()
     # create_corpora()
-    # create_word2vec()
+    # create_word2vec()\
+    # create_lda()
     # find_synonymy()
     # filter_word()
     # feature_select()

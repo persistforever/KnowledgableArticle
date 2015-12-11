@@ -78,6 +78,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="wechat\main\classify\single_classify.py" />
+    <Compile Include="wechat\main\corpora\create_lda.py" />
     <Compile Include="wechat\main\corpora\create_wordsim.py" />
     <Compile Include="wechat\main\corpora\create_word2vec.py" />
     <Compile Include="wechat\main\corpora\create_mmcopus.py" />

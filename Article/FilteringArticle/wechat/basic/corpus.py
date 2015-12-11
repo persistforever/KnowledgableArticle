@@ -413,11 +413,12 @@ class Corpus(object) :
                         ...
                       ]
         """
+        remain_pos = [u'vn', u'nz', u'nt', u'ns', u'n', u'an']
         texts = []
         for article in self.article_list :
             text = []
-            text.extend([word.to_string() for word in article.participle_title])
-            text.extend([word.to_string() for word in article.participle_content])
+            text.extend([word.to_string() for word in article.participle_title if word.feature in remain_pos])
+            text.extend([word.to_string() for word in article.participle_content if word.feature in remain_pos])
             texts.append(text)
         return texts
     

@@ -10,8 +10,8 @@ from word import Word
 class Article :
 
     def __init__(self) :
-        self.split_title = []
-        self.split_content = []
+        self.participle_title = []
+        self.participle_content = []
         self.sub_title = []
         self.sub_sentence_list = []
         self.keyword_list = []
