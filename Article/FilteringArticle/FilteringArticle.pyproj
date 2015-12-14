@@ -51,6 +51,10 @@
     <Compile Include="wechat\classifier\__init__.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="wechat\cluster\base.py" />
+    <Compile Include="wechat\cluster\lda_cluster.py" />
+    <Compile Include="wechat\cluster\word_cluster.py" />
+    <Compile Include="wechat\cluster\__init__.py" />
     <Compile Include="wechat\feature\base.py" />
     <Compile Include="wechat\feature\pos_feature.py" />
     <Compile Include="wechat\feature\user_feature.py" />
@@ -95,12 +99,6 @@
     <Compile Include="wechat\qa\article_tag.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="wechat\qa\lda_cluster.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="wechat\qa\word_cluster.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="wechat\qa\__init__.py" />
     <Compile Include="wechat\simplifier\sentence_spliter.py" />
     <Compile Include="wechat\simplifier\content_simplifier.py" />
@@ -139,6 +137,7 @@
     <Folder Include="wechat\main\feature\" />
     <Folder Include="wechat\main\simplify\" />
     <Folder Include="wechat\main\pretreatment\" />
+    <Folder Include="wechat\cluster\" />
     <Folder Include="wechat\pretreatment\" />
     <Folder Include="wechat\synonymy\" />
     <Folder Include="wechat\simplifier\" />

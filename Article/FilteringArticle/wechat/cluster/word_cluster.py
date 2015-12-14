@@ -10,37 +10,23 @@ import gensim
 from file.path_manager import PathManager
 from file.file_operator import TextFileOperator
 from basic.word import Word
+from cluster.base import BaseCluster
 # package importing end
 
 
-class WordCluster :
+class WordCluster(BaseCluster) :
 
     def __init__(self, corpus_path='', tfidf_path='', dict_path='', w2v_path='', lda_path='') :
+        BaseCluster.__init__(self, corpus_path, tfidf_path, dict_path, w2v_path, lda_path)
         self.n_cluster = 3
-        self.mmcorpus, self.dictionary = self._read_data(corpus_path, dict_path)
-
-    def _read_data(self, corpus_path, dict_path) :
-        """ Read gensim models. """
-        mmcorpus = gensim.corpora.MmCorpus(corpus_path)
-        dictionary = gensim.corpora.Dictionary.load(dict_path)
-        return mmcorpus, dictionary
 
     def _init_model(self) :
         """ Init navie bayes model. """
         self.word_dict = dict()
         self.word_dict[self.dictionary.token2id[u'发型<:>n']] = [1.0, 0.0, 0.0]
-        self.word_dict[self.dictionary.token2id[u'化妆<:>vn']] = [0.0, 1.0, 0.0]
+        self.word_dict[self.dictionary.token2id[u'化妆<:>n']] = [0.0, 1.0, 0.0]
         self.word_dict[self.dictionary.token2id[u'服饰<:>n']] = [0.0, 0.0, 1.0]
         self.prior_prob = [1.0/self.n_cluster] * self.n_cluster
-
-    def read_test_label(self, data_path) :
-        """ Read test label of cluster. """
-        file_operator = TextFileOperator()
-        data_list = file_operator.reading(data_path)
-        self._article_label_dict = dict()
-        for data in data_list[1:] :
-            if data[0] not in self._article_label_dict :
-                self._article_label_dict[data[0]] = int(data[4])
 
     def read_test_class(self, article_list, labels_pred) :
         """ Read test class of cluster. """
@@ -54,11 +40,12 @@ class WordCluster :
             The same as labeling articles.
         """
         for idx, texts in enumerate(self.mmcorpus) :
+            n_words = sum([term[1] for term in texts])
             distinguished = False
             scores = [1.0] * self.n_cluster
             for label in range(self.n_cluster) :
                 for word, times in texts :
-                    if word in self.word_dict :
+                    if word in self.word_dict and 1.0*times/n_words >= 0.025 :
                         distinguished = True
                         scores[label] *= self.word_dict[word][label]
                 scores[label] *= self.prior_prob[label]
@@ -73,14 +60,16 @@ class WordCluster :
             condidate_word[word] = [0.0] * self.n_cluster
         cluster_number = [0.0] * self.n_cluster
         for idx, texts in enumerate(self.mmcorpus) :
+            n_words = sum([times for word, times in texts])
             if labels_pred[idx] != -1 :
                 cluster_number[labels_pred[idx]] += 1
                 for word, times in texts :
-                    condidate_word[word][labels_pred[idx]] += 1
+                    if 1.0*times/n_words >= 0.025 :
+                        condidate_word[word][labels_pred[idx]] += 1
         for word in condidate_word.keys() :
             for label in range(self.n_cluster) :
                 condidate_word[word][label] = 1.0 * (condidate_word[word][label] + 1) / \
-                    (cluster_number[label] + len(self.dictionary))
+                    (cluster_number[label] + 1)
         selected_word = self.select_condidate_word(condidate_word, threshold=0.001)
         for word in selected_word :
             self.word_dict[word] = condidate_word[word]
@@ -133,7 +122,8 @@ class WordCluster :
         print 'homogeneity_score is', score
         score = metrics.completeness_score(labels_true, labels_pred)  
         print 'completeness_score is', score
-        adj_labels_pred = [[9, 1, 2, 3][l+1] for l in labels_pred]
+        adj_labels_pred = [int(l)+1 if l != None else None for l in labels_pred]
         score = 1.0 * sum([1 for idx in range(len(labels_true)) \
             if adj_labels_pred[idx] == labels_true[idx]]) / len(labels_true)
         print 'accurancy is', score
+        print 'ok'

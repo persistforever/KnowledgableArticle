@@ -188,7 +188,7 @@ def lda_cluster() :
 def word_cluster() :
     from file.path_manager import PathManager
     from basic.corpus import Corpus
-    from qa.word_cluster import WordCluster
+    from cluster.word_cluster import WordCluster
     corpus = Corpus()
     corpus.read_article_list(PathManager.CORPUS_ARTICLE)
     cluster = WordCluster(corpus_path=PathManager.CORPORA_MMCORPUS,  \
