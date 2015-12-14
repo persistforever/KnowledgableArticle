@@ -142,7 +142,7 @@ class Corpora(object) :
         else :
             return False
 
-    def create_lda_model(self,  type='create', mmcorpus=None, dictionary=None, path='') :
+    def create_lda_model(self,  type='create', mmcorpus=None, dictionary=None, path='', n_topics=3) :
         """ If type is 'create' :
                 Initialize the lda model using mmcorpus and dictionary.
             If type is 'load' :
@@ -150,7 +150,7 @@ class Corpora(object) :
         """
         if type is 'create' :
             lda_model = gensim.models.ldamodel.LdaModel(corpus=mmcorpus, id2word=dictionary, \
-                num_topics=3, iterations=1000)
+                num_topics=n_topics, iterations=1000)
             lda_model.save(path)
         elif type is 'load' :
             lda_model = gensim.models.ldamodel.LdaModel.load(path)

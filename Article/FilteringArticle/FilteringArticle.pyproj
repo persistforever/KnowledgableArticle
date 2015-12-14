@@ -95,6 +95,9 @@
     <Compile Include="wechat\qa\article_tag.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="wechat\qa\lda_cluster.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="wechat\qa\word_cluster.py">
       <SubType>Code</SubType>
     </Compile>

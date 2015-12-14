@@ -47,6 +47,8 @@ class PathManager :
     CORPORA_LDA = 'lda model initial file in the corpora'
 
     CLASSIFIER_CLASSIFIER = 'classifier in the classifier'
+
+    CLUSTER_TESTDATA = 'test data in the cluster'
         
     @staticmethod
     def _get_configuration() :
@@ -90,6 +92,8 @@ class PathManager :
         PathManager.CORPORA_LDA = cfg.get('corpora', 'LDA')
 
         PathManager.CLASSIFIER_CLASSIFIER = cfg.get('classifier', 'CLASSIFIER')
+
+        PathManager.CLUSTER_TESTDATA = cfg.get('cluster', 'TESTDATA')
 
 
 PathManager._get_configuration()

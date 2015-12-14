@@ -25,7 +25,7 @@ class ArticleCluster :
         self.dict_path = dict_path
         self.w2v_path = w2v_path
         self.lda_path = lda_path
-        self.mmcorpus, self.tfidf_model, self.dictionary, self.word2vec = self._read_model()
+        self.mmcorpus, self.tfidf_model, self.dictionary, self.word2vec, self.lda = self._read_model()
 
     def _read_model(self) :
         """ Read tfidf models. """
@@ -97,10 +97,10 @@ class ArticleCluster :
         return word_dict
 
     def user_choosing(self, lucene_list, query_list) :
-        # word_dict, tag_list = self._article_keyword()
-        # word_dict = self._word_clustering(word_dict)
-        word_dict, tag_list = self._article_tfidf(lucene_list, query_list)
+        word_dict = self._article_idf()
         word_dict = self._word_clustering(word_dict)
+        # word_dict, tag_list = self._article_idf(lucene_list, query_list)
+        # word_dict = self._word_clustering(word_dict)
 
     def _article_tfidf(self, lucene_list, query_list) :
         """ tagging each article. """
@@ -120,6 +120,14 @@ class ArticleCluster :
             tag_list.append(tag)
         word_dict = {word:None for word, lst in word_dict.iteritems() if sum(lst)>0}
         return word_dict, tag_list
+
+    def _article_idf(self) :
+        """ tagging each article. """
+        word_dict = dict()
+        word_score_list = sorted(self.tfidf_model.idfs.iteritems(), key=lambda x: x[1])
+        for idx, score in word_score_list[0:100] :
+            word_dict[self.dictionary.id2token[idx]] = None
+        return word_dict
 
     def _article_keyword(self) :
         """ tagging each article. """
