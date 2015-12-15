@@ -456,3 +456,23 @@ class Corpus(object) :
                 if len(sentence) > 10 :
                     sentences.append([word.to_string() for word in sentence])
         return sentences
+
+    def article_to_tuples_list(self) :
+        """ Transform article to tuples list accordding to gensim. 
+            Tuple list is a [list] and each element is a [list].
+            Each element of the tuple list is a tuple.
+            Each element of the tuple is a <key, value>.
+            Like this [ [(id, string), (url, string), ...], 
+                        [(id, string), (url, string), ...], 
+                        ...
+                      ]
+        """
+        tuples_list = []
+        for article in self.article_list :
+            tuples = []
+            tuples.append(('id', article.id))
+            tuples.append(('url', article.url))
+            tuples.append(('title', article.title))
+            tuples.append(('content', article.content))
+            tuples_list.append(tuples)
+        return tuples_list

@@ -197,10 +197,11 @@ if __name__ == '__main__' :
     # create_corpora()
     # create_word2vec()\
     # create_lda()
+    create_article_info()
     # find_synonymy()
     # filter_word()
     # feature_select()
     # create_classifier()
     # content_split_sentence()
     # simplifying_content()
-    word_cluster()
+    # word_cluster()

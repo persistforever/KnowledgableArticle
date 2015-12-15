@@ -39,6 +39,7 @@ class PathManager :
     CORPUS_KNOWLEDGE = 'knowledgeable article list in corpus'
     CORPUS_TRAINDATA = 'train data in corpus'
 
+    CORPORA_INFO = 'article info in corpora'
     CORPORA_DICTIONARY = 'dictionary in corpora accorrding to gensim'
     CORPORA_MMCORPUS = 'corpus in corpora stored as mmcorpus'
     CORPORA_TFIDF = 'tfidf model in corpora'
@@ -86,6 +87,7 @@ class PathManager :
         PathManager.CORPUS_KNOWLEDGE = cfg.get('corpus', 'KNOWLEDGE')
         PathManager.CORPUS_TRAINDATA = cfg.get('corpus', 'TRAINDATA')
 
+        PathManager.CORPORA_INFO = cfg.get('corpora', 'INFO')
         PathManager.CORPORA_DICTIONARY = cfg.get('corpora', 'DICTIONARY')
         PathManager.CORPORA_MMCORPUS = cfg.get('corpora', 'MMCORPUS')
         PathManager.CORPORA_TFIDF = cfg.get('corpora', 'TFIDF')
