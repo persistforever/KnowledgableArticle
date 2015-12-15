@@ -37,22 +37,35 @@ class Corpus(object) :
         self._constr_dict_id()
         self._constr_dict_index()
 
-    def read_split_list(self, split_path) :
-        """ Read split list.
+    def read_participle_title_list(self, split_path) :
+        """ Read participle title list.
             Each row of the file is a article.
             column[0] of the file is the id of article.
-            column[1] of the file is the split_title of article.
-            column[2] of the file is the split_content of article.
+            column[1] of the file is the participle_title of article.
         """
         file_operator = TextFileOperator()
         data_list = file_operator.reading(split_path)
         for data in data_list[1:] :
-            if len(data) >= 3 :
+            if len(data) >= 2 :
                 id = data[0]
                 if id in self._id_article :
                     article = self._id_article[id]
                     article.participle_title = [Word(part, sp_char=':') for part in data[1].split(' ')]
-                    article.participle_content = [Word(part, sp_char=':') for part in data[2].split(' ')]
+
+    def read_participle_content_list(self, split_path) :
+        """ Read participle content list.
+            Each row of the file is a article.
+            column[0] of the file is the id of article.
+            column[1] of the file is the participle_title of article.
+        """
+        file_operator = TextFileOperator()
+        data_list = file_operator.reading(split_path)
+        for data in data_list[1:] :
+            if len(data) >= 2 :
+                id = data[0]
+                if id in self._id_article :
+                    article = self._id_article[id]
+                    article.participle_content = [Word(part, sp_char=':') for part in data[1].split(' ')]
 
     def read_sub_sentence_list(self, sentence_path) :
         """ Read sentence list.
@@ -403,7 +416,7 @@ class Corpus(object) :
         for gzh_id, length, score, avg in gzh_list[-10:] :
             print gzh_id, length, score, avg
 
-    def article_to_texts(self) :
+    def article_to_texts(self, choose='title') :
         """ Transform article to texts accordding to gensim. 
             Texts is a [list] and each element is a [list].
             Each element of the texts_list is a article.
@@ -417,8 +430,13 @@ class Corpus(object) :
         texts = []
         for article in self.article_list :
             text = []
-            text.extend([word.to_string() for word in article.participle_title if word.feature in remain_pos])
-            text.extend([word.to_string() for word in article.participle_content if word.feature in remain_pos])
+            if choose == 'title' :
+                text.extend([word.to_string() for word in article.participle_title if word.feature in remain_pos])
+            elif choose == 'content' :
+                text.extend([word.to_string() for word in article.participle_content if word.feature in remain_pos])
+            elif choose == 'all' :
+                text.extend([word.to_string() for word in article.participle_title if word.feature in remain_pos])
+                text.extend([word.to_string() for word in article.participle_content if word.feature in remain_pos])
             texts.append(text)
         return texts
     

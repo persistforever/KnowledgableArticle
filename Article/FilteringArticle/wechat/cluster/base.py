@@ -40,3 +40,22 @@ class BaseCluster :
         for data in data_list[1:] :
             if data[0] not in self._article_label_dict :
                 self._article_label_dict[data[0]] = int(data[4])
+
+    def write_article_topic(self, doc_topic_, label_path='') :
+        """ Write article topic. 
+            Each row of the file is a article.
+            column[0] of the file is id.
+            column[1] of the file is label.
+        """
+        data_list = []
+        for idx, tuple_list in enumerate(doc_topic_) :
+            data = []
+            if idx == 0 :
+                for key, value in tuple_list :
+                    data.append(key)
+            else :
+                for key, value in tuple_list :
+                    data.append(value)
+            data_list.append(data)
+        file_operator = TextFileOperator()
+        file_operator.writing(data_list, label_path)

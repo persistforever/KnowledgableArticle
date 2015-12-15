@@ -21,7 +21,7 @@ from sklearn import metrics
 class LdaCluster(BaseCluster) :
 
     def __init__(self, corpus_path='', tfidf_path='', dict_path='', w2v_path='', lda_path='') :
-        BaseCluster.__init__(self)
+        BaseCluster.__init__(self, corpus_path, tfidf_path, dict_path, w2v_path, lda_path)
 
     def read_test_class(self, article_list) :
         """ Read test class of cluster. """
@@ -33,8 +33,9 @@ class LdaCluster(BaseCluster) :
 
     def evaluation(self) :
         """ evaluate the accurancy of the lda model. """
-        labels_true = self._article_label_dict.values()
-        labels_pred = self._article_class_dict.values()
+        labels_true = self._article_label_dict
+        labels_pred = self._article_class_dict
+        '''
         score = metrics.adjusted_rand_score(labels_true, labels_pred)  
         print 'adjusted_rand_score is', score
         score = metrics.adjusted_mutual_info_score(labels_true, labels_pred)  
@@ -43,7 +44,13 @@ class LdaCluster(BaseCluster) :
         print 'homogeneity_score is', score
         score = metrics.completeness_score(labels_true, labels_pred)  
         print 'completeness_score is', score
-        adj_labels_pred = [[0, 0, 2, 1, 3][l] for l in labels_pred]
-        score = 1.0 * sum([1 for idx in range(len(labels_true)) \
-            if adj_labels_pred[idx] == labels_true[idx]]) / len(labels_true)
+        '''
+        adj_labels_pred = {id: [0, 0, 2, 1, 3][labels_pred[id]] for id in labels_pred.keys()}
+        score = 1.0 * sum([1 for id in labels_true \
+            if adj_labels_pred[id] == labels_true[id]] ) / len(labels_true)
         print 'accurancy is', score
+
+    def process(self, article_list) :
+        """ main process of naive bayes. """
+        self.read_test_class(article_list)
+        self.evaluation()

@@ -49,6 +49,8 @@ class PathManager :
     CLASSIFIER_CLASSIFIER = 'classifier in the classifier'
 
     CLUSTER_TESTDATA = 'test data in the cluster'
+    CLUSTER_DOCTOPIC = 'doc_topic in the cluster'
+    CLUSTER_TOPICWORD = 'topic_word in the cluster'
         
     @staticmethod
     def _get_configuration() :
@@ -94,6 +96,8 @@ class PathManager :
         PathManager.CLASSIFIER_CLASSIFIER = cfg.get('classifier', 'CLASSIFIER')
 
         PathManager.CLUSTER_TESTDATA = cfg.get('cluster', 'TESTDATA')
+        PathManager.CLUSTER_DOCTOPIC = cfg.get('cluster', 'DOCTOPIC')
+        PathManager.CLUSTER_TOPICWORD = cfg.get('cluster', 'TOPICWORD')
 
 
 PathManager._get_configuration()

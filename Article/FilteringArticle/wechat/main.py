@@ -168,27 +168,12 @@ def simplifying_content() :
     corpus.read_content_sentence_list(PathManager.CORPUS_SENTENCE)
     corpus.simplify_content(rd_path=PathManager.TOOLS_REDUNDANCE)
     corpus.write_article_list(length=100, article_path=PathManager.CORPUS_SIMPLYARTICLE)
-
-def lda_cluster() :
-    from file.path_manager import PathManager
-    from basic.corpus import Corpus
-    from qa.lda_cluster import LdaCluster
-    corpus = Corpus()
-    corpus.read_article_list(PathManager.CORPUS_ARTICLE)
-    cluster = LdaCluster(corpus_path=PathManager.CORPORA_MMCORPUS,  \
-        tfidf_path=PathManager.CORPORA_TFIDF, \
-        dict_path=PathManager.CORPORA_DICTIONARY, \
-        w2v_path=PathManager.CORPORA_WORD2VEC, \
-        lda_path=PathManager.CORPORA_LDA)
-    cluster.read_test_label(data_path=PathManager.CLUSTER_TESTDATA)
-    cluster.read_test_class(corpus.article_list)
-    cluster.evaluation()
-    print 'finish'
  
 def word_cluster() :
     from file.path_manager import PathManager
     from basic.corpus import Corpus
     from cluster.word_cluster import WordCluster
+    from cluster.lda_cluster import LdaCluster
     corpus = Corpus()
     corpus.read_article_list(PathManager.CORPUS_ARTICLE)
     cluster = WordCluster(corpus_path=PathManager.CORPORA_MMCORPUS,  \
@@ -197,7 +182,9 @@ def word_cluster() :
         w2v_path=PathManager.CORPORA_WORD2VEC, \
         lda_path=PathManager.CORPORA_LDA)
     cluster.read_test_label(data_path=PathManager.CLUSTER_TESTDATA)
-    cluster.process(corpus.article_list)
+    doc_topic_, topic_word_ = cluster.process(corpus.article_list)
+    cluster.write_article_topic(doc_topic_, label_path=PathManager.CLUSTER_DOCTOPIC)
+    cluster.write_article_topic(topic_word_, label_path=PathManager.CLUSTER_TOPICWORD)
     print 'finish'
 
 
@@ -216,5 +203,4 @@ if __name__ == '__main__' :
     # create_classifier()
     # content_split_sentence()
     # simplifying_content()
-    # lda_cluster()
     word_cluster()
