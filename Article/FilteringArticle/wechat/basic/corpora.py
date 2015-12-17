@@ -18,7 +18,7 @@ class Corpora(object) :
     def __init__(self) :
         pass
 
-    def create_gensim_dictionary(self, type='create', texts=[], path='') :
+    def word_dictionary(self, type='create', texts=[], path='') :
         """ If type is 'create' :
                 Initialize the dictionary using texts and tokens.
                 Texts is to initialize and Tokens is to filter.
@@ -41,11 +41,11 @@ class Corpora(object) :
         print dictionary
         return dictionary
 
-    def create_gensim_corpus(self, type='create', texts=[], dictionary=None, path='') :
+    def article_texts_bow(self, type='create', texts=[], dictionary=None, path='') :
         """ If type is 'create' :
-                Initialize the doc2bow using texts and dictionary
+                Transform texts to bow using dictionary.
             If type is 'load' :
-                Initialize the doc2bow from the file.
+                Initialize the bow from the file.
         """
         if type is 'create' :
             corpus = [dictionary.doc2bow(text) for text in texts]
@@ -55,14 +55,14 @@ class Corpora(object) :
         print len(corpus)
         return corpus
 
-    def create_gensim_tfidf(self,  type='create', mmcorpus=None, path='') :
+    def textsbow_to_tfidf(self,  type='create', textsbow=None, path='') :
         """ If type is 'create' :
-                Initialize the tfidf model using mmcorpus
+                Initialize the tfidf model using textsbow.
             If type is 'load' :
                 Initialize the tfidf model from the file.
         """
         if type is 'create' :
-            tfidf_model = gensim.models.TfidfModel(mmcorpus)
+            tfidf_model = gensim.models.TfidfModel(textsbow)
             tfidf_model.save(path)
         elif type is 'load' :
             tfidf_model = gensim.models.TfidfModel.load(path)
@@ -119,7 +119,7 @@ class Corpora(object) :
             similarities.append(similarity)
         return similarities
 
-    def create_wordsim_word2vec(self,  type='create', sentences=[], path='') :
+    def word_to_vector(self,  type='create', sentences=[], path='') :
         """ If type is 'create' :
                 Initialize the word2vec wordsim using sentences
             If type is 'load' :

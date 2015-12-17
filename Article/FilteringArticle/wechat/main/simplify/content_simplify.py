@@ -11,16 +11,18 @@ import sys
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/../..'))
 
 from basic.corpus import Corpus
-from simplifier.content_simplifier import AnotherCorpus
+from simplifier.simplifier import ContentSimplifier
 # package importing end
 
 
-def content_simplify(article, sentence, redundance, simply) :
-    corpus = AnotherCorpus()
-    corpus.read_article_list(article)
-    corpus.read_content_sentence_list(sentence)
-    corpus.simplify_content(rd_path=redundance)
-    corpus.write_article_list(length=100, article_path=simply)
+def simplifying_content(article, sentence, redundance, simply) :
+    corpus = Corpus()
+    corpus = Corpus()
+    corpus.article_info(article)
+    corpus.segemented_list(sentence, type='load', target='content')
+    simplifier = ContentSimplifier(redundance)
+    corpus.simplify_content(target='content', simplifier=simplifier)
+    corpus.article_info(simply, type='create')
 
 
 if __name__ == '__main__' :
@@ -28,4 +30,4 @@ if __name__ == '__main__' :
     sentence = sys.argv[2].strip()
     redundance = sys.argv[3].strip()
     simply = sys.argv[4].strip()
-    content_simplify(article, sentence, redundance, simply)
+    simplifying_content(article, sentence, redundance, simply)

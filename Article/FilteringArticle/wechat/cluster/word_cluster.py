@@ -23,11 +23,11 @@ class WordCluster(BaseCluster) :
     def _init_model(self) :
         """ Init navie bayes model. """
         self.word_dict = dict()
-        self.startup_words = []
-        self.startup_words.append([u'发型'])
-        self.startup_words.append([u'化妆', u'彩妆'])
-        self.startup_words.append([u'衣服', u'服饰'])
-        self.n_cluster = len(self.startup_words)
+        self.seeds = []
+        self.seeds.append([u'发型'])
+        self.seeds.append([u'化妆', u'彩妆'])
+        self.seeds.append([u'衣服', u'服饰'])
+        self.n_cluster = len(self.seeds)
         '''
         self.startup_words.append([u'男'])
         self.startup_words.append([u'女'])
@@ -46,7 +46,7 @@ class WordCluster(BaseCluster) :
         for idx, article in enumerate(article_list) :
             distinguished = False
             for label in range(self.n_cluster) :
-                for word in self.startup_words[label] :
+                for word in self.seeds[label] :
                     if word in article.title :
                         distinguished = True
                         labels_pred[idx] = label
@@ -86,7 +86,7 @@ class WordCluster(BaseCluster) :
             for label in range(self.n_cluster) :
                 condidate_word[word][label] = 1.0 * (condidate_word[word][label] + 1) / \
                     (cluster_number[label] + len(self.word_dict))
-        selected_word = self.select_condidate_word(condidate_word, threshold=0.05)
+        selected_word = self.select_condidate_word(condidate_word, threshold=0.01)
         for word in selected_word :
             self.word_dict[word] = condidate_word[word]
         return self.word_dict
@@ -112,7 +112,7 @@ class WordCluster(BaseCluster) :
             for word, lst in sorted_list :
                 if max(lst) != 0.0 and max(enumerate(lst), key=lambda x: x[1])[0] == label:
                     selected_label_word.append(word)
-            selected_word.extend(selected_label_word[0:100])
+            selected_word.extend(selected_label_word[0:200])
         return selected_word
 
     def evaluation(self) :

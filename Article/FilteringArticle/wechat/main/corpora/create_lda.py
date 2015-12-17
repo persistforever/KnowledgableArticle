@@ -17,7 +17,7 @@ from basic.corpora import Corpora
 
 def create_lda(dictionary_path, mmcorpu_path, tfidf_path, lda_model, num) :
     corpora = Corpora()
-    dictionary = corpora.create_gensim_dictionary(type='load', path=dictionary_path)
+    dictionary = corpora.word_dictionary(type='load', path=dictionary_path)
     mmcorpus = corpora.create_gensim_corpus(type='load', path=mmcorpu_path)
     tfidf_model = corpora.create_gensim_tfidf(type='load', path=tfidf_path)
     corpora.create_lda_model(type='create', mmcorpus=mmcorpus, dictionary=dictionary, \

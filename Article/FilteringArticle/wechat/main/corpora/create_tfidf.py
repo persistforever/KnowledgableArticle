@@ -16,14 +16,13 @@ from basic.corpora import Corpora
 # package importing end
 
 
-def create_corpora(mmcorpu_path, tfidf_path) :
+def create_corpora(texts_path, tfidf_path) :
     corpora = Corpora()
-    mmcorpus = corpora.create_gensim_corpus(type='load', path=mmcorpu_path)
-    tfidf_model = corpora.create_gensim_tfidf(type='create', mmcorpus=mmcorpus, \
-        path=tfidf_path)
+    texts = corpora.article_texts_bow(type='load', path=texts_path)
+    tfidf = corpora.textsbow_to_tfidf(type='create', textsbow=texts, path=tfidf_path)
 
 
 if __name__ == '__main__' :
-    mmcorpus = sys.argv[1].strip()
-    tfidf_model = sys.argv[2].strip()
-    create_corpora(mmcorpus, tfidf_model)
+    texts = sys.argv[1].strip()
+    tfidf = sys.argv[2].strip()
+    create_corpora(texts, tfidf)

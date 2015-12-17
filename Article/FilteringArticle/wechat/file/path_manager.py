@@ -11,7 +11,7 @@ class PathManager :
 
     # a list of path
     TOOLS_TITLESPST = 'title splist in the tools'
-    TOOLS_SENTENCEPST = 'sentence split in the tools'
+    TOOLS_CONTENTSPST = 'sentence split in the tools'
     TOOLS_PUNCTUATION = 'punctuation in the tools'
     TOOLS_FIRSTPRO = 'first pronoun in the tools'
     TOOLS_SECONDPRO = 'second pronoun in the tools'
@@ -46,6 +46,8 @@ class PathManager :
     CORPORA_WORD2TFIDF = 'word2sim by tfidf model initial file in the corpora'
     CORPORA_WORD2VEC = 'word2sim by word2vec model initial file in the corpora'
     CORPORA_LDA = 'lda model initial file in the corpora'
+    CORPORA_TITLETEXTS = 'participle title texts in the corpora'
+    CORPORA_CONTENTTEXTS = 'participle content texts in the corpora'
 
     CLASSIFIER_CLASSIFIER = 'classifier in the classifier'
 
@@ -59,7 +61,7 @@ class PathManager :
         cfg = ConfigParser.ConfigParser()
         cfg.read('wechat/file/configuration.ini')
         PathManager.TOOLS_TITLESPST = cfg.get('tools', 'TITLESPST')
-        PathManager.TOOLS_SENTENCEPST = cfg.get('tools', 'SENTENCEPST')
+        PathManager.TOOLS_CONTENTSPST = cfg.get('tools', 'CONTENTSPST')
         PathManager.TOOLS_PUNCTUATION = cfg.get('tools', 'PUNCTUATION')
         PathManager.TOOLS_FIRSTPRO = cfg.get('tools', 'FIRSTPRO')
         PathManager.TOOLS_SECONDPRO = cfg.get('tools', 'SECONDPRO')
@@ -94,6 +96,8 @@ class PathManager :
         PathManager.CORPORA_WORD2TFIDF = cfg.get('corpora', 'WORD2TFIDF')
         PathManager.CORPORA_WORD2VEC = cfg.get('corpora', 'WORD2VEC')
         PathManager.CORPORA_LDA = cfg.get('corpora', 'LDA')
+        PathManager.CORPORA_TITLETEXTS = cfg.get('corpora', 'TITLETEXTS')
+        PathManager.CORPORA_CONTENTTEXTS = cfg.get('corpora', 'CONTENTTEXTS')
 
         PathManager.CLASSIFIER_CLASSIFIER = cfg.get('classifier', 'CLASSIFIER')
 

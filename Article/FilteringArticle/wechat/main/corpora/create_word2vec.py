@@ -16,17 +16,17 @@ from basic.corpora import Corpora
 # package importing end
 
 
-def create_corpora(artice_path, sentence_path, w2v_path) :
+def create_word_vector(article_path, sentence_path, w2v_path) :
     corpus = Corpus()
-    corpus.read_article_list(artice_path)
-    corpus.read_content_participle_sentence(sentence_path)
-    sentences = corpus.article_to_sentences()
+    corpus.article_info(article_path, type='load')
+    corpus.segemented_participle_list(sentence_path, type='load', target='content')
+    sentences = corpus.article_to_sentences(target='segemented_participle_content')
     corpora = Corpora()
-    corpora.create_wordsim_word2vec(type='create', sentences=sentences, path=w2v_path)
+    corpora.word_to_vector(type='create', sentences=sentences, path=w2v_path)
 
 
 if __name__ == '__main__' :
     article = sys.argv[1].strip()
     sentence = sys.argv[2].strip()
     word2vec = sys.argv[3].strip()
-    create_corpora(article, sentence, word2vec)
+    create_word_vector(article, sentence, word2vec)

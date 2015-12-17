@@ -90,50 +90,20 @@ class ContentSimplifier :
         else :
             return sentence_list
 
-
-class AnotherCorpus(Corpus) :
+        
+class TitleSimplifier :
 
     def __init__(self) :
-        super(AnotherCorpus, self).__init__()
-
-    def read_article_list(self, article_path):
-        return super(AnotherCorpus, self).read_article_list(article_path)
-
-    def read_content_sentence_list(self, sentence_path) :
-        """ Read content sentence list.
-            Each row of the file is a sentence.
-            column[0] of the file is the id of article.
-            column[1] of the file is the splited sentence of article.
-        """
-        file_operator = TextFileOperator()
-        data_list = file_operator.reading(sentence_path)
-        for data in data_list[1:] :
-            if len(data) >= 2 :
-                id = data[0]
-                if id in self._id_article :
-                    article = self._id_article[id]
-                    article.sub_sentence_list.append(data[1])
-
-    def simplify_content(self, rd_path) :
-        """ Simplify content. """
-        simplifier = ContentSimplifier(redundance_path=rd_path)
-        for idx, article in enumerate(self.article_list) :
-            sentence_list = []
-            for sentence in article.sub_sentence_list :
-                sentence_list.append(simplifier.tag_sentence(sentence))
-            sentence_list = simplifier.filter_tail(sentence_list)
-            sentence_list = simplifier.filter_head(sentence_list)
-            article.content = ''
-            for sentence, flag in sentence_list :
-                article.content += sentence + u'。'
-
-    def write_article_list(self, length=100, article_path='') :
-        """ Write splited sentence.
-            Each row of the file is a splited sentence.
-            Column[:] of the file is the attributes of the article.
-        """
-        article_list = []
-        for article in self.article_list :
-            if len(article.content) >= length :
-                article_list.append(article)
-        super(AnotherCorpus, self).write_article_list(article_list, article_path=article_path)
+        pass
+                    
+    def filter_sentence(self, sentences, words) :
+        """ Filter sentence in sentences. """
+        scores = [0]*len(sentences)
+        for word in words :
+            for idx, sentence in enumerate(sentences) :
+                scores[idx] = [1 for latter in word if latter in sentence]
+        if max(scores) != 0 :
+            sentence = sentences[max(enumerate(scores), key=lambda x: x[1])[0]]
+        else :
+            sentence = ''
+        return sentence

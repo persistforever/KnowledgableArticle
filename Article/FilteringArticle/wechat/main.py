@@ -32,17 +32,6 @@ def feature_select() :
         pc_path=PathManager.TOOLS_PUNCTUATION, pos_path=PathManager.TOOLS_POS)
     corpus.write_feature_list(PathManager.CORPUS_FEATURE)
 
-def simplifying_title() :
-    from file.path_manager import PathManager
-    from basic.corpus import Corpus
-    corpus = Corpus()
-    corpus.read_article_list(PathManager.CORPUS_ARTICLE)
-    corpus.read_sub_title(PathManager.CORPUS_SUBTITLE)
-    corpus.read_keyword(PathManager.CORPUS_KEYWORD)
-    corpus.title_simplifying(w2v_path=PathManager.CORPORA_WORD2VEC, \
-        spst_path=PathManager.TOOLS_TITLESPST)
-    corpus.write_simply_article(PathManager.CORPUS_SIMPLYARTICLE)
-
 def simplifying_article() :
     corpus = Corpus()
     corpus.read_article_list()
@@ -84,22 +73,30 @@ def find_synonymy() :
     synonymy_searcher.find_synonymy_words()
     synonymy_searcher.write_synonymys(PathManager.SYNONYMYS_SYNONYMY)
 
-def create_corpora() :
+def create_texts() :
     from basic.corpus import Corpus
     from basic.corpora import Corpora
     from file.path_manager import PathManager
     corpus = Corpus()
-    corpus.read_article_list(PathManager.CORPUS_ARTICLE)
-    corpus.read_split_list(PathManager.CORPUS_SPLIT)
-    texts = corpus.article_to_texts()
+    corpus.article_info(PathManager.CORPUS_ARTICLE, type='load')
+    corpus.participle_list(PathManager.CORPUS_SPLIT, \
+        type='load', target='participle_title')
+    texts = corpus.article_to_texts(target='participle_title')
     corpora = Corpora()
-    dictionary = corpora.create_gensim_dictionary(type='create', texts=texts, \
+    dictionary = corpora.word_dictionary(type='load', texts=texts, \
         path=PathManager.CORPORA_DICTIONARY)
-    mmcorpus = corpora.create_gensim_corpus(type='create', texts=texts, dictionary=dictionary, \
-        path=PathManager.CORPORA_MMCORPUS)
-    tfidf_model = corpora.create_gensim_tfidf(type='create', mmcorpus=mmcorpus, \
-        path=PathManager.CORPORA_TFIDF)
-    word2tfidf = corpora.create_wordsim_tfidf(type='create', path=PathManager.CORPORA_WORD2TFIDF)
+    texts = corpora.article_texts_bow(type='load', texts=texts, dictionary=dictionary, \
+        path=PathManager.CORPORA_TITLETEXTS)
+    print 'finished ...'
+
+def create_tfidf() :
+    from basic.corpus import Corpus
+    from basic.corpora import Corpora
+    from file.path_manager import PathManager
+    corpora = Corpora()
+    dictionary = corpora.word_dictionary(type='load', path=PathManager.CORPORA_DICTIONARY)
+    texts = corpora.article_texts_bow(type='load', path=PathManager.CORPORA_CONTENTTEXTS)
+    tfidf = corpora.textsbow_to_tfidf(type='create', textsbow=texts, path=PathManager.CORPORA_TFIDF)
     print 'finished ...'
 
 def create_word2vec() :
@@ -107,11 +104,12 @@ def create_word2vec() :
     from basic.corpora import Corpora
     from file.path_manager import PathManager
     corpus = Corpus()
-    corpus.read_article_list(PathManager.CORPUS_ARTICLE)
-    corpus.read_content_participle_sentence(PathManager.CORPUS_SENTENCE)
-    sentences = corpus.article_to_sentences()
+    corpus.article_info(PathManager.CORPUS_SIMPLYARTICLE, type='load')
+    corpus.segemented_participle_list(PathManager.CORPUS_SENTENCE, type='load', target='content')
+    sentences = corpus.article_to_sentences(target='segemented_participle_content')
     corpora = Corpora()
-    corpora.create_wordsim_word2vec(type='create', sentences=sentences, path=PathManager.CORPORA_WORD2VEC)
+    corpora.word_to_vector(type='create', sentences=sentences, \
+        path=PathManager.CORPORA_WORD2VEC)
     print 'finished ...'
 
 def create_lda() :
@@ -123,9 +121,9 @@ def create_lda() :
     corpus.read_split_list(PathManager.CORPUS_SPLIT)
     texts = corpus.article_to_texts()
     corpora = Corpora()
-    dictionary = corpora.create_gensim_dictionary(type='create', texts=texts, \
+    dictionary = corpora.word_dictionary(type='create', texts=texts, \
         path=PathManager.CORPORA_DICTIONARY)
-    mmcorpus = corpora.create_gensim_corpus(type='create', texts=texts, dictionary=dictionary, \
+    mmcorpus = corpora.article_texts_bow(type='create', texts=texts, dictionary=dictionary, \
         path=PathManager.CORPORA_MMCORPUS)
     corpora.create_lda_model(type='create', mmcorpus=mmcorpus, dictionary=dictionary, \
         path=PathManager.CORPORA_LDA)
@@ -159,15 +157,44 @@ def content_split_sentence() :
     corpus.content_split_sentence(PathManager.TOOLS_SENTENCEPST)
     corpus.write_content_sentence_list(PathManager.CORPUS_SENTENCE)
 
+def segement_content() :
+    from basic.corpus import Corpus
+    from file.path_manager import PathManager
+    from simplifier.segementor import ContentSegementor
+    corpus = Corpus()
+    corpus.article_info(PathManager.CORPUS_ARTICLE)
+    segementor = ContentSegementor(spst_path=PathManager.TOOLS_CONTENTSPST)
+    corpus.segemented_list(PathManager.CORPUS_SENTENCE, type='create', target='content', \
+        segementor=segementor)
+    print 'finish'
+
 def simplifying_content() :
     from basic.corpus import Corpus
     from file.path_manager import PathManager
-    from simplifier.content_simplifier import AnotherCorpus
-    corpus = AnotherCorpus()
-    corpus.read_article_list(PathManager.CORPUS_ARTICLE)
-    corpus.read_content_sentence_list(PathManager.CORPUS_SENTENCE)
-    corpus.simplify_content(rd_path=PathManager.TOOLS_REDUNDANCE)
-    corpus.write_article_list(length=100, article_path=PathManager.CORPUS_SIMPLYARTICLE)
+    from simplifier.simplifier import ContentSimplifier
+    corpus = Corpus()
+    corpus.article_info(PathManager.CORPUS_SIMPLYARTICLE)
+    corpus.segemented_list(PathManager.CORPUS_SENTENCE, type='load', target='content')
+    simplifier = ContentSimplifier(redundance_path=PathManager.TOOLS_REDUNDANCE)
+    corpus.simplify_content(simplifier=simplifier)
+    corpus.article_info(PathManager.CORPUS_SIMPLYARTICLE)
+    print 'finish'
+
+def simplifying_title() :
+    from file.path_manager import PathManager
+    from basic.corpus import Corpus
+    from basic.corpora import Corpora
+    from simplifier.simplifier import TitleSimplifier
+    corpus = Corpus()
+    corpus.article_info(PathManager.CORPUS_SIMPLYARTICLE, type='load')
+    corpus.segemented_list(PathManager.CORPUS_SENTENCE, type='load', target='title')
+    corpora = Corpora()
+    dictionary = corpora.word_dictionary(type='load', path=PathManager.CORPORA_DICTIONARY)
+    texts = corpora.article_texts_bow(type='load', path=PathManager.CORPORA_CONTENTTEXTS)
+    tfidf = corpora.textsbow_to_tfidf(type='load', path=PathManager.CORPORA_TFIDF)
+    simplifier = TitleSimplifier()
+    corpus.simplify_title(dictionary, texts, tfidf, simplifier=simplifier)
+    print 'finish'
  
 def word_cluster() :
     from file.path_manager import PathManager
@@ -190,18 +217,19 @@ def word_cluster() :
 
 if __name__ == '__main__' :
     # 5classifying()
-    # simplifying_title()
     # simplifying_article()
     # tagging_article()
     # qa_system()
-    # create_corpora()
-    # create_word2vec()\
+    # create_texts()
+    # create_tfidf()
+    # create_word2vec()
     # create_lda()
-    create_article_info()
+    # create_article_info()
     # find_synonymy()
     # filter_word()
     # feature_select()
     # create_classifier()
     # content_split_sentence()
     # simplifying_content()
+    simplifying_title()
     # word_cluster()

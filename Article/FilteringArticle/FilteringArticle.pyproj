@@ -33,6 +33,7 @@
     <Compile Include="wechat\basic\article.py" />
     <Compile Include="wechat\basic\corpora.py" />
     <Compile Include="wechat\basic\corpus.py" />
+    <Compile Include="wechat\basic\old_corpus.py" />
     <Compile Include="wechat\basic\tag.py">
       <SubType>Code</SubType>
     </Compile>
@@ -82,14 +83,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="wechat\main\classify\single_classify.py" />
+    <Compile Include="wechat\main\corpora\create_dictionary.py" />
     <Compile Include="wechat\main\corpora\create_lda.py" />
     <Compile Include="wechat\main\corpora\create_tfidf.py" />
+    <Compile Include="wechat\main\corpora\create_content_texts.py" />
     <Compile Include="wechat\main\corpora\create_wordsim.py" />
     <Compile Include="wechat\main\corpora\create_word2vec.py" />
-    <Compile Include="wechat\main\corpora\create_mmcopus.py" />
+    <Compile Include="wechat\main\corpora\create_title_texts.py" />
     <Compile Include="wechat\main\feature\feature_extract.py" />
     <Compile Include="wechat\main\feature\narrative_extract.py" />
     <Compile Include="wechat\main\pretreatment\split_sentence.py" />
+    <Compile Include="wechat\main\simplify\title_segment.py" />
+    <Compile Include="wechat\main\simplify\content_segment.py" />
     <Compile Include="wechat\main\simplify\content_simplify.py" />
     <Compile Include="wechat\main\simplify\title_simplify.py" />
     <Compile Include="wechat\main\find_synonymy.py" />
@@ -101,8 +106,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="wechat\qa\__init__.py" />
+    <Compile Include="wechat\simplifier\segementor.py" />
     <Compile Include="wechat\simplifier\sentence_spliter.py" />
-    <Compile Include="wechat\simplifier\content_simplifier.py" />
+    <Compile Include="wechat\simplifier\simplifier.py" />
     <Compile Include="wechat\simplifier\title_simplifier.py">
       <SubType>Code</SubType>
     </Compile>
