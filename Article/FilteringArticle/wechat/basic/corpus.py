@@ -168,11 +168,22 @@ class Corpus(object) :
         target = 'title'
         for idx, article in enumerate(self.article_list) :
             sentences = []
-            for sentence in article['segemented_'+target] :
-                sentences.append(sentence)
-            words = [Word(dictionary[word], sp_char='<:>').name for word, value in tfidf[texts[idx]]]
+            for sentence in article['segemented_participle_'+target] :
+                sentences.append([word for word in sentence])
+            words = [dictionary[word] for word, value in \
+                sorted(tfidf[texts[idx]], key=lambda x: x[1], reverse=True)[0:10]]
             sentence = simplifier.filter_sentence(sentences, words)
-            article[target] = sentence
+            article[target] = ''.join([word.name for word in sentence])
+
+    def simplify_article(self) :
+        """ Unique article. """
+        article_list = []
+        title_dict = dict()
+        for idx, article in enumerate(self.article_list) :
+            if article['title'] not in title_dict :
+                title_dict[article['title']] = None
+                article_list.append(article)
+        self.article_list = article_list
 
     def article_to_texts(self, target='participle_title') :
         """ Transform article to texts accordding to gensim. 

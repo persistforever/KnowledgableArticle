@@ -4,6 +4,8 @@
 import codecs
 import numpy as np
 
+import gensim
+
 from basic.article import Article
 from basic.corpus import Corpus
 from file.file_operator import TextFileOperator
@@ -93,15 +95,26 @@ class ContentSimplifier :
         
 class TitleSimplifier :
 
-    def __init__(self) :
-        pass
+    def __init__(self, word2vec_path='') :
+        self.word2vec = gensim.models.Word2Vec.load(word2vec_path)
                     
     def filter_sentence(self, sentences, words) :
         """ Filter sentence in sentences. """
         scores = [0]*len(sentences)
         for word in words :
             for idx, sentence in enumerate(sentences) :
-                scores[idx] = [1 for latter in word if latter in sentence]
+                fenmu = 0
+                for worda in sentence :
+                    worda = worda.to_string()
+                    if worda in self.word2vec :
+                        fenmu += 1
+                        for wordb in words :
+                            if wordb in self.word2vec :
+                                scores[idx] += self.word2vec.similarity(worda, wordb)
+                if fenmu == 0 :
+                    scores[idx] = 0
+                else :
+                    scores[idx] /= 1.0 * fenmu
         if max(scores) != 0 :
             sentence = sentences[max(enumerate(scores), key=lambda x: x[1])[0]]
         else :

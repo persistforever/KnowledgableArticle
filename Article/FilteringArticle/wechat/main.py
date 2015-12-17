@@ -187,13 +187,21 @@ def simplifying_title() :
     from simplifier.simplifier import TitleSimplifier
     corpus = Corpus()
     corpus.article_info(PathManager.CORPUS_SIMPLYARTICLE, type='load')
-    corpus.segemented_list(PathManager.CORPUS_SENTENCE, type='load', target='title')
+    corpus.segemented_participle_list(PathManager.CORPUS_SENTENCE, type='load', target='title')
     corpora = Corpora()
     dictionary = corpora.word_dictionary(type='load', path=PathManager.CORPORA_DICTIONARY)
     texts = corpora.article_texts_bow(type='load', path=PathManager.CORPORA_CONTENTTEXTS)
     tfidf = corpora.textsbow_to_tfidf(type='load', path=PathManager.CORPORA_TFIDF)
-    simplifier = TitleSimplifier()
+    simplifier = TitleSimplifier(word2vec_path=PathManager.CORPORA_WORD2VEC)
     corpus.simplify_title(dictionary, texts, tfidf, simplifier=simplifier)
+    print 'finish'
+
+def unique_article() :
+    from file.path_manager import PathManager
+    from basic.corpus import Corpus
+    corpus = Corpus()
+    corpus.article_info(PathManager.CORPUS_SIMPLYARTICLE, type='load')
+    corpus.simplify_article()
     print 'finish'
  
 def word_cluster() :
@@ -231,5 +239,6 @@ if __name__ == '__main__' :
     # create_classifier()
     # content_split_sentence()
     # simplifying_content()
-    simplifying_title()
+    # simplifying_title()
     # word_cluster()
+    unique_article()

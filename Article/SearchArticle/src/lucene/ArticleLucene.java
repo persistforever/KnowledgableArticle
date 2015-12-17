@@ -83,7 +83,7 @@ public class ArticleLucene {
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);  
         ArrayList<Article> resultlist = new ArrayList<Article>();
         try {
-        	String[] querys = {"鞋帽"};
+        	String[] querys = {"发型"};
         	String[] fields = {"title"};
         	BooleanClause.Occur[] flags = { 
         			BooleanClause.Occur.MUST}; 
@@ -91,7 +91,7 @@ public class ArticleLucene {
         } catch (ParseException e) {  
         }  
         if (searcher != null) {  
-            TopDocs results = searcher.search(query, 1000);
+            TopDocs results = searcher.search(query, 500);
             hits = results.scoreDocs;
             if (hits.length > 0) { 
                 System.out.println("找到:" + hits.length + " 个结果!");

@@ -96,6 +96,7 @@
     <Compile Include="wechat\main\simplify\title_segment.py" />
     <Compile Include="wechat\main\simplify\content_segment.py" />
     <Compile Include="wechat\main\simplify\content_simplify.py" />
+    <Compile Include="wechat\main\simplify\article_simplify.py" />
     <Compile Include="wechat\main\simplify\title_simplify.py" />
     <Compile Include="wechat\main\find_synonymy.py" />
     <Compile Include="wechat\pretreatment\content_to_sentence.py">
