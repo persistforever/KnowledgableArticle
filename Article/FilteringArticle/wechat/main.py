@@ -210,8 +210,8 @@ def word_cluster() :
     from cluster.word_cluster import WordCluster
     from cluster.lda_cluster import LdaCluster
     corpus = Corpus()
-    corpus.read_article_list(PathManager.CORPUS_ARTICLE)
-    cluster = WordCluster(corpus_path=PathManager.CORPORA_MMCORPUS,  \
+    corpus.article_info(PathManager.CORPUS_SIMPLYARTICLE, type='load')
+    cluster = WordCluster(corpus_path=PathManager.CORPORA_CONTENTTEXTS,  \
         tfidf_path=PathManager.CORPORA_TFIDF, \
         dict_path=PathManager.CORPORA_DICTIONARY, \
         w2v_path=PathManager.CORPORA_WORD2VEC, \
@@ -240,5 +240,5 @@ if __name__ == '__main__' :
     # content_split_sentence()
     # simplifying_content()
     # simplifying_title()
-    # word_cluster()
-    unique_article()
+    word_cluster()
+    # unique_article()
