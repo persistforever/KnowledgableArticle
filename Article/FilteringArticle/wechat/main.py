@@ -222,6 +222,20 @@ def word_cluster() :
     cluster.write_article_topic(topic_word_, label_path=PathManager.CLUSTER_TOPICWORD)
     print 'finish'
 
+def parsing() :
+    from basic.corpora import Corpora
+    from file.path_manager import PathManager
+    from ltpparser.parsing import SentenceParsing
+    from qa.article_tag import ArticleCluster
+    corpus = SentenceParsing()
+    word_set = corpus.read_parsed(PathManager.CORPUS_SENTENCE)
+    corpora = Corpora()
+    word2vec = corpora.word_to_vector(type='load', path=PathManager.CORPORA_WORD2VEC)
+    cluster = ArticleCluster()
+    corpus.word_clustering(word2vec, word_set, cluster)
+    print 'finish'
+
+
 
 if __name__ == '__main__' :
     # 5classifying()
@@ -240,5 +254,6 @@ if __name__ == '__main__' :
     # content_split_sentence()
     # simplifying_content()
     # simplifying_title()
-    word_cluster()
+    # word_cluster()
     # unique_article()
+    parsing()

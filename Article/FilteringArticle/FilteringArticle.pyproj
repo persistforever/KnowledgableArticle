@@ -99,6 +99,10 @@
     <Compile Include="wechat\main\simplify\article_simplify.py" />
     <Compile Include="wechat\main\simplify\title_simplify.py" />
     <Compile Include="wechat\main\find_synonymy.py" />
+    <Compile Include="wechat\ltpparser\parsing.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="wechat\ltpparser\__init__.py" />
     <Compile Include="wechat\pretreatment\content_to_sentence.py">
       <SubType>Code</SubType>
     </Compile>
@@ -146,6 +150,8 @@
     <Folder Include="wechat\main\simplify\" />
     <Folder Include="wechat\main\pretreatment\" />
     <Folder Include="wechat\cluster\" />
+    <Folder Include="wechat\ltpparser\" />
+    <Folder Include="wechat\tools\" />
     <Folder Include="wechat\pretreatment\" />
     <Folder Include="wechat\synonymy\" />
     <Folder Include="wechat\simplifier\" />

@@ -25,16 +25,16 @@ class ArticleCluster :
         self.dict_path = dict_path
         self.w2v_path = w2v_path
         self.lda_path = lda_path
-        self.mmcorpus, self.tfidf_model, self.dictionary, self.word2vec, self.lda = self._read_model()
+        # self.mmcorpus, self.tfidf_model, self.dictionary, self.word2vec, self.lda = self._read_model()
 
     def _read_model(self) :
         """ Read tfidf models. """
-        mmcorpus = gensim.corpora.MmCorpus(self.corpus_path)
-        tfidf_model = gensim.models.TfidfModel.load(self.tfidf_path)
-        dictionary = gensim.corpora.Dictionary.load(self.dict_path)
-        word2vec = gensim.models.Word2Vec.load(self.w2v_path)
-        lda_model = gensim.models.LdaModel.load(self.lda_path)
-        return mmcorpus, tfidf_model, dictionary, word2vec, lda_model
+        # mmcorpus = gensim.corpora.MmCorpus(self.corpus_path)
+        # tfidf_model = gensim.models.TfidfModel.load(self.tfidf_path)
+        # dictionary = gensim.corpora.Dictionary.load(self.dict_path)
+        # word2vec = gensim.models.Word2Vec.load(self.w2v_path)
+        # lda_model = gensim.models.LdaModel.load(self.lda_path)
+        # return mmcorpus, tfidf_model, dictionary, word2vec, lda_model
 
     def article_clustering(self, article_list, query_list) :
         """ clustering article's keyword accordding to query. """
@@ -149,10 +149,10 @@ class ArticleCluster :
         """ clustering the word. """
         word_set = []
         for word in word_dict.keys() :
-            word_set.append(self.word2vec[word])
+            word_set.append(word_dict[word])
         word_set = np.array(word_set)
-        max_labels_, max_evaluation = np.zeros([len(word_dict), 1]), 0.08
-        for n in range(2, 5) :
+        max_labels_, max_evaluation = np.zeros([len(word_dict), 1]), 0
+        for n in range(2, 20) :
             cls = SpectralClustering(n_clusters=n, assign_labels='discretize').fit(word_set)
             score = metrics.silhouette_score(word_set, cls.labels_, metric='cosine')
             if score > max_evaluation :
