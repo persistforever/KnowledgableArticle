@@ -56,6 +56,12 @@
     <Compile Include="wechat\cluster\lda_cluster.py" />
     <Compile Include="wechat\cluster\word_cluster.py" />
     <Compile Include="wechat\cluster\__init__.py" />
+    <Compile Include="wechat\embedding\run.py" />
+    <Compile Include="wechat\embedding\script.py" />
+    <Compile Include="wechat\embedding\word_embed.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="wechat\embedding\__init__.py" />
     <Compile Include="wechat\feature\base.py" />
     <Compile Include="wechat\feature\pos_feature.py" />
     <Compile Include="wechat\feature\user_feature.py" />
@@ -103,6 +109,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="wechat\ltpparser\__init__.py" />
+    <Compile Include="wechat\myunique\script.py" />
+    <Compile Include="wechat\myunique\run.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="wechat\myunique\__init__.py" />
     <Compile Include="wechat\pretreatment\content_to_sentence.py">
       <SubType>Code</SubType>
     </Compile>
@@ -111,6 +122,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="wechat\qa\__init__.py" />
+    <Compile Include="wechat\segment\run.py" />
+    <Compile Include="wechat\segment\script.py" />
+    <Compile Include="wechat\segment\segementor.py" />
+    <Compile Include="wechat\segment\__init__.py" />
     <Compile Include="wechat\simplifier\segementor.py" />
     <Compile Include="wechat\simplifier\sentence_spliter.py" />
     <Compile Include="wechat\simplifier\simplifier.py" />
@@ -136,6 +151,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="wechat\tag\__init__.py" />
+    <Compile Include="wechat\myunique\unique.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="wechat\word\run.py" />
+    <Compile Include="wechat\word\script.py" />
+    <Compile Include="wechat\word\word_bag.py" />
+    <Compile Include="wechat\word\__init__.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wechat\basic\" />
@@ -151,7 +173,10 @@
     <Folder Include="wechat\main\pretreatment\" />
     <Folder Include="wechat\cluster\" />
     <Folder Include="wechat\ltpparser\" />
-    <Folder Include="wechat\tools\" />
+    <Folder Include="wechat\myunique\" />
+    <Folder Include="wechat\embedding\" />
+    <Folder Include="wechat\word\" />
+    <Folder Include="wechat\segment\" />
     <Folder Include="wechat\pretreatment\" />
     <Folder Include="wechat\synonymy\" />
     <Folder Include="wechat\simplifier\" />

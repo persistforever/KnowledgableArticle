@@ -38,6 +38,8 @@ class PathManager :
     CORPUS_LUCENE = 'lucene result article list in corpus'
     CORPUS_KNOWLEDGE = 'knowledgeable article list in corpus'
     CORPUS_TRAINDATA = 'train data in corpus'
+    CORPUS_SEGTITLE = 'segmented title in corpus'
+    CORPUS_SEGCONTENT = 'segmented content in corpus'
 
     CORPORA_INFO = 'article info in corpora'
     CORPORA_DICTIONARY = 'dictionary in corpora accorrding to gensim'
@@ -54,6 +56,7 @@ class PathManager :
     CLUSTER_TESTDATA = 'test data in the cluster'
     CLUSTER_DOCTOPIC = 'doc_topic in the cluster'
     CLUSTER_TOPICWORD = 'topic_word in the cluster'
+    CLUSTER_WORDCLUSTER = 'word embedding test in the cluster'
         
     @staticmethod
     def _get_configuration() :
@@ -88,6 +91,8 @@ class PathManager :
         PathManager.CORPUS_LUCENE = cfg.get('corpus', 'LUCENE')
         PathManager.CORPUS_KNOWLEDGE = cfg.get('corpus', 'KNOWLEDGE')
         PathManager.CORPUS_TRAINDATA = cfg.get('corpus', 'TRAINDATA')
+        PathManager.CORPUS_SEGTITLE = cfg.get('corpus', 'SEGTITLE')
+        PathManager.CORPUS_SEGCONTENT = cfg.get('corpus', 'SEGCONTENT')
 
         PathManager.CORPORA_INFO = cfg.get('corpora', 'INFO')
         PathManager.CORPORA_DICTIONARY = cfg.get('corpora', 'DICTIONARY')
@@ -104,6 +109,7 @@ class PathManager :
         PathManager.CLUSTER_TESTDATA = cfg.get('cluster', 'TESTDATA')
         PathManager.CLUSTER_DOCTOPIC = cfg.get('cluster', 'DOCTOPIC')
         PathManager.CLUSTER_TOPICWORD = cfg.get('cluster', 'TOPICWORD')
+        PathManager.CLUSTER_WORDCLUSTER = cfg.get('cluster', 'WORDCLUSTER')
 
 
 PathManager._get_configuration()
