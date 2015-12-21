@@ -6,6 +6,7 @@ import codecs
 import csv
 import os
 import xml.dom.minidom
+import json
 
 from base import BaseFileOperator
 # package importing end
@@ -117,4 +118,27 @@ class XmlFileOperator(BaseFileOperator) :
         _parent_dir = os.path.pardir
         (file_name, file_type) = os.path.splitext(file_path)
         path = file_name + '.xml'
+        return path
+
+
+class JsonOperator(BaseFileOperator) :
+    
+    @filedecorator
+    def reading(self, file_name, encoding='utf8'):
+        """ Read the file as text file. """
+        self.data = []
+        with codecs.open(file_name, mode='r', encoding=encoding) as fo :
+            self.data = json.load(fo)
+        return self.data
+    
+    @filedecorator
+    def writing(self, data, file_name, encoding='utf8'):
+        """ Write the file as text file. """
+        with open(file_name, mode='w') as fw :
+            json.dump(data, fw, indent=4)
+
+    def _text_file(self, file_path) :
+        _parent_dir = os.path.pardir
+        (file_name, file_type) = os.path.splitext(file_path)
+        path = file_name + '.txt'
         return path

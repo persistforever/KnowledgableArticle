@@ -276,6 +276,14 @@ def word_bag() :
     corpus = Corpus()
     corpus.run_create_dictionary(sentences_path, \
         dictionary_path)
+    
+def pre_load() :
+    from preload.run import Corpus
+    from file.path_manager import PathManager
+    sentences_path = PathManager.CORPUS_SUBTITLE
+    json_path = PathManager.CORPORA_MMCORPUS
+    corpus = Corpus()
+    corpus.run_load_json(json_path)
 
 
 
@@ -302,4 +310,5 @@ if __name__ == '__main__' :
     # unique()
     # segment()
     # word_embedding()
-    word_bag()
+    # word_bag()
+    pre_load()

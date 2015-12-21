@@ -114,6 +114,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="wechat\myunique\__init__.py" />
+    <Compile Include="wechat\preload\run.py" />
+    <Compile Include="wechat\preload\script.py" />
+    <Compile Include="wechat\preload\json_market.py" />
+    <Compile Include="wechat\preload\__init__.py" />
     <Compile Include="wechat\pretreatment\content_to_sentence.py">
       <SubType>Code</SubType>
     </Compile>
@@ -175,6 +179,7 @@
     <Folder Include="wechat\ltpparser\" />
     <Folder Include="wechat\myunique\" />
     <Folder Include="wechat\embedding\" />
+    <Folder Include="wechat\preload\" />
     <Folder Include="wechat\word\" />
     <Folder Include="wechat\segment\" />
     <Folder Include="wechat\pretreatment\" />

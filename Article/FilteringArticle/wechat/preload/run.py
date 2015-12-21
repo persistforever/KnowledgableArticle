@@ -5,7 +5,7 @@ import sys
 
 import gensim
 
-from word.word_bag import WordBag
+from preload.json_market import JsonMarket
 from basic.word import Word
 from file.file_operator import TextFileOperator
 # package importing end
@@ -16,11 +16,16 @@ class Corpus :
     def __init__(self) :
         pass
 
-    def run_create_dictionary(self, sentence_path, \
-        dictionary_path) :
+    def run_create_json(self, sentence_path, \
+        json_path) :
         sentences = self.read_sentences(sentence_path)
-        embedor = WordBag()
-        word2vec = embedor.word_to_dictionary(type='create', sentences=sentences, path=dictionary_path)
+        loader = JsonMarket()
+        json_market = loader.sentences_to_json(type='create', sentences=sentences, path=json_path)
+
+    def run_load_json(self, json_path) :
+        loader = JsonMarket()
+        json_market = loader.sentences_to_json(type='load', path=json_path)
+        return json_market
 
     def read_sentences(self, source_path) :
         """ Read participle sentences.
