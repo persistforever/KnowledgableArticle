@@ -62,7 +62,7 @@ class PathManager :
     def _get_configuration() :
         """ Get FILE_PATH of path manager. """
         cfg = ConfigParser.ConfigParser()
-        cfg.read('knowldge_tree/file/configuration.ini')
+        cfg.read('knowledge_tree/file/configuration.ini')
         PathManager.TOOLS_TITLESPST = cfg.get('tools', 'TITLESPST')
         PathManager.TOOLS_CONTENTSPST = cfg.get('tools', 'CONTENTSPST')
         PathManager.TOOLS_PUNCTUATION = cfg.get('tools', 'PUNCTUATION')

@@ -51,9 +51,12 @@ def word_embedding() :
     from file.path_manager import PathManager
     sentences_path = PathManager.CORPORA_MMCORPUS
     wordembed_path = PathManager.CORPORA_WORD2VEC
+    dictionary_path = PathManager.CORPORA_DICTIONARY
     word_cluster_path = PathManager.CLUSTER_WORDCLUSTER
+    similarity_path = PathManager.CLUSTER_TOPICWORD
     corpus = Corpus()
-    corpus.run(sentences_path, wordembed_path, word_cluster_path)
+    corpus.run(sentences_path, dictionary_path, wordembed_path, word_cluster_path, \
+        similarity_path)
 
 def word_bag() :
     from word.run import Corpus
@@ -68,10 +71,10 @@ def pre_load() :
     from preload.run import Corpus
     from file.path_manager import PathManager
     sentences_path = PathManager.CORPUS_SUBTITLE
+    dictionary_path = PathManager.CORPORA_DICTIONARY
     json_path = PathManager.CORPORA_MMCORPUS
     corpus = Corpus()
-    corpus.run(sentences_path, \
-        json_path)
+    corpus.run(sentences_path, dictionary_path, json_path)
 
 
 
@@ -79,6 +82,6 @@ if __name__ == '__main__' :
     # parsing()
     # unique()
     # segment()
-    # word_embedding()
-    word_bag()
+    word_embedding()
+    # word_bag()
     # pre_load()

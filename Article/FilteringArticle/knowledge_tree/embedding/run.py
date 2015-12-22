@@ -17,44 +17,41 @@ class Corpus :
     def __init__(self) :
         pass
 
-    def run(self, sentences_path, wordembed_path, word_cluster_path) :
-        self.run_create_word2vec(sentences_path, wordembed_path)
-        self.run_evaluate_word2vec(wordembed_path, word_cluster_path)
+    def run(self, sentences_path, dictionary_path, wordembed_path, word_cluster_path, \
+        similarity_path) :
+        self.run_create_word2vec(sentences_path, dictionary_path, wordembed_path)
+        self.run_evaluate_word2vec(wordembed_path, dictionary_path, word_cluster_path, \
+            similarity_path)
+        # self.run_remove_stopwords(sentences_path, dictionary_path)
 
-    def run_create_word2vec(self, sentence_path, \
+    def run_create_word2vec(self, sentence_path, dictionary_path, \
         wordembed_path) :
-        # sentences = self.read_sentences(sentence_path)
-        sentences = self.read_sentences_pickle(sentence_path)
-        embedor = WordEmbed()
-        word2vec = embedor.word_to_vector(type='create', sentences=sentences[0:100000], path=wordembed_path)
-
-    def run_evaluate_word2vec(self, wordembed_path, word_cluster_path) :
-        embedor = WordEmbed()
-        word2vec = embedor.word_to_vector(type='load', path=wordembed_path)
-        word_dict = self.read_word_cluster(word_cluster_path)
-        score = embedor.evaluate_word2vec_model(word2vec, word_dict)
-        print 'score of word2vec model is ', score
-        return word2vec
-
-    def read_sentences_pickle(self, sentence_path) :
-        """ Speed up read participle sentences. """
         loader = PickleMarket()
         sentences = loader.load_market(sentence_path)
-        return sentences
+        # sentences = self.run_remove_stopwords(sentence_path, dictionary_path)
+        embedor = WordEmbed()
+        word2vec = embedor.word_to_vector(type='create', sentences=sentences, path=wordembed_path)
 
-    def read_sentences(self, sentence_path) :
-        """ Read participle sentences.
-            Each row is a sentence.
-        """
-        file_operator = TextFileOperator()
-        data_list = file_operator.reading(sentence_path)
-        entry_list = data_list[0]
-        sentences = list()
-        for data in data_list[1:] :
-            if len(data) >= len(entry_list) :
-                sentence = [Word(word, sp_char=':').to_string() for word in data[0].split(' ')]
-                sentences.append(sentence)
-        return sentences
+    def run_evaluate_word2vec(self, wordembed_path, dictionary_path, word_cluster_path, \
+        similarity_path) :
+        embedor = WordEmbed()
+        word2vec = embedor.word_to_vector(type='load', path=wordembed_path)
+        loader = PickleMarket()
+        dictionary = loader.load_market(dictionary_path)
+        word_dict, word_list = self.read_word_cluster(word_cluster_path)
+        score, similarity_matrix = embedor.evaluate_word2vec_model(dictionary, word2vec, word_dict, word_list)
+        self.write_similarity_matrix(word_list, similarity_matrix, similarity_path)
+        print 'score of word2vec model is %.4f.' % score
+        return word2vec
+
+    def run_remove_stopwords(self, sentence_path, dictionary_path) :
+        loader = PickleMarket()
+        sentences = loader.load_market(sentence_path)
+        dictionary = loader.load_market(dictionary_path)
+        embedor = WordEmbed()
+        rmstop_sentences = embedor.remove_stop_words( \
+            type='create', dictionary=dictionary, sentences=sentences)
+        return rmstop_sentences
 
     def read_word_cluster(self, word_cluster_path) :
         """ Read word cluster.
@@ -66,9 +63,27 @@ class Corpus :
         data_list = file_operator.reading(word_cluster_path)
         entry_list = data_list[0]
         word_dict = dict()
+        word_list = list()
         for data in data_list[1:] :
             if len(data) >= len(entry_list) :
                 word = data[0]
                 if word not in word_dict :
                     word_dict[word] = int(data[1])
-        return word_dict
+                    word_list.append(word)
+        return word_dict, word_list
+
+    def write_similarity_matrix(self, word_list, similarity_matrix, similarity_path) :
+        """ Write similarity matrix.
+            Each row and column is a word.
+            Each entry in matrix is the similarity.
+        """
+        file_operator = TextFileOperator()
+        data_list = []
+        data = ['sim']
+        data.extend(word_list)
+        data_list.append(data)
+        for row in range(similarity_matrix.shape[0]) :
+            data = [word_list[row]]
+            data.extend(similarity_matrix[row, :].tolist())
+            data_list.append(data)
+        file_operator.writing(data_list, similarity_path)

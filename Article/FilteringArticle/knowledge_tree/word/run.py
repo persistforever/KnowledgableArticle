@@ -54,17 +54,3 @@ class Corpus :
                 print 'finish rate is %.2f%%\r' % (100.0*idx/length),
         print 'finish rate is %.2f%%\r' % (100.0*idx/length)
         return sentences
-
-    def convert_sentences(self, sentences, dictionary) :
-        """ Convert each word in sentences.
-            Before convert, word is name<:>pos.
-            After convert, word is seq according to dictionary.
-        """
-        converted_sentences = []
-        for sentence in sentences :
-            converted_sentence = []
-            for word in sentence :
-                seq = dictionary.token2id[word]
-                converted_sentence.append(seq)
-            converted_sentences.append(converted_sentence)
-        return converted_sentences

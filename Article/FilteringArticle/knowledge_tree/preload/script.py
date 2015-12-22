@@ -12,6 +12,7 @@ from preload.run import Corpus
 # run this script
 
 sentences_path = sys.argv[1]
-market_path = sys.argv[2]
+dictionary_path = sys.argv[2]
+market_path = sys.argv[3]
 corpus = Corpus()
-corpus.run(sentences_path, market_path)
+corpus.run(sentences_path, dictionary_path, market_path)
