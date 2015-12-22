@@ -6,7 +6,7 @@ import sys
 import gensim
 
 from preload.market import PickleMarket
-from word.word_bag import WordBag
+from word.word_bag import DictWordBag
 from basic.word import Word
 from file.file_operator import TextFileOperator
 # package importing end
@@ -25,7 +25,7 @@ class Corpus :
         dictionary_path, converted_sentence_path) :
         sentences = self.read_sentences(sentence_path)
         embedor = WordBag()
-        dictionary = embedor.word_to_dictionary(type='create', sentences=sentences, path=dictionary_path)
+        dictionary = embedor.dump_word_dict(sentences=sentences, path=dictionary_path)
         converted_sentences = self.convert_sentences(sentences, dictionary)
         loader = PickleMarket()
         loader.dump_market(converted_sentences, converted_sentence_path)
