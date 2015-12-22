@@ -33,7 +33,10 @@ class WordEmbed :
             Score is sum distance outside cluster / sum distance among inside cluster.
         """
         score_fenzi = 0.0
+        num_fenzi = 0.0
         score_fenmu = 0.0
+        num_fenmu = 0.0
+        similarity_list = []
         for worda in word_dict.keys() :
             for wordb in word_dict.keys() :
                 if worda == wordb :
@@ -41,11 +44,14 @@ class WordEmbed :
                 if worda in word2vec_model.index2word and \
                     wordb in word2vec_model.index2word :
                     distance = word2vec_model.similarity(worda, wordb)
+                    similarity_list.append((worda + '&' + wordb, distance))
                     if word_dict[worda] == word_dict[wordb] :
-                        score_fenmu += distance
-                    else :
                         score_fenzi += distance
+                        num_fenzi += 1
+                    else :
+                        score_fenmu += distance
+                        num_fenmu += 1
         if score_fenmu == 0.0 :
             return 0.0
         else :
-            return score_fenzi / score_fenmu
+            return score_fenzi / num_fenzi

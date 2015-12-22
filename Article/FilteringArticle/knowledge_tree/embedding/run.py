@@ -5,7 +5,7 @@ import sys
 
 import gensim
 
-from preload.json_market import JsonMarket
+from preload.market import PickleMarket
 from embedding.word_embed import WordEmbed
 from basic.word import Word
 from file.file_operator import TextFileOperator
@@ -17,24 +17,29 @@ class Corpus :
     def __init__(self) :
         pass
 
-    def run_create_word2vec(self, sentence_path, \
-        word2vec_path) :
-        # sentences = self.read_sentences(sentence_path)
-        sentences = self.read_sentences_json(sentence_path)
-        embedor = WordEmbed()
-        word2vec = embedor.word_to_vector(type='create', sentences=sentences, path=word2vec_path)
+    def run(self, sentences_path, wordembed_path, word_cluster_path) :
+        self.run_create_word2vec(sentences_path, wordembed_path)
+        self.run_evaluate_word2vec(wordembed_path, word_cluster_path)
 
-    def run_evaluate_word2vec(self, word2vec_path, word_cluster_path) :
+    def run_create_word2vec(self, sentence_path, \
+        wordembed_path) :
+        # sentences = self.read_sentences(sentence_path)
+        sentences = self.read_sentences_pickle(sentence_path)
         embedor = WordEmbed()
-        word2vec = embedor.word_to_vector(type='load', path=word2vec_path)
+        word2vec = embedor.word_to_vector(type='create', sentences=sentences[0:100000], path=wordembed_path)
+
+    def run_evaluate_word2vec(self, wordembed_path, word_cluster_path) :
+        embedor = WordEmbed()
+        word2vec = embedor.word_to_vector(type='load', path=wordembed_path)
         word_dict = self.read_word_cluster(word_cluster_path)
         score = embedor.evaluate_word2vec_model(word2vec, word_dict)
         print 'score of word2vec model is ', score
         return word2vec
 
-    def read_sentences_json(self, sentence_path) :
-        loader = JsonMarket()
-        sentences = loader.sentences_to_json(type='load', path=sentence_path)
+    def read_sentences_pickle(self, sentence_path) :
+        """ Speed up read participle sentences. """
+        loader = PickleMarket()
+        sentences = loader.load_market(sentence_path)
         return sentences
 
     def read_sentences(self, sentence_path) :

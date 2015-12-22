@@ -5,14 +5,14 @@ import os
 import sys
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/..'))
 
-from preload.run import Corpus
+from word.run import Corpus
 # package importing end
 
 
 # run this script
 
 sentences_path = sys.argv[1]
-json_path = sys.argv[2]
+dictionary_path = sys.argv[2]
+converted_sentences_path = sys.argv[3]
 corpus = Corpus()
-corpus.run_create_json(sentences_path, \
-        json_path)
+corpus.run(sentences_path, dictionary_path, converted_sentences_path)

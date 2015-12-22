@@ -7,6 +7,7 @@ import csv
 import os
 import xml.dom.minidom
 import json
+import cPickle as pickle
 
 from base import BaseFileOperator
 # package importing end
@@ -136,6 +137,29 @@ class JsonOperator(BaseFileOperator) :
         """ Write the file as text file. """
         with open(file_name, mode='w') as fw :
             json.dump(data, fw, indent=4)
+
+    def _text_file(self, file_path) :
+        _parent_dir = os.path.pardir
+        (file_name, file_type) = os.path.splitext(file_path)
+        path = file_name + '.txt'
+        return path
+
+
+class PickleOperator(BaseFileOperator) :
+    
+    @filedecorator
+    def reading(self, file_name, encoding='utf8'):
+        """ Read the file as text file. """
+        self.data = []
+        with open(file_name, mode='rb') as fo :
+            self.data = pickle.load(fo)
+        return self.data
+    
+    @filedecorator
+    def writing(self, data, file_name):
+        """ Write the file as text file. """
+        with open(file_name, mode='wb') as fw :
+            pickle.dump(data, fw, True)
 
     def _text_file(self, file_path) :
         _parent_dir = os.path.pardir
