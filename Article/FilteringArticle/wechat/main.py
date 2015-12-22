@@ -262,11 +262,11 @@ def segment() :
 def word_embedding() :
     from embedding.run import Corpus
     from file.path_manager import PathManager
-    sentences_path = PathManager.CORPUS_SUBTITLE
+    sentences_path = PathManager.CORPORA_MMCORPUS
     wordembed_path = PathManager.CORPORA_WORD2VEC
     word_cluster_path = PathManager.CLUSTER_WORDCLUSTER
     corpus = Corpus()
-    corpus.run_evaluate_word2vec(wordembed_path, word_cluster_path)
+    corpus.run_create_word2vec(sentences_path, wordembed_path)
 
 def word_bag() :
     from word.run import Corpus
@@ -309,6 +309,6 @@ if __name__ == '__main__' :
     # parsing()
     # unique()
     # segment()
-    # word_embedding()
+    word_embedding()
     # word_bag()
-    pre_load()
+    # pre_load()

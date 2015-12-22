@@ -6,7 +6,7 @@
     <ProjectGuid>cd7445f1-befb-4724-baaa-6e1043271308</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>wechat\main.py</StartupFile>
+    <StartupFile>knowldge_tree\main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -30,6 +30,44 @@
     <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="knowldge_tree\basic\article.py" />
+    <Compile Include="knowldge_tree\basic\corpora.py" />
+    <Compile Include="knowldge_tree\basic\corpus.py" />
+    <Compile Include="knowldge_tree\basic\old_corpus.py" />
+    <Compile Include="knowldge_tree\basic\tag.py" />
+    <Compile Include="knowldge_tree\basic\test_basic.py" />
+    <Compile Include="knowldge_tree\basic\word.py" />
+    <Compile Include="knowldge_tree\basic\__init__.py" />
+    <Compile Include="knowldge_tree\embedding\run.py" />
+    <Compile Include="knowldge_tree\embedding\script.py" />
+    <Compile Include="knowldge_tree\embedding\word_embed.py" />
+    <Compile Include="knowldge_tree\embedding\__init__.py" />
+    <Compile Include="knowldge_tree\file\base.py" />
+    <Compile Include="knowldge_tree\file\file_operator.py" />
+    <Compile Include="knowldge_tree\file\path_manager.py" />
+    <Compile Include="knowldge_tree\file\test_file.py" />
+    <Compile Include="knowldge_tree\file\__init__.py" />
+    <Compile Include="knowldge_tree\ltpparser\parsing.py" />
+    <Compile Include="knowldge_tree\ltpparser\__init__.py" />
+    <Compile Include="knowldge_tree\main.py" />
+    <Compile Include="knowldge_tree\myunique\run.py" />
+    <Compile Include="knowldge_tree\myunique\script.py" />
+    <Compile Include="knowldge_tree\myunique\unique.py" />
+    <Compile Include="knowldge_tree\myunique\__init__.py" />
+    <Compile Include="knowldge_tree\preload\json_market.py" />
+    <Compile Include="knowldge_tree\preload\run.py" />
+    <Compile Include="knowldge_tree\preload\script.py" />
+    <Compile Include="knowldge_tree\preload\__init__.py" />
+    <Compile Include="knowldge_tree\qa\article_tag.py" />
+    <Compile Include="knowldge_tree\qa\__init__.py" />
+    <Compile Include="knowldge_tree\segment\run.py" />
+    <Compile Include="knowldge_tree\segment\script.py" />
+    <Compile Include="knowldge_tree\segment\segementor.py" />
+    <Compile Include="knowldge_tree\segment\__init__.py" />
+    <Compile Include="knowldge_tree\word\run.py" />
+    <Compile Include="knowldge_tree\word\script.py" />
+    <Compile Include="knowldge_tree\word\word_bag.py" />
+    <Compile Include="knowldge_tree\word\__init__.py" />
     <Compile Include="wechat\basic\article.py" />
     <Compile Include="wechat\basic\corpora.py" />
     <Compile Include="wechat\basic\corpus.py" />
@@ -164,6 +202,16 @@
     <Compile Include="wechat\word\__init__.py" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="knowldge_tree\" />
+    <Folder Include="knowldge_tree\basic\" />
+    <Folder Include="knowldge_tree\embedding\" />
+    <Folder Include="knowldge_tree\file\" />
+    <Folder Include="knowldge_tree\ltpparser\" />
+    <Folder Include="knowldge_tree\myunique\" />
+    <Folder Include="knowldge_tree\preload\" />
+    <Folder Include="knowldge_tree\qa\" />
+    <Folder Include="knowldge_tree\segment\" />
+    <Folder Include="knowldge_tree\word\" />
     <Folder Include="wechat\basic\" />
     <Folder Include="wechat\classifier\" />
     <Folder Include="wechat\file\" />
@@ -189,6 +237,7 @@
     <Folder Include="wechat\tag\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="knowldge_tree\file\configuration.ini" />
     <Content Include="wechat\file\configuration.ini" />
   </ItemGroup>
   <Import Condition="Exists($(PtvsTargetsFile))" Project="$(PtvsTargetsFile)" />

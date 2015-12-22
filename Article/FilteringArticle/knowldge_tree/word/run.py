@@ -5,7 +5,7 @@ import sys
 
 import gensim
 
-from preload.json_market import JsonMarket
+from word.word_bag import WordBag
 from basic.word import Word
 from file.file_operator import TextFileOperator
 # package importing end
@@ -16,16 +16,11 @@ class Corpus :
     def __init__(self) :
         pass
 
-    def run_create_json(self, sentence_path, \
-        json_path) :
+    def run_create_dictionary(self, sentence_path, \
+        dictionary_path) :
         sentences = self.read_sentences(sentence_path)
-        loader = JsonMarket()
-        json_market = loader.sentences_to_json(type='create', sentences=sentences, path=json_path)
-
-    def run_load_json(self, json_path) :
-        loader = JsonMarket()
-        json_market = loader.sentences_to_json(type='load', path=json_path)
-        return json_market
+        embedor = WordBag()
+        word2vec = embedor.word_to_dictionary(type='create', sentences=sentences, path=dictionary_path)
 
     def read_sentences(self, source_path) :
         """ Read participle sentences.
@@ -35,12 +30,8 @@ class Corpus :
         data_list = file_operator.reading(source_path)
         entry_list = data_list[0]
         sentences = list()
-        length = len(data_list[1:])
-        for idx, data in enumerate(data_list[1:]) :
+        for data in data_list[1:] :
             if len(data) >= len(entry_list) :
                 sentence = [Word(word, sp_char=':').to_string() for word in data[0].split(' ')]
                 sentences.append(sentence)
-            if idx % 1000 == 0 :
-                print 'finish rate is %.2f\r' % (1.0*idx/length),
-        print 
         return sentences
