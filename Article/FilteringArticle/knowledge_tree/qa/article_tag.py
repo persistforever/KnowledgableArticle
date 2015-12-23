@@ -7,11 +7,13 @@ import numpy as np
 
 import gensim
 
+'''
 from basic.article import Article
 from basic.word import Word
 from file.path_manager import PathManager
 from file.file_operator import TextFileOperator
 from qa.word_cluster import WordCluster
+'''
 from sklearn.cluster import KMeans, SpectralClustering
 from sklearn import metrics
 # package importing end
@@ -152,16 +154,17 @@ class ArticleCluster :
             word_set.append(word_dict[word])
         word_set = np.array(word_set)
         max_labels_, max_evaluation = np.zeros([len(word_dict), 1]), 0
-        for n in range(2, 20) :
+        for n in range(7, 8) :
             cls = SpectralClustering(n_clusters=n, assign_labels='discretize').fit(word_set)
+            # cls = KMeans(n_clusters=n).fit(word_set)
             score = metrics.silhouette_score(word_set, cls.labels_, metric='cosine')
             if score > max_evaluation :
                 max_evaluation = score
                 max_labels_ = cls.labels_
         for idx in range(max_labels_.shape[0]) :
             word_dict[word_dict.keys()[idx]] = max_labels_[idx]
-        for word in word_dict :
-            print word, word_dict[word]
+        for word in sorted(word_dict.iteritems(), key=lambda x: x[1], reverse=False) :
+            print word[0], word[1]
         return word_dict
 
     def ploting(self, word_set, labels) :

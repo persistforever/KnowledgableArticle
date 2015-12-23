@@ -12,7 +12,6 @@ import gensim
 from file.path_manager import PathManager
 from file.file_operator import TextFileOperator
 from basic.word import Word
-from cluster.base import BaseCluster
 # package importing end
 
 
@@ -67,12 +66,15 @@ class SentenceParsing :
                 for idx, word in enumerate(word_list) :
                     if word['parent'] == hair_idx and word['relate'] == u'ATT' and \
                         word[u'pos'] not in self.removed_pos : #and (hair_idx-idx) <= 2 :
-                        word_string = word[u'cont'] + u'<:>' + word[u'pos']
+                        if word[u'pos'] == u'nt' :
+                            word_string = word[u'cont'] + u'<:>' + u't'
+                        else :
+                            word_string = word[u'cont'] + u'<:>' + word[u'pos']
                         if word_string not in word_dict :
                             word_dict[word_string] = 0
                         word_dict[word_string] += 1
         word_sort = sorted(word_dict.iteritems(), key=lambda x:x[1], reverse=True)
-        return [word[0] for word in word_sort[0:100]]
+        return [word[0] for word in word_sort if word[1] >= 3]
 
     def read_parsed1(self, parse_path) :
         """ Read parsed sentence. """

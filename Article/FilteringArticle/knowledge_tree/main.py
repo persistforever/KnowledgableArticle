@@ -9,20 +9,6 @@ If function func_name debug finished, please complete the wechat/main/func_name.
 # package importing end
 
 
-def parsing() :
-    from basic.corpora import Corpora
-    from file.path_manager import PathManager
-    from ltpparser.parsing import SentenceParsing
-    from qa.article_tag import ArticleCluster
-    corpus = SentenceParsing()
-    # sentences = corpus.read_parsed(PathManager.CORPUS_SENTENCE)
-    word_set = corpus.read_word(PathManager.CORPUS_SENTENCE)
-    corpora = Corpora()
-    word2vec = corpora.word_to_vector(type='load', path=PathManager.CORPORA_WORD2VEC)
-    cluster = ArticleCluster()
-    corpus.word_clustering(word2vec, word_set, cluster)
-    print 'finish'
-
 def unique() :
     from myunique.run import Corpus
     from file.path_manager import PathManager
@@ -75,13 +61,23 @@ def pre_load() :
     json_path = PathManager.CORPORA_MMCORPUS
     corpus = Corpus()
     corpus.run(sentences_path, dictionary_path, json_path)
-
+    
+def parsing() :
+    from ltpparser.run import Corpus
+    from file.path_manager import PathManager
+    sentences_path = PathManager.CORPUS_SENTENCE
+    dictionary_path = PathManager.CORPORA_DICTIONARY
+    wordembed_path = PathManager.CORPORA_WORD2VEC
+    word_cluster_path = PathManager.CLUSTER_WORDCLUSTER
+    corpus = Corpus()
+    corpus.run(sentences_path, dictionary_path, wordembed_path, word_cluster_path)
+    print 'finish'
 
 
 if __name__ == '__main__' :
-    # parsing()
     # unique()
     # segment()
     word_embedding()
     # word_bag()
     # pre_load()
+    # parsing()

@@ -19,10 +19,10 @@ class Corpus :
 
     def run(self, sentences_path, dictionary_path, wordembed_path, word_cluster_path, \
         similarity_path) :
-        self.run_create_word2vec(sentences_path, dictionary_path, wordembed_path)
-        self.run_evaluate_word2vec(wordembed_path, dictionary_path, word_cluster_path, \
-            similarity_path)
-        # self.run_remove_stopwords(sentences_path, dictionary_path)
+        # self.run_create_word2vec(sentences_path, dictionary_path, wordembed_path)
+        # self.run_evaluate_word2vec(wordembed_path, dictionary_path, word_cluster_path, \
+        #     similarity_path)
+        self.run_remove_stopwords(sentences_path, dictionary_path)
 
     def run_create_word2vec(self, sentence_path, dictionary_path, \
         wordembed_path) :
@@ -50,7 +50,7 @@ class Corpus :
         dictionary = loader.load_market(dictionary_path)
         embedor = WordEmbed()
         rmstop_sentences = embedor.remove_stop_words( \
-            type='create', dictionary=dictionary, sentences=sentences)
+            type='load', dictionary=dictionary, sentences=sentences)
         return rmstop_sentences
 
     def read_word_cluster(self, word_cluster_path) :

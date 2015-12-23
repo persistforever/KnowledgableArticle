@@ -48,6 +48,7 @@
     <Compile Include="knowledge_tree\file\test_file.py" />
     <Compile Include="knowledge_tree\file\__init__.py" />
     <Compile Include="knowledge_tree\ltpparser\parsing.py" />
+    <Compile Include="knowledge_tree\ltpparser\run.py" />
     <Compile Include="knowledge_tree\ltpparser\__init__.py" />
     <Compile Include="knowledge_tree\main.py" />
     <Compile Include="knowledge_tree\myunique\run.py" />
@@ -67,6 +68,7 @@
     <Compile Include="knowledge_tree\word\run.py" />
     <Compile Include="knowledge_tree\word\script.py" />
     <Compile Include="knowledge_tree\word\word_bag.py" />
+    <Compile Include="knowledge_tree\word\word_cluster.py" />
     <Compile Include="knowledge_tree\word\__init__.py" />
   </ItemGroup>
   <ItemGroup>
