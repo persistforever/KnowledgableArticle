@@ -72,12 +72,23 @@ def parsing() :
     corpus = Corpus()
     corpus.run(sentences_path, dictionary_path, wordembed_path, word_cluster_path)
     print 'finish'
+    
+def appositive() :
+    from appositive.run import Corpus
+    from file.path_manager import PathManager
+    sentences_path = PathManager.CORPUS_ARTICLE
+    wordembed_path = PathManager.CORPORA_WORD2VEC
+    appositive_path = PathManager.CORPUS_SPLIT
+    corpus = Corpus()
+    corpus.run(sentences_path, wordembed_path, appositive_path)
+    print 'finish'
 
 
 if __name__ == '__main__' :
     # unique()
     # segment()
-    word_embedding()
+    # word_embedding()
     # word_bag()
     # pre_load()
     # parsing()
+    appositive()

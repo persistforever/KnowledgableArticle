@@ -30,6 +30,9 @@
     <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="knowledge_tree\appositive\run.py" />
+    <Compile Include="knowledge_tree\appositive\word_apposit.py" />
+    <Compile Include="knowledge_tree\appositive\__init__.py" />
     <Compile Include="knowledge_tree\basic\article.py" />
     <Compile Include="knowledge_tree\basic\corpora.py" />
     <Compile Include="knowledge_tree\basic\corpus.py" />
@@ -78,6 +81,7 @@
     <Folder Include="knowledge_tree\file\" />
     <Folder Include="knowledge_tree\ltpparser\" />
     <Folder Include="knowledge_tree\myunique\" />
+    <Folder Include="knowledge_tree\appositive\" />
     <Folder Include="knowledge_tree\preload\" />
     <Folder Include="knowledge_tree\qa\" />
     <Folder Include="knowledge_tree\segment\" />

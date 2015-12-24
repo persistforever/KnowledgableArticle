@@ -20,9 +20,9 @@ class Corpus :
     def run(self, sentences_path, dictionary_path, wordembed_path, word_cluster_path, \
         similarity_path) :
         # self.run_create_word2vec(sentences_path, dictionary_path, wordembed_path)
-        # self.run_evaluate_word2vec(wordembed_path, dictionary_path, word_cluster_path, \
-        #     similarity_path)
-        self.run_remove_stopwords(sentences_path, dictionary_path)
+        self.run_evaluate_word2vec(wordembed_path, dictionary_path, word_cluster_path, \
+            similarity_path)
+        # self.run_remove_stopwords(sentences_path, dictionary_path)
 
     def run_create_word2vec(self, sentence_path, dictionary_path, \
         wordembed_path) :
@@ -38,6 +38,7 @@ class Corpus :
         word2vec = embedor.word_to_vector(type='load', path=wordembed_path)
         loader = PickleMarket()
         dictionary = loader.load_market(dictionary_path)
+        index2word = dict((value, key) for key, value in dictionary.iteritems())
         word_dict, word_list = self.read_word_cluster(word_cluster_path)
         score, similarity_matrix = embedor.evaluate_word2vec_model(dictionary, word2vec, word_dict, word_list)
         self.write_similarity_matrix(word_list, similarity_matrix, similarity_path)
