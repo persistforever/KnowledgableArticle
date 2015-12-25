@@ -68,6 +68,11 @@
     <Compile Include="knowledge_tree\segment\script.py" />
     <Compile Include="knowledge_tree\segment\segementor.py" />
     <Compile Include="knowledge_tree\segment\__init__.py" />
+    <Compile Include="knowledge_tree\tag\run.py" />
+    <Compile Include="knowledge_tree\tag\tagger.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="knowledge_tree\tag\__init__.py" />
     <Compile Include="knowledge_tree\word\run.py" />
     <Compile Include="knowledge_tree\word\script.py" />
     <Compile Include="knowledge_tree\word\word_bag.py" />
@@ -82,6 +87,7 @@
     <Folder Include="knowledge_tree\ltpparser\" />
     <Folder Include="knowledge_tree\myunique\" />
     <Folder Include="knowledge_tree\appositive\" />
+    <Folder Include="knowledge_tree\tag\" />
     <Folder Include="knowledge_tree\preload\" />
     <Folder Include="knowledge_tree\qa\" />
     <Folder Include="knowledge_tree\segment\" />

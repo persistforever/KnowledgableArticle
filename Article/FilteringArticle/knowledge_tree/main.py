@@ -82,6 +82,16 @@ def appositive() :
     corpus = Corpus()
     corpus.run(sentences_path, wordembed_path, appositive_path)
     print 'finish'
+    
+def tag() :
+    from tag.run import Corpus
+    from file.path_manager import PathManager
+    sentences_path = PathManager.CORPUS_ARTICLE
+    tag_tree_path = PathManager.TAG_TAGTREE
+    tags_path = PathManager.TAG_ARTICLETAG
+    corpus = Corpus()
+    corpus.run(sentences_path, tag_tree_path, tags_path)
+    print 'finish'
 
 
 if __name__ == '__main__' :
@@ -91,4 +101,5 @@ if __name__ == '__main__' :
     # word_bag()
     # pre_load()
     # parsing()
-    appositive()
+    # appositive()
+    tag()

@@ -57,6 +57,9 @@ class PathManager :
     CLUSTER_DOCTOPIC = 'doc_topic in the cluster'
     CLUSTER_TOPICWORD = 'topic_word in the cluster'
     CLUSTER_WORDCLUSTER = 'word embedding test in the cluster'
+
+    TAG_TAGTREE = 'tag tree in the tag'
+    TAG_ARTICLETAG = 'article tag in the tag'
         
     @staticmethod
     def _get_configuration() :
@@ -110,6 +113,9 @@ class PathManager :
         PathManager.CLUSTER_DOCTOPIC = cfg.get('cluster', 'DOCTOPIC')
         PathManager.CLUSTER_TOPICWORD = cfg.get('cluster', 'TOPICWORD')
         PathManager.CLUSTER_WORDCLUSTER = cfg.get('cluster', 'WORDCLUSTER')
+
+        PathManager.TAG_TAGTREE = cfg.get('tag', 'TAGTREE')
+        PathManager.TAG_ARTICLETAG = cfg.get('tag', 'ARTICLETAG')
 
 
 PathManager._get_configuration()
