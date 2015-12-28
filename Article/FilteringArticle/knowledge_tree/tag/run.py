@@ -19,8 +19,8 @@ class Corpus :
         pass
 
     def run(self, sentences_path, tag_tree_path, sentences_market_path, tags_path) :
-        # self.run_tag_sentences(tag_tree_path, sentences_path, sentences_market_path, tags_path)
-        self.run_robot(tag_tree_path, sentences_market_path, tags_path)
+        self.run_tag_sentences(tag_tree_path, sentences_path, sentences_market_path, tags_path)
+        # self.run_robot(tag_tree_path, sentences_market_path, tags_path)
         # self.test_entropy()
 
     def run_tag_sentences(self, tag_tree_path, sentences_path, sentences_market_path, tags_path) :
@@ -29,7 +29,8 @@ class Corpus :
         sentences = self.read_sentences(sentences_path)
         tags = robot.tag_sentences(tag_tree, sentences)
         loader = PickleMarket()
-        loader.dump_market(tags, tags_path)
+        self.write_tags(sentences, tags, tags_path)
+        # loader.dump_market(tags, tags_path)
         loader.dump_market(sentences, sentences_market_path)
 
     def run_robot(self, tag_tree_path, sentences_market_path, tags_path) :
@@ -71,7 +72,7 @@ class Corpus :
         data_list.append(['sentence', 'tag'])
         length = len(tags) - 1
         for idx, term in enumerate(tags) :
-            if len(term) > 2 :
+            if len(term) >= 2 :
                 data = list()
                 data.append(sentences[idx])
                 tag_str = ''

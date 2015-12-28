@@ -99,7 +99,7 @@ class Robot :
         else :
             return list()
 
-    def _tag_sentence_attributes(self, attr_dict, sentence, tag) :
+    def _tag_sentence_attributes1(self, attr_dict, sentence, tag) :
         """ Tag attributes to each sentence. """
         if len(tag) >= 2 :
             for key, value in tag :
@@ -108,6 +108,31 @@ class Robot :
             for value in attr_dict[label] :
                 if value in sentence :
                     tag.append((attr_dict[label][value], value))
+        return tag
+
+    def _tag_sentence_attributes(self, attr_dict, sentence, tag) :
+        """ Tag attributes to each sentence. """
+        if len(tag) >= 2 :
+            for key, value in tag :
+                if key == u'label' :
+                    label = value
+            value_dict = attr_dict[label]
+            start = end = len(sentence)-1
+            while end >= 0 and start >= 0 :
+                condidate_tag = list()
+                condidate_word = sentence[start:end+1]
+                for value in value_dict :
+                    if value.endswith(condidate_word) :
+                        condidate_tag.append(value)
+                if len(condidate_tag) > 1 :
+                    start -= 1
+                elif len(condidate_tag) == 1 and condidate_tag[0] == condidate_word :
+                    tag.append((attr_dict[label][condidate_tag[0]], condidate_tag[0]))
+                    end = start - 1
+                    start = start - 1
+                else :
+                    end = start - 1
+                    start = start - 1
         return tag
 
     def _find_key_sentence(self, sentence, tag) :
