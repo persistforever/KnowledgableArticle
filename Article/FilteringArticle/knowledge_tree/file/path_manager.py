@@ -60,6 +60,7 @@ class PathManager :
 
     TAG_TAGTREE = 'tag tree in the tag'
     TAG_ARTICLETAG = 'article tag in the tag'
+    TAG_SENTENCES = 'article sentences market in the tag'
         
     @staticmethod
     def _get_configuration() :
@@ -116,6 +117,7 @@ class PathManager :
 
         PathManager.TAG_TAGTREE = cfg.get('tag', 'TAGTREE')
         PathManager.TAG_ARTICLETAG = cfg.get('tag', 'ARTICLETAG')
+        PathManager.TAG_SENTENCES = cfg.get('tag', 'SENTENCES')
 
 
 PathManager._get_configuration()

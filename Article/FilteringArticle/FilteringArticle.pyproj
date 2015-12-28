@@ -69,7 +69,7 @@
     <Compile Include="knowledge_tree\segment\segementor.py" />
     <Compile Include="knowledge_tree\segment\__init__.py" />
     <Compile Include="knowledge_tree\tag\run.py" />
-    <Compile Include="knowledge_tree\tag\tagger.py">
+    <Compile Include="knowledge_tree\tag\robot.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="knowledge_tree\tag\__init__.py" />
