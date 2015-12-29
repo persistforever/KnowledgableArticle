@@ -18,11 +18,12 @@ class Corpus :
         pass
 
     def run(self, sentences_path, dictionary_path, wordembed_path, word_cluster_path, \
-        similarity_path) :
+        similarity_path, wordvector_path) :
         # self.run_create_word2vec(sentences_path, dictionary_path, wordembed_path)
-        self.run_evaluate_word2vec(wordembed_path, dictionary_path, word_cluster_path, \
-            similarity_path)
+        # self.run_evaluate_word2vec(wordembed_path, dictionary_path, word_cluster_path, \
+        #     similarity_path)
         # self.run_remove_stopwords(sentences_path, dictionary_path)
+        self.run_write_wordvector(wordembed_path, dictionary_path, wordvector_path)
 
     def run_create_word2vec(self, sentence_path, dictionary_path, \
         wordembed_path) :
@@ -53,6 +54,15 @@ class Corpus :
         rmstop_sentences = embedor.remove_stop_words( \
             type='load', dictionary=dictionary, sentences=sentences)
         return rmstop_sentences
+
+    def run_write_wordvector(self, wordembed_path, dictionary_path, wordvecotr_path) :
+        embedor = WordEmbed()
+        word2vec = embedor.word_to_vector(type='load', path=wordembed_path)
+        loader = PickleMarket()
+        dictionary = loader.load_market(dictionary_path)
+        index2word = dict((value, key) for key, value in dictionary.iteritems())
+        self.write_word_vector(word2vec, index2word, wordvecotr_path)
+        return word2vec
 
     def read_word_cluster(self, word_cluster_path) :
         """ Read word cluster.
@@ -88,3 +98,18 @@ class Corpus :
             data.extend(similarity_matrix[row, :].tolist())
             data_list.append(data)
         file_operator.writing(data_list, similarity_path)
+
+    def write_word_vector(self, word2vec, index2word, wordvector_path) :
+        """ Write word vector.
+            Each row is a word.
+            Column[0] is the name of word.
+            Column[1:] is the entry of the word vector.
+        """
+        file_operator = TextFileOperator()
+        data_list = list()
+        for index in index2word :
+            if str(index) in word2vec.vocab :
+                data = [index2word[index]]
+                data.extend(word2vec[str(index)])
+                data_list.append(data)
+        file_operator.writing(data_list, wordvector_path)

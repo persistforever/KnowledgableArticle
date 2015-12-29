@@ -47,6 +47,7 @@ class PathManager :
     CORPORA_TFIDF = 'tfidf model in corpora'
     CORPORA_WORD2TFIDF = 'word2sim by tfidf model initial file in the corpora'
     CORPORA_WORD2VEC = 'word2sim by word2vec model initial file in the corpora'
+    CORPORA_WORDVECTOR = 'word vector in the corpora'
     CORPORA_LDA = 'lda model initial file in the corpora'
     CORPORA_TITLETEXTS = 'participle title texts in the corpora'
     CORPORA_CONTENTTEXTS = 'participle content texts in the corpora'
@@ -104,6 +105,7 @@ class PathManager :
         PathManager.CORPORA_TFIDF = cfg.get('corpora', 'TFIDF')
         PathManager.CORPORA_WORD2TFIDF = cfg.get('corpora', 'WORD2TFIDF')
         PathManager.CORPORA_WORD2VEC = cfg.get('corpora', 'WORD2VEC')
+        PathManager.CORPORA_WORDVECTOR = cfg.get('corpora', 'WORDVECTOR')
         PathManager.CORPORA_LDA = cfg.get('corpora', 'LDA')
         PathManager.CORPORA_TITLETEXTS = cfg.get('corpora', 'TITLETEXTS')
         PathManager.CORPORA_CONTENTTEXTS = cfg.get('corpora', 'CONTENTTEXTS')

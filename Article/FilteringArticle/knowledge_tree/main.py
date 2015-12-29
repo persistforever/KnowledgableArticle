@@ -40,9 +40,10 @@ def word_embedding() :
     dictionary_path = PathManager.CORPORA_DICTIONARY
     word_cluster_path = PathManager.CLUSTER_WORDCLUSTER
     similarity_path = PathManager.CLUSTER_TOPICWORD
+    wordvector_path = PathManager.CORPORA_WORDVECTOR
     corpus = Corpus()
     corpus.run(sentences_path, dictionary_path, wordembed_path, word_cluster_path, \
-        similarity_path)
+        similarity_path, wordvector_path)
 
 def word_bag() :
     from word.run import Corpus
