@@ -91,8 +91,9 @@ def tag() :
     tag_tree_path = PathManager.TAG_TAGTREE
     tags_path = PathManager.TAG_ARTICLETAG
     sentences_market_path = PathManager.TAG_SENTENCES
+    untag_sentence_path = PathManager.TAG_UNTAGSENTENCE
     corpus = Corpus()
-    corpus.run(sentences_path, tag_tree_path, sentences_market_path, tags_path)
+    corpus.run(sentences_path, tag_tree_path, sentences_market_path, tags_path, untag_sentence_path)
     print 'finish'
 
 

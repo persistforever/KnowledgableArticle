@@ -26,6 +26,7 @@ class TagTree :
     def _constr_tag_tree(self, cmd_list) :
         """ Construct tag tree from tag list. """
         for cmd in cmd_list :
+            [word.upper() for word in cmd]
             func = cmd[0]
             params = cmd[1:] 
 

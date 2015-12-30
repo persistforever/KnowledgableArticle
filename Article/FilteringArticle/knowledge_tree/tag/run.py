@@ -18,11 +18,11 @@ class Corpus :
     def __init__(self) :
         pass
 
-    def run(self, sentences_path, tag_tree_path, sentences_market_path, tags_path) :
+    def run(self, sentences_path, tag_tree_path, sentences_market_path, tags_path, \
+        untag_sentence_path) :
         # self.run_convert_sentences(sentences_path, sentences_market_path)
-        self.run_tag_sentences(tag_tree_path, sentences_market_path, tags_path)
-        # self.run_robot(tag_tree_path, sentences_market_path, tags_path)
-        # self.test_entropy()
+        # self.run_tag_sentences(tag_tree_path, sentences_market_path, tags_path, untag_sentence_path)
+        self.run_robot(tag_tree_path, sentences_market_path, tags_path)
 
     def run_convert_sentences(self, sentences_path, sentences_market_path) :
         file_operator = TextFileOperator()
@@ -30,18 +30,18 @@ class Corpus :
         loader = PickleMarket()
         loader.dump_market(sentences, sentences_market_path)
 
-    def run_tag_sentences(self, tag_tree_path, sentences_market_path, tags_path) :
+    def run_tag_sentences(self, tag_tree_path, sentences_market_path, tags_path, untag_sentence_path) :
         file_operator = TextFileOperator()
         loader = PickleMarket()
         sentences = loader.load_market(sentences_market_path)
         cmd_list = file_operator.reading(tag_tree_path)
         tag_tree = TagTree(cmd_list)
         robot = Robot()
-        tags, untag_sentences = robot.tag_sentences(tag_tree, sentences)
+        tags, untag_sentences = robot.tag_sentences(tag_tree, sentences[0:])
         loader = PickleMarket()
         # self.write_tags(sentences, tags, tags_path)
         loader.dump_market(tags, tags_path)
-        # file_operator.writing(untag_sentences, sentences_market_path)
+        file_operator.writing(untag_sentences, untag_sentence_path)
         # loader.dump_market(untag_sentences, sentences_market_path)
 
     def run_robot(self, tag_tree_path, sentences_market_path, tags_path) :
@@ -68,7 +68,7 @@ class Corpus :
         length = len(data_list[1:]) - 1
         for idx, data in enumerate(data_list[1:]) :
             if len(data) >= len(entry_list) :
-                sentence = data[0]
+                sentence = data[0].upper()
                 sentences.append(sentence)
             if idx % 100 == 0 :
                 print 'finish rate is %.2f%%\r' % (100.0*idx/length),

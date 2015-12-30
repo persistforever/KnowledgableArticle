@@ -24,7 +24,7 @@ class Robot :
             tag, untag_sentence = self._tag_sentence_attributes(tag_tree.value2attr, key_sentence, tag)
             tag_list.append(tag)
             if untag_sentence != '' :
-                untag_sentences.append([untag_sentence])
+                untag_sentences.append([untag_sentence, sentence])
 
             if idx % 100 == 0 :
                 print 'finish rate is %.2f%%\r' % (100.0*idx/length),
@@ -74,6 +74,7 @@ class Robot :
             attr_dict[label] = value_dict
         return entity_dict, attr_dict
 
+    '''
     def _tag_sentence_entity(self, entity2label, sentence) :
         """ Tag entity to each sentence. """
         tag = list()
@@ -86,7 +87,6 @@ class Robot :
         else :
             return list()
 
-    '''
     def _tag_sentence_attributes_old(self, value2attr, sentence, tag) :
         """ Tag attributes to each sentence. """
         if len(tag) >= 2 :
@@ -98,6 +98,43 @@ class Robot :
                     tag.append((value2attr[label][value], value))
         return tag
     '''
+
+    def _tag_sentence_entity(self, entity2label, sentence) :
+        """ Tag entity to each sentence. """
+        sentence = '#' + sentence
+        tag = list()
+        start = end = len(sentence)-1
+        inited = True
+        while end >= 0 and start >= 0 :
+            condidate = sentence[start:end+1]
+            if inited :
+                inited = False
+                tec = list() # target_endswith_condidate
+                cet = list() # condidate_endswith_target
+                for value in entity2label :
+                    if value.endswith(condidate) :
+                        cet.append(value)
+            new_cet = list()
+            for idx, value in enumerate(cet) :
+                if value.endswith(condidate) :
+                    new_cet.append(value)
+            cet = new_cet
+            for idx, value in enumerate(cet) :
+                if condidate.endswith(value) :
+                    tec.append(value)
+            if len(cet) > 0 :
+                start -= 1
+            else :
+                inited = True
+                if len(tec) > 0 :
+                    entity = max(tec, key=lambda x: len(x))
+                    tag.append((u'label', entity2label[entity]))
+                    tag.append((u'entity', entity))
+                    end = start
+                else :
+                    start -= 1
+                    end = start
+        return tag
 
     def _tag_sentence_attributes(self, value2attr, sentence, tag) :
         """ Tag attributes to each sentence. """
