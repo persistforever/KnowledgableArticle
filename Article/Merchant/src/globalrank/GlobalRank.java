@@ -38,7 +38,6 @@ public class GlobalRank {
 	public GlobalRank(String usertag, String globalrank, String date, String day) {
 		this.inputpath = usertag;
 		this.outputpath = globalrank;
-		this.tmpout = globalrank + "_tmp";
 		this.inputList = Week.Input(this.inputpath, date, Integer.parseInt(day));
 		this.date = date;
 	}
@@ -48,9 +47,9 @@ public class GlobalRank {
 		Configuration conf = new Configuration();
 		conf.set("mapred.job.queue.name", "searchteam");
 		conf.set("mapred.job.priority", "NORMAL");
-		conf.set("date", this.date);
+		conf.set("today", this.date);
 		Job job = new Job(conf);
-		tools.HadoopFileOperation.DeleteDir(tmpout, conf);
+		tools.HadoopFileOperation.DeleteDir(this.outputpath, conf);
 
 		job.setJarByClass(GlobalRank.class);
 		job.setMapperClass(GlobalRankMapper.class);
@@ -65,10 +64,11 @@ public class GlobalRank {
 			MultipleInputs.addInputPath(job, new Path(out),
 					TextInputFormat.class, GlobalRankMapper.class);
 		}
-		FileOutputFormat.setOutputPath(job, new Path(tmpout));
+		FileOutputFormat.setOutputPath(job, new Path(outputpath));
 		job.waitForCompletion(true);
 
 		// sort
+		/*
 		job = new Job(conf);
 		tools.HadoopFileOperation.DeleteDir(outputpath, conf);
 
@@ -86,6 +86,7 @@ public class GlobalRank {
 						"REDUCE_OUTPUT_RECORDS").getValue();
 
 		tools.HadoopFileOperation.DeleteDir(tmpout, conf);
+		*/
 	}
 
 	public static class SortMapper extends

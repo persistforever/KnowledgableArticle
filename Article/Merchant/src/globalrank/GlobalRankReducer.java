@@ -16,10 +16,13 @@ public class GlobalRankReducer extends Reducer<Text, Text, Text, Text>{
 		String today = context.getConfiguration().get("today");
 		double score = 0.0;
 		for(Text v:value){
-			int datespan = Week.getDateSpan(today, v.toString());
+			int datespan = Week.getDateSpan(v.toString(), today);
 			score += 1.0 * Math.exp(1.0 * (90 - datespan) / 90.0);
 		}
-		context.write(new Text(key), new Text(String.valueOf(score)));
+		String id = tools.LineSplit.split(key.toString(), "<@>", 0);
+		String info = tools.LineSplit.split(key.toString(), "<@>", 1);
+		String city = tools.LineSplit.split(info, "<&>", 0);
+		context.write(new Text(id), new Text(String.valueOf(score) + "\t" + city));
 	}
 
 }

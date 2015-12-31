@@ -22,7 +22,7 @@ public class Week {
 			for(int i=0 ; i<day; i++) {
 				Date tmp = cal.getTime();
 				week.add(dateFormat.format(tmp));
-				cal.add(Calendar.DAY_OF_YEAR, 1);
+				cal.add(Calendar.DAY_OF_YEAR, -1);
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block

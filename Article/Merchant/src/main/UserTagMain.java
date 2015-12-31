@@ -46,7 +46,7 @@ public class UserTagMain {
 		for(int i=0 ; i<this.inputList.size() ; i++) {
 			String in = this.inputList.get(i);
 			String out = this.outputList.get(i);
-			String today = Week.getDate(date, i);
+			String today = Week.getDate(date, -i);
 			UserTag ut = new UserTag(in, this.poipath, out, today,
 					MerchantSnsAnalyser.class, MerchantReduceAnalyser.class);
 			ut.run();
