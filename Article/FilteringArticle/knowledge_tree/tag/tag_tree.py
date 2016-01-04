@@ -55,6 +55,7 @@ class TagTree :
         for label in self.root.labels :
             for entity in self.root.labels[label].entitys :
                 self.entity2label[entity] = label
+
         self.value2attr = dict()
         for label in self.root.labels :
             self.value2attr[label] = dict()
@@ -64,6 +65,47 @@ class TagTree :
             for attr in self.root.global_attrs :
                 for value in self.root.global_attrs[attr] :
                     self.value2attr[label][value] = attr
+
+        self.attr2index = dict()
+        self.index2attr = dict()
+        index = 0
+        for label in self.root.labels :
+            self.attr2index[label] = dict()
+            self.index2attr[label] = dict()
+            for attr in self.root.labels[label].local_attrs :
+                if attr not in self.attr2index[label] :
+                    self.attr2index[label][attr] = index
+                    self.index2attr[label][index] = attr
+                    index += 1
+        label = u'GLOBAL'
+        self.attr2index[label] = dict()
+        self.index2attr[label] = dict()
+        for attr in self.root.global_attrs :
+            if attr not in self.attr2index[label] :
+                self.attr2index[label][attr] = index
+                self.index2attr[label][index] = attr
+                index += 1
+
+        self.value2index = dict()
+        self.index2value = dict()
+        index = 0
+        for label in self.root.labels :
+            self.value2index[label] = dict()
+            for attr in self.root.labels[label].local_attrs :
+                if attr not in self.value2index[label] :
+                    self.value2index[label][attr] = dict()
+                for value in self.root.labels[label].local_attrs[attr] :
+                    if value not in self.value2attr[label][attr] :
+                        self.value2attr[label][attr][value] = index
+                        self.index2value[label][attr][index] = value
+                        index += 1
+        label = u'GLOBAL'
+        self.attr2index[label] = dict()
+        for attr in self.root.global_attrs :
+            if attr not in self.attr2index[label] :
+                self.attr2index[label][attr] = index
+                self.index2attr[label][index] = attr
+                index += 1
 
     def add_label(self, label) :
         """ Add label to root node. """

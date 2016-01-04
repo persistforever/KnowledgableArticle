@@ -39,7 +39,7 @@ class Corpus :
         cmd_list = file_operator.reading(tag_tree_path)
         tag_tree = TagTree(cmd_list)
         robot = Robot()
-        tags, untag_sentences = robot.tag_sentences(tag_tree, sentences[0:])
+        tags, untag_sentences = robot.tag_sentences(tag_tree, sentences[0:10000])
         loader = PickleMarket()
         self.write_tags(sentences, tags, tags_path)
         loader.dump_market(tags, tags_martket_path)
