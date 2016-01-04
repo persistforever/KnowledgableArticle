@@ -19,10 +19,11 @@ class Corpus :
         pass
 
     def run(self, sentences_path, tag_tree_path, sentences_market_path, tags_path, \
-        untag_sentence_path) :
+        tags_martket_path, untag_sentence_path) :
         # self.run_convert_sentences(sentences_path, sentences_market_path)
-        # self.run_tag_sentences(tag_tree_path, sentences_market_path, tags_path, untag_sentence_path)
-        self.run_robot(tag_tree_path, sentences_market_path, tags_path)
+        self.run_tag_sentences(tag_tree_path, sentences_market_path, tags_path, \
+            tags_martket_path, untag_sentence_path)
+        # self.run_robot(tag_tree_path, sentences_market_path, tags_path)
 
     def run_convert_sentences(self, sentences_path, sentences_market_path) :
         file_operator = TextFileOperator()
@@ -30,7 +31,8 @@ class Corpus :
         loader = PickleMarket()
         loader.dump_market(sentences, sentences_market_path)
 
-    def run_tag_sentences(self, tag_tree_path, sentences_market_path, tags_path, untag_sentence_path) :
+    def run_tag_sentences(self, tag_tree_path, sentences_market_path, tags_path, \
+        tags_martket_path, untag_sentence_path) :
         file_operator = TextFileOperator()
         loader = PickleMarket()
         sentences = loader.load_market(sentences_market_path)
@@ -39,10 +41,12 @@ class Corpus :
         robot = Robot()
         tags, untag_sentences = robot.tag_sentences(tag_tree, sentences[0:])
         loader = PickleMarket()
-        # self.write_tags(sentences, tags, tags_path)
-        loader.dump_market(tags, tags_path)
+        self.write_tags(sentences, tags, tags_path)
+        loader.dump_market(tags, tags_martket_path)
         file_operator.writing(untag_sentences, untag_sentence_path)
         # loader.dump_market(untag_sentences, sentences_market_path)
+        print '%.2f%% article >= 2 tags' % (100.0 * len([tag for tag in tags if len(tag) >= 2]) / len(tags))
+        print '%.2f%% article >= 3 tags' % (100.0 * len([tag for tag in tags if len(tag) >= 3]) / len(tags))
 
     def run_robot(self, tag_tree_path, sentences_market_path, tags_path) :
         robot = Robot()

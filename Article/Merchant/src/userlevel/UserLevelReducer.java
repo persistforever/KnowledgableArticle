@@ -38,18 +38,37 @@ public class UserLevelReducer extends Reducer<Text, Text, Text, Text>{
 	protected void reduce(Text key, Iterable<Text> value,
 			Reducer<Text, Text, Text, Text>.Context context) throws IOException,
 			InterruptedException {
-		double level = 0.0;
+		double score = 0.0;
+		int level = 0;
 		int num = 0;
 		for(Text v:value){
 			if (this.levelmap.containsKey(v.toString())) {
-				level += this.levelmap.get(v.toString());
+				score += this.levelmap.get(v.toString());
 				num ++;
 			}
 		}
 		if (num != 0) {
-			level = 1.0 * level / num;
-			context.write(new Text(key), new Text(String.valueOf(level)));
+			score = 1.0 * score / num;
 		}
+		else {
+			score = 0.0;
+		}
+		if (score <= 50.0) {
+			level = 1;
+		}
+		else if(score <= 100.0) {
+			level = 2;
+		}
+		else if(score <= 200.0) {
+			level = 3;
+		}
+		else if(score <= 500.0) {
+			level = 4;
+		}
+		else {
+			level = 5;
+		}
+		context.write(new Text(key), new Text(String.valueOf(level)));
 	}
 
 }

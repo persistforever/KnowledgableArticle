@@ -49,12 +49,12 @@ public class MerchantRun {
 		UserTag ut = new UserTag(this.snspath, this.poipath, this.usertagpath, this.date,
 				MerchantSnsAnalyser.class, MerchantReduceAnalyser.class);
 		ut.run();
-		
+		*/
 		System.out.println("============ global_rank ===============");
 		GlobalRank gr = new GlobalRank(this.usertagpath, this.rankpath, this.date, this.day);
 		gr.run();
 		outinfo[0] = gr.reducenum;
-		*/
+
 		System.out.println("============ user_level ===============");
 		UserLevel ul = new UserLevel(this.usertagpath, this.poipath, this.levelpath, this.date, this.day);
 		ul.run();
