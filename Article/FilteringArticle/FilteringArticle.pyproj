@@ -68,7 +68,8 @@
     <Compile Include="knowledge_tree\segment\script.py" />
     <Compile Include="knowledge_tree\segment\segementor.py" />
     <Compile Include="knowledge_tree\segment\__init__.py" />
-    <Compile Include="knowledge_tree\tag\script.py" />
+    <Compile Include="knowledge_tree\tag\script\convert_sentences.py" />
+    <Compile Include="knowledge_tree\tag\script\tag_sentences.py" />
     <Compile Include="knowledge_tree\tag\test.py" />
     <Compile Include="knowledge_tree\tag\tag_tree.py" />
     <Compile Include="knowledge_tree\tag\run.py" />
@@ -94,10 +95,13 @@
     <Folder Include="knowledge_tree\preload\" />
     <Folder Include="knowledge_tree\qa\" />
     <Folder Include="knowledge_tree\segment\" />
+    <Folder Include="knowledge_tree\tag\script\" />
     <Folder Include="knowledge_tree\word\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="knowledge_tree\file\configuration.ini" />
+    <Content Include="knowledge_tree\tag\script\convert_sentences.sh" />
+    <Content Include="knowledge_tree\tag\script\tag_sentences.sh" />
   </ItemGroup>
   <Import Condition="Exists($(PtvsTargetsFile))" Project="$(PtvsTargetsFile)" />
   <Import Condition="!Exists($(PtvsTargetsFile))" Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />

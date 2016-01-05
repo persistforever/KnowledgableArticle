@@ -3,6 +3,7 @@
 # package importing start
 import re
 import math
+import bitmap
 
 from file.file_operator import TextFileOperator
 # package importing end
@@ -16,20 +17,37 @@ class Robot :
     def tag_sentences(self, tag_tree, sentences) :
         """ Tag sentences. """
         tag_list = list()
+        tag_list_show = list()
         untag_sentences = list()
         length = len(sentences) - 1
-        for idx, sentence in enumerate(sentences) :
-            tag = self._tag_sentence_entity(tag_tree.entity2label, sentence)
-            key_sentence = self._find_key_sentence(sentence, tag)
-            tag, untag_sentence = self._tag_sentence_attributes(tag_tree.value2attr, key_sentence, tag)
-            tag_list.append(tag)
-            if untag_sentence != '' :
-                untag_sentences.append([untag_sentence, sentence])
+        for idx, term in enumerate(sentences) :
+            aid, sentence = term[0], term[1]
+            single, label, entity = self._tag_sentence_entity(tag_tree.entity2label, sentence)
+            if single :
+                key_sentence = self._find_key_sentence(sentence, label, entity)
+                tag, untag_sentence = self._tag_sentence_attributes(tag_tree.value2attr, key_sentence, label, entity)
+                tag_list_show.append(tag)
+                # store as bit map
+                bitlist = [0] * len(tag_tree.index2attr[label])
+                strlist = [''] * len(tag_tree.index2attr[label])
+                for index in tag_tree.index2attr[label] :
+                    attr = tag_tree.index2attr[label][index]
+                    strlist[index] = ['0'] * len(tag_tree.value2index[label][attr])
+                for attr, value in tag :
+                    strlist[tag_tree.attr2index[label][attr]][ \
+                        tag_tree.value2index[label][attr][value]] = '1'
+                for idx, string in enumerate(strlist) :
+                    bitlist[idx] = bitmap.BitMap.fromstring(''.join(string[::-1])).bitmap[0]
+                tag_list.append((aid, label, entity, bitlist))
+                if untag_sentence != '' :
+                    untag_sentences.append([untag_sentence, sentence])
+            else :
+                tag_list_show.append(list())
 
             if idx % 100 == 0 :
                 print 'finish rate is %.2f%%\r' % (100.0*idx/length),
         print 'finish rate is %.2f%%\r' % (100.0*idx/length)
-        return tag_list, untag_sentences
+        return tag_list, tag_list_show, untag_sentences
 
     def question_and_answer(self, string, sentences, tags, tag_tree) :
         """ Robot find tags accordding to querys and ask the tags.
@@ -102,7 +120,8 @@ class Robot :
     def _tag_sentence_entity(self, entity2label, sentence) :
         """ Tag entity to each sentence. """
         sentence = '#' + sentence
-        tag = list()
+        label = list()
+        entity = list()
         start = end = len(sentence)-1
         inited = True
         while end >= 0 and start >= 0 :
@@ -127,84 +146,75 @@ class Robot :
             else :
                 inited = True
                 if len(tec) > 0 :
-                    entity = max(tec, key=lambda x: len(x))
-                    tag.append((u'label', entity2label[entity]))
-                    tag.append((u'entity', entity))
+                    ett = max(tec, key=lambda x: len(x))
+                    label.append(entity2label[ett])
+                    entity.append(ett)
                     end = start
                 else :
                     start -= 1
                     end = start
-        return tag
+        single = False
+        if len(entity) == 1 :
+            single = True
+            return single, label[0], entity[0]
+        else :
+            return single, list(), list()
 
-    def _tag_sentence_attributes(self, value2attr, sentence, tag) :
+    def _tag_sentence_attributes(self, value2attr, sentence, label, entity) :
         """ Tag attributes to each sentence. """
         old_sentence = sentence
         sentence = '#' + sentence
         untag_sentence = ''
-        new_tag = list()
-        if len(tag) >= 2 :
-            for key, value in tag :
-                if key == u'label' :
-                    label = value
-                if key == u'entity' :
-                    entity = value
-            value_dict = value2attr[label]
-            value_dict[entity] = u'entity'
-            start = end = len(sentence)-1
-            inited = True
-            while end >= 0 and start >= 0 :
-                condidate = sentence[start:end+1]
-                if inited :
-                    inited = False
-                    tec = list() # target_endswith_condidate
-                    cet = list() # condidate_endswith_target
-                    for value in value_dict :
-                        if value.endswith(condidate) :
-                            cet.append(value)
-                new_cet = list()
-                for idx, value in enumerate(cet) :
+        tag = list()
+        value_dict = value2attr[label]
+        value_dict[entity] = u'entity'
+        start = end = len(sentence)-1
+        inited = True
+        while end >= 0 and start >= 0 :
+            condidate = sentence[start:end+1]
+            if inited :
+                inited = False
+                tec = list() # target_endswith_condidate
+                cet = list() # condidate_endswith_target
+                for value in value_dict :
                     if value.endswith(condidate) :
-                        new_cet.append(value)
-                cet = new_cet
-                for idx, value in enumerate(cet) :
-                    if condidate.endswith(value) :
-                        tec.append(value)
-                if len(cet) > 0 :
-                    start -= 1
+                        cet.append(value)
+            new_cet = list()
+            for idx, value in enumerate(cet) :
+                if value.endswith(condidate) :
+                    new_cet.append(value)
+            cet = new_cet
+            for idx, value in enumerate(cet) :
+                if condidate.endswith(value) :
+                    tec.append(value)
+            if len(cet) > 0 :
+                start -= 1
+            else :
+                inited = True
+                if len(tec) > 0 :
+                    value = max(tec, key=lambda x: len(x))
+                    tag.append((value2attr[label][value], value))
+                    end = start
                 else :
-                    inited = True
-                    if len(tec) > 0 :
-                        value = max(tec, key=lambda x: len(x))
-                        new_tag.append((value2attr[label][value], value))
-                        end = start
-                    else :
-                        start -= 1
-                        end = start
-                        untag_sentence += condidate[::-1]
-        for attr, value in new_tag :
-            if attr not in [a for a, t in tag] :
-                tag.append((attr, value))
+                    start -= 1
+                    end = start
+                    untag_sentence += condidate[::-1]
         untag_sentence = untag_sentence[::-1][1:]
-        return tag, untag_sentence
+        outtag = [(key, value) for key, value in tag if key != u'entity']
+        return outtag, untag_sentence
 
-    def _find_key_sentence(self, sentence, tag) :
+    def _find_key_sentence(self, sentence, label, entity) :
         """ Find key_sentence of a sentence. """
         stop_list = [u'\uff01', u'\u3010', u'\u3011', u'\uff0c', u'\u3002', \
             u'uff1f', u'\u3001', u'\uff1a', u'\uff08', '\uff09'\
             u'!', u'|', u'~', u',', u'.', u'#', u'-', u'?', u'+']
         sentence = '#' + sentence
-        if len(tag) >= 2 :
-            for key, value in tag :
-                if key == u'entity' :
-                    entity = value
-            start = -1
-            end = sentence.index(entity)
-            for idx, letter in enumerate(sentence[0:end+1]) :
-                if letter in stop_list :
-                    start = idx
-            key_sentence = sentence[start+1:idx+len(entity)]
-        else :
-            key_sentence = sentence[1:]
+        start = -1
+        end = sentence.index(entity)
+        for idx, letter in enumerate(sentence[0:end+1]) :
+            if letter in stop_list :
+                start = idx
+        key_sentence = sentence[start+1:idx+len(entity)]
         return key_sentence
 
     def _find_condidate_article(self, querys, sentences, tags) :

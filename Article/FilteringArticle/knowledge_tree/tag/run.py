@@ -10,7 +10,7 @@ import gensim
 from tag.robot import Robot
 from tag.tag_tree import TagTree
 from file.file_operator import TextFileOperator
-from preload.market import PickleMarket
+from preload.market import PickleMarket, JsonMarket
 # package importing end
 
 class Corpus :
@@ -31,7 +31,22 @@ class Corpus :
         loader = PickleMarket()
         loader.dump_market(sentences, sentences_market_path)
 
-    def run_tag_sentences(self, tag_tree_path, sentences_market_path, tags_path, \
+    def run_tag_sentences(self, tag_tree_path, sentences_market_path, tags_martket_path, dict_market_path) :
+        file_operator = TextFileOperator()
+        loader = PickleMarket()
+        sentences = loader.load_market(sentences_market_path)
+        cmd_list = file_operator.reading(tag_tree_path)
+        tag_tree = TagTree(cmd_list)
+        robot = Robot()
+        tags, tags_show, untag_sentences = robot.tag_sentences(tag_tree, sentences[0:])
+        loader = JsonMarket()
+        loader.dump_market(tags, tags_martket_path)
+        loader.dump_market(tag_tree.dict_tuple, dict_market_path)
+        print '%.2f%% article >= 1 tags, number is, %d.' \
+            % (100.0 * len([tag for tag in tags_show if len(tag) >= 1]) / len(sentences)) \
+            % len([tag for tag in tags_show if len(tag) >= 1])
+
+    def run_test(self, tag_tree_path, sentences_market_path, tags_path, \
         tags_martket_path, untag_sentence_path) :
         file_operator = TextFileOperator()
         loader = PickleMarket()
@@ -39,14 +54,14 @@ class Corpus :
         cmd_list = file_operator.reading(tag_tree_path)
         tag_tree = TagTree(cmd_list)
         robot = Robot()
-        tags, untag_sentences = robot.tag_sentences(tag_tree, sentences[0:10000])
-        loader = PickleMarket()
-        self.write_tags(sentences, tags, tags_path)
+        tags, tags_show, untag_sentences = robot.tag_sentences(tag_tree, sentences[0:])
+        loader = JsonMarket()
+        self.write_tags(sentences, tags_show, tags_path)
         loader.dump_market(tags, tags_martket_path)
         file_operator.writing(untag_sentences, untag_sentence_path)
         # loader.dump_market(untag_sentences, sentences_market_path)
-        print '%.2f%% article >= 2 tags' % (100.0 * len([tag for tag in tags if len(tag) >= 2]) / len(tags))
-        print '%.2f%% article >= 3 tags' % (100.0 * len([tag for tag in tags if len(tag) >= 3]) / len(tags))
+        # print '%.2f%% article >= 2 tags' % (100.0 * len([tag for tag in tags_show if len(tag) >= 1]) / len(sentences))
+        print '%.2f%% article >= 3 tags' % (100.0 * len([tag for tag in tags_show if len(tag) >= 1]) / len(sentences))
 
     def run_robot(self, tag_tree_path, sentences_market_path, tags_path) :
         robot = Robot()
@@ -72,8 +87,9 @@ class Corpus :
         length = len(data_list[1:]) - 1
         for idx, data in enumerate(data_list[1:]) :
             if len(data) >= len(entry_list) :
-                sentence = data[0].upper()
-                sentences.append(sentence)
+                id = data[0]
+                sentence = data[1].upper()
+                sentences.append((id, sentence))
             if idx % 100 == 0 :
                 print 'finish rate is %.2f%%\r' % (100.0*idx/length),
         print 'finish rate is %.2f%%\r' % (100.0*idx/length)
@@ -91,7 +107,7 @@ class Corpus :
         for idx, term in enumerate(tags) :
             if len(term) >= 2 :
                 data = list()
-                data.append(sentences[idx])
+                data.append(sentences[idx][1])
                 tag_str = ''
                 for attr, value in term :
                     tag_str += u'<' + attr + u',' + value + u'>' + ' '
