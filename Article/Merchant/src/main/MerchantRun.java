@@ -5,8 +5,8 @@ import globalrank.GlobalRank;
 import java.io.IOException;
 
 import userlevel.UserLevel;
-import usertag.MerchantReduceAnalyser;
-import usertag.MerchantSnsAnalyser;
+import usertag.LocationReducer;
+import usertag.LocationMapper;
 import usertag.UserTag;
 
 
@@ -43,23 +43,23 @@ public class MerchantRun {
 	public void run() throws IOException, ClassNotFoundException, InterruptedException{
 		Long[] outinfo = new Long[3];
 		
-		System.out.println("============start===============");
+		System.out.println("==================== start ====================");
 		/*
 		System.out.println("============ user_tag ===============");
 		UserTag ut = new UserTag(this.snspath, this.poipath, this.usertagpath, this.date,
 				MerchantSnsAnalyser.class, MerchantReduceAnalyser.class);
 		ut.run();
 		*/
-		System.out.println("============ global_rank ===============");
+		System.out.println("==================== global_rank ====================");
 		GlobalRank gr = new GlobalRank(this.usertagpath, this.rankpath, this.date, this.day);
 		gr.run();
 		outinfo[0] = gr.reducenum;
 
-		System.out.println("============ user_level ===============");
+		System.out.println("==================== user_level ====================");
 		UserLevel ul = new UserLevel(this.usertagpath, this.poipath, this.levelpath, this.date, this.day);
 		ul.run();
 		outinfo[0] = ul.reducenum;
 		
-		System.out.println("============end===============");
+		System.out.println("==================== end ====================");
 	}
 }

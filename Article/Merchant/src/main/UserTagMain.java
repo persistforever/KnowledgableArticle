@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 import tools.HadoopFileOperation;
 import tools.Week;
-import usertag.MerchantSnsAnalyser;
-import usertag.MerchantReduceAnalyser;
+import usertag.LocationMapper;
+import usertag.LocationReducer;
 import usertag.UserTag;
 
 
@@ -40,7 +40,7 @@ public class UserTagMain {
 	}
 	
 	public void run() throws IOException, ClassNotFoundException, InterruptedException{
-		System.out.println("============usertag===============");
+		System.out.println("======================usertag=========================");
 		this.inputList = Week.Input(this.pyqpath, date, day);
 		this.outputList = Week.Input(HadoopFileOperation.CatPath(this.mainpath, date), date, day);
 		for(int i=0 ; i<this.inputList.size() ; i++) {
@@ -48,7 +48,7 @@ public class UserTagMain {
 			String out = this.outputList.get(i);
 			String today = Week.getDate(date, -i);
 			UserTag ut = new UserTag(in, this.poipath, out, today,
-					MerchantSnsAnalyser.class, MerchantReduceAnalyser.class);
+					LocationMapper.class, LocationReducer.class);
 			ut.run();
 		}
 	}

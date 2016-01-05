@@ -1,13 +1,10 @@
 package usertag;
 
-public class MerchantSnsAnalyser extends SnsAnalyse{
+public class LocationMapper extends SnsAnalyse{
 	public boolean analyse(String line) {
 
-		if (line.trim().length() == 0) {
-			return false;
-		}
 		String tid = tools.LineSplit.split(line, "\t", 10).trim();
-		if(tid.trim().length() == 0 || tid.trim().length() == 0) {
+		if(tid.trim().length() == 0) {
 			return false;
 		}
 		this.key = tools.LineSplit.split(tid, " · ", 0).trim() +"<&>"+ tools.LineSplit.split(tid, " · ", 1).trim();

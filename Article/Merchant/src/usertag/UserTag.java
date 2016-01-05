@@ -62,7 +62,7 @@ public class UserTag {
 		MultipleInputs.addInputPath(job, new Path(snsinput),
 				TextInputFormat.class, UserTagMapper.class);
 		MultipleInputs.addInputPath(job, new Path(dicinput),
-				TextInputFormat.class, DicMapper.class);
+				TextInputFormat.class, DictMapper.class);
 		FileOutputFormat.setOutputPath(job, new Path(outputpath));
 
 		if (job.waitForCompletion(true))

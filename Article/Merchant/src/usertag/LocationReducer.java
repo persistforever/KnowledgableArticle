@@ -2,7 +2,7 @@ package usertag;
 
 import org.apache.hadoop.io.Text;
 
-public class MerchantReduceAnalyser extends ReduceAnalyse{
+public class LocationReducer extends ReduceAnalyse{
 
 	@Override
 	public boolean analyse(Text key, Iterable<Text> value) {

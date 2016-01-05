@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-public class DicMapper extends Mapper<Object, Text, Text, Text> {
+public class DictMapper extends Mapper<Object, Text, Text, Text> {
 
 	@Override
 	protected void map(Object key, Text value,
