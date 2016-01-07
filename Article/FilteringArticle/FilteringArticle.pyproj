@@ -60,6 +60,7 @@
     <Compile Include="knowledge_tree\preload\__init__.py" />
     <Compile Include="knowledge_tree\pretreate\advertice.py" />
     <Compile Include="knowledge_tree\pretreate\run.py" />
+    <Compile Include="knowledge_tree\pretreate\script\pretreate.py" />
     <Compile Include="knowledge_tree\pretreate\segementor.py" />
     <Compile Include="knowledge_tree\pretreate\simplifier.py" />
     <Compile Include="knowledge_tree\pretreate\unique.py" />
@@ -98,6 +99,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="knowledge_tree\file\configuration.ini" />
+    <Content Include="knowledge_tree\pretreate\script\instruction.docx" />
+    <Content Include="knowledge_tree\pretreate\script\pretreate.sh" />
     <Content Include="knowledge_tree\tag\script\convert_sentences.sh" />
     <Content Include="knowledge_tree\tag\script\tag_sentences.sh" />
   </ItemGroup>
