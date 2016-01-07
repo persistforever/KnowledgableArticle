@@ -9,8 +9,8 @@ from file.file_operator import TextFileOperator
 
 class BaseSegementor :
 
-    def __init__(self, spst_path='') :
-        self.split_dict = self._read_dictionary(spst_path)
+    def __init__(self) :
+        pass
         
     def _read_dictionary(self, split_path) :
         self.file_operator = TextFileOperator()
@@ -25,18 +25,14 @@ class BaseSegementor :
 
 class ContentSegementor(BaseSegementor) :
 
-    def __init__(self, spst_path='') :
-        BaseSegementor.__init__(self, spst_path)
+    def __init__(self) :
+        BaseSegementor.__init__(self)
 
     def segement(self, sentence) :
         """ Split content into sentence. """
-        self.split_char = '['
-        for sp in self.split_dict :
-            self.split_char += sp + '|'
-        self.split_char += u'\u3000' + '|'
-        self.split_char += ']'
+        split_char = u'[\u3000]' #|\u3002|\uff01|\uff1b|\uff1f]'
         segemented_sentence = []
-        for sent in re.split(self.split_char, sentence) :
+        for sent in re.split(split_char, sentence) :
             if sent.strip() != '' :
                 segemented_sentence.append(sent)
         return segemented_sentence

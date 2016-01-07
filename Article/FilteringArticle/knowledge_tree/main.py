@@ -97,6 +97,15 @@ def tag() :
     corpus.run(sentences_path, tag_tree_path, sentences_market_path, tags_path, \
         tags_market_path, untag_sentence_path)
     print 'finish'
+    
+def pre_treate() :
+    from pretreate.run import Corpus
+    from file.path_manager import PathManager
+    articles_path = PathManager.CORPUS_ARTICLE
+    participle_title_path = PathManager.CORPUS_SPLIT
+    treated_article_path = PathManager.CORPUS_FEATURE
+    corpus = Corpus()
+    corpus.run(articles_path, participle_title_path, treated_article_path)
 
 
 if __name__ == '__main__' :
@@ -107,4 +116,5 @@ if __name__ == '__main__' :
     # pre_load()
     # parsing()
     # appositive()
-    tag()
+    # tag()
+    pre_treate()
