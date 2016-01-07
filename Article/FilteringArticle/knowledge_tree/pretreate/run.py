@@ -50,7 +50,7 @@ class Corpus :
         treated_articles = [article for article in unredundant_articles if len(article['content']) >= 300]
         print 'remove short texts finished ...'
 
-        self.write_article(unredundant_articles, treated_article_path)
+        self.write_article(treated_articles, treated_article_path)
         print 'finish'
 
     def remove_redundance(self, article_list, segmentor, simplifier) :
