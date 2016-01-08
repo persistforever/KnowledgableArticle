@@ -30,11 +30,18 @@ class ContentSegementor(BaseSegementor) :
 
     def segement(self, sentence) :
         """ Split content into sentence. """
-        split_char = u'[\u3000]' #|\u3002|\uff01|\uff1b|\uff1f]'
-        segemented_sentence = []
-        for sent in re.split(split_char, sentence) :
-            if sent.strip() != '' :
-                segemented_sentence.append(sent)
+        sentences = re.split(u'[\u3000]', sentence)
+        split_char = u'[\u3002|\uff01|\uff1f]'
+        segemented_sentence = list()
+        for stc in sentences :
+            if len(stc.strip()) > 0 :
+                new_sentence = u'\u3002' + stc
+                poss = [x.start() for x in re.finditer(split_char, new_sentence)]
+                if len(poss) == 1 :
+                    segemented_sentence.append(stc)
+                elif len(poss) >= 2 :
+                    for start in range(0, len(poss)-1) :
+                        segemented_sentence.append(new_sentence[poss[start]+1:poss[start+1]+1])
         return segemented_sentence
 
     

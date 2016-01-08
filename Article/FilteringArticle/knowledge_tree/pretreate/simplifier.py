@@ -22,9 +22,8 @@ class ContentSimplifier :
             else :
                 sentence is useful
         """
-        patterns = [re.compile(p) for p in [u'微信', u'关注', u'长按复制', u'阅读原文', \
-                                            u'下载', u'订阅', u'分享', u'二维码', u'回复', \
-                                            u'QQ', u'点击', u'查询']]
+        patterns = [re.compile(p) for p in [u'(微信)', u'(点击).*(关注)', u'(长按复制)', u'(阅读原文)', \
+                                            u'(订阅)', u'(分享)', u'(二维码)', u'(回复)', u'(QQ)']]
         redundance = False
         for pattern in patterns :
             if pattern.search(sentence) :

@@ -3,7 +3,7 @@
 # package importing start
 import sys
 
-import gensim
+# import gensim
 
 from basic.word import Word
 from file.file_operator import TextFileOperator
@@ -21,7 +21,7 @@ class Corpus :
 
     def run(self, article_path, participle_title_path, treated_article_path) :
         """ function for script to drive. """
-        self.run_remove_advertice(article_path, participle_title_path, treated_article_path)
+        self.run_pretreate(article_path, participle_title_path, treated_article_path)
 
     def run_pretreate(self,  article_path, participle_title_path, treated_article_path) :
         articles = self.read_article(article_path)
@@ -55,13 +55,17 @@ class Corpus :
 
     def remove_redundance(self, article_list, segmentor, simplifier) :
         """ Segment title and content of article. """
-        for article in article_list :
+        length = len(article_list) - 1
+        for idx, article in enumerate(article_list) :
             segmented_content = segmentor.segement(article['content'])
             tag_content = [simplifier.tag_sentence(sentence) for sentence in segmented_content]
             tag_content = simplifier.filter_tail(tag_content)
             tag_content = simplifier.filter_head(tag_content)
             article['segmented_content'] = [content[0] for content in tag_content]
             article['content'] = u'\u3000'.join(article['segmented_content'])
+            if idx % 100 == 0 :
+                print 'finish rate is %.2f%%\r' % (100.0*idx/length),
+        print 'finish rate is %.2f%%\r' % (100.0*idx/length)
         return article_list
 
     def read_article(self, article_path) :

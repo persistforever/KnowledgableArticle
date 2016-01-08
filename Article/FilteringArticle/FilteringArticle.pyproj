@@ -89,6 +89,7 @@
     <Folder Include="knowledge_tree\file\" />
     <Folder Include="knowledge_tree\ltpparser\" />
     <Folder Include="knowledge_tree\appositive\" />
+    <Folder Include="knowledge_tree\pretreate\" />
     <Folder Include="knowledge_tree\pretreate\script\" />
     <Folder Include="knowledge_tree\tag\" />
     <Folder Include="knowledge_tree\preload\" />
