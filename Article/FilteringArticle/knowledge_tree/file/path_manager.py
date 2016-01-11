@@ -53,6 +53,8 @@ class PathManager :
     CORPORA_CONTENTTEXTS = 'participle content texts in the corpora'
 
     CLASSIFIER_CLASSIFIER = 'classifier in the classifier'
+    CLASSIFIER_TRAINDATA = 'training data in the classifier'
+    CLASSIFIER_TESTDATA = 'testing data in the classifier'
 
     CLUSTER_TESTDATA = 'test data in the cluster'
     CLUSTER_DOCTOPIC = 'doc_topic in the cluster'
@@ -112,6 +114,8 @@ class PathManager :
         PathManager.CORPORA_CONTENTTEXTS = cfg.get('corpora', 'CONTENTTEXTS')
 
         PathManager.CLASSIFIER_CLASSIFIER = cfg.get('classifier', 'CLASSIFIER')
+        PathManager.CLASSIFIER_TRAINDATA = cfg.get('classifier', 'TRAINDATA')
+        PathManager.CLASSIFIER_TESTDATA = cfg.get('classifier', 'TESTDATA')
 
         PathManager.CLUSTER_TESTDATA = cfg.get('cluster', 'TESTDATA')
         PathManager.CLUSTER_DOCTOPIC = cfg.get('cluster', 'DOCTOPIC')

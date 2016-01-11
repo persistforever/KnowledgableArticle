@@ -10,7 +10,7 @@ import gensim
 from tag.robot import Robot
 from tag.tag_tree import TagTree
 from file.file_operator import TextFileOperator
-from preload.market import PickleMarket, JsonMarket
+from basic.market import PickleMarket, JsonMarket
 # package importing end
 
 class Corpus :

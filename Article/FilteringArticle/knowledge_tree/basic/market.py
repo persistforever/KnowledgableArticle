@@ -5,6 +5,7 @@ import re
 import time
 
 import file.file_operator as fop
+from file.file_operator import JsonOperator, PickleOperator
 # package importing end
 
 """

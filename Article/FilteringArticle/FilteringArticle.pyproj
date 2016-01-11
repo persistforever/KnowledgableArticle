@@ -30,34 +30,22 @@
     <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="knowledge_tree\appositive\run.py" />
-    <Compile Include="knowledge_tree\appositive\word_apposit.py" />
-    <Compile Include="knowledge_tree\appositive\__init__.py" />
-    <Compile Include="knowledge_tree\basic\article.py" />
-    <Compile Include="knowledge_tree\basic\corpora.py" />
-    <Compile Include="knowledge_tree\basic\corpus.py" />
-    <Compile Include="knowledge_tree\basic\old_corpus.py" />
-    <Compile Include="knowledge_tree\basic\tag.py" />
-    <Compile Include="knowledge_tree\basic\test_basic.py" />
+    <Compile Include="knowledge_tree\basic\market.py" />
     <Compile Include="knowledge_tree\basic\word.py" />
     <Compile Include="knowledge_tree\basic\__init__.py" />
-    <Compile Include="knowledge_tree\embedding\run.py" />
-    <Compile Include="knowledge_tree\embedding\script.py" />
-    <Compile Include="knowledge_tree\embedding\word_embed.py" />
-    <Compile Include="knowledge_tree\embedding\__init__.py" />
+    <Compile Include="knowledge_tree\classify\script\classifying.py" />
+    <Compile Include="knowledge_tree\classify\script\feature_select.py" />
+    <Compile Include="knowledge_tree\classify\script\convert_article.py" />
+    <Compile Include="knowledge_tree\classify\selector.py" />
+    <Compile Include="knowledge_tree\classify\run.py" />
+    <Compile Include="knowledge_tree\classify\classifier.py" />
+    <Compile Include="knowledge_tree\classify\__init__.py" />
     <Compile Include="knowledge_tree\file\base.py" />
     <Compile Include="knowledge_tree\file\file_operator.py" />
     <Compile Include="knowledge_tree\file\path_manager.py" />
     <Compile Include="knowledge_tree\file\test_file.py" />
     <Compile Include="knowledge_tree\file\__init__.py" />
-    <Compile Include="knowledge_tree\ltpparser\parsing.py" />
-    <Compile Include="knowledge_tree\ltpparser\run.py" />
-    <Compile Include="knowledge_tree\ltpparser\__init__.py" />
     <Compile Include="knowledge_tree\main.py" />
-    <Compile Include="knowledge_tree\preload\market.py" />
-    <Compile Include="knowledge_tree\preload\run.py" />
-    <Compile Include="knowledge_tree\preload\script.py" />
-    <Compile Include="knowledge_tree\preload\__init__.py" />
     <Compile Include="knowledge_tree\pretreate\advertice.py" />
     <Compile Include="knowledge_tree\pretreate\run.py" />
     <Compile Include="knowledge_tree\pretreate\script\pretreatement.py" />
@@ -65,8 +53,6 @@
     <Compile Include="knowledge_tree\pretreate\simplifier.py" />
     <Compile Include="knowledge_tree\pretreate\unique.py" />
     <Compile Include="knowledge_tree\pretreate\__init__.py" />
-    <Compile Include="knowledge_tree\qa\article_tag.py" />
-    <Compile Include="knowledge_tree\qa\__init__.py" />
     <Compile Include="knowledge_tree\tag\script\convert_sentences.py" />
     <Compile Include="knowledge_tree\tag\script\tag_sentences.py" />
     <Compile Include="knowledge_tree\tag\test.py" />
@@ -76,32 +62,28 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="knowledge_tree\tag\__init__.py" />
-    <Compile Include="knowledge_tree\word\run.py" />
-    <Compile Include="knowledge_tree\word\script.py" />
-    <Compile Include="knowledge_tree\word\word_bag.py" />
-    <Compile Include="knowledge_tree\word\word_cluster.py" />
-    <Compile Include="knowledge_tree\word\__init__.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="knowledge_tree\" />
     <Folder Include="knowledge_tree\basic\" />
-    <Folder Include="knowledge_tree\embedding\" />
+    <Folder Include="knowledge_tree\classify\script\" />
     <Folder Include="knowledge_tree\file\" />
-    <Folder Include="knowledge_tree\ltpparser\" />
-    <Folder Include="knowledge_tree\appositive\" />
+    <Folder Include="knowledge_tree\classify\" />
     <Folder Include="knowledge_tree\pretreate\" />
     <Folder Include="knowledge_tree\pretreate\script\" />
     <Folder Include="knowledge_tree\tag\" />
-    <Folder Include="knowledge_tree\preload\" />
-    <Folder Include="knowledge_tree\qa\" />
     <Folder Include="knowledge_tree\tag\script\" />
-    <Folder Include="knowledge_tree\word\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="knowledge_tree\classify\script\classifying.sh" />
+    <Content Include="knowledge_tree\classify\script\feature_select.sh" />
+    <Content Include="knowledge_tree\classify\script\instruction.docx" />
+    <Content Include="knowledge_tree\classify\script\convert_article.sh" />
     <Content Include="knowledge_tree\file\configuration.ini" />
     <Content Include="knowledge_tree\pretreate\script\instruction.docx" />
     <Content Include="knowledge_tree\pretreate\script\pretreatement.sh" />
     <Content Include="knowledge_tree\tag\script\convert_sentences.sh" />
+    <Content Include="knowledge_tree\tag\script\instruction.docx" />
     <Content Include="knowledge_tree\tag\script\tag_sentences.sh" />
   </ItemGroup>
   <Import Condition="Exists($(PtvsTargetsFile))" Project="$(PtvsTargetsFile)" />
