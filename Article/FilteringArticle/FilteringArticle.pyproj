@@ -41,6 +41,9 @@
     <Compile Include="knowledge_tree\classify\run.py" />
     <Compile Include="knowledge_tree\classify\classifier.py" />
     <Compile Include="knowledge_tree\classify\__init__.py" />
+    <Compile Include="knowledge_tree\embedding\run.py" />
+    <Compile Include="knowledge_tree\embedding\word_embed.py" />
+    <Compile Include="knowledge_tree\embedding\__init__.py" />
     <Compile Include="knowledge_tree\file\base.py" />
     <Compile Include="knowledge_tree\file\file_operator.py" />
     <Compile Include="knowledge_tree\file\path_manager.py" />
@@ -70,6 +73,7 @@
     <Folder Include="knowledge_tree\classify\script\" />
     <Folder Include="knowledge_tree\file\" />
     <Folder Include="knowledge_tree\classify\" />
+    <Folder Include="knowledge_tree\embedding\" />
     <Folder Include="knowledge_tree\pretreate\" />
     <Folder Include="knowledge_tree\pretreate\script\" />
     <Folder Include="knowledge_tree\tag\" />
