@@ -7,6 +7,7 @@ from sklearn import svm
 from sklearn.externals import joblib
 import sklearn.metrics as metrics
 from sklearn import cross_validation
+from sklearn import preprocessing
 # package importing end
 
 
@@ -15,13 +16,14 @@ class SvmClassifier :
     def __init__(self, c=1) :
         self.c = c
 
-    def training(self, train_dataset, train_label) :
+    def training(self, train_dataset, train_label, cset=range(10, 1000, 10), \
+        kernel='linear') :
         """ Train classifier with train_data and train_label. """
         X_train, X_test, y_train, y_test = cross_validation.train_test_split( \
             train_dataset, train_label, test_size=0.2, random_state=0)
         max_eval, max_c = 0.0, 1
-        for c in range(1, 10000, 1000) :
-            self.clf = svm.SVC(C=c, kernel='linear')
+        for c in cset :
+            self.clf = svm.SVC(C=c, kernel=kernel)
             self.clf.fit(X_train, y_train)
             class_test = self.testing(X_test)
             perfor = self.evaluation(y_test, class_test)
@@ -39,8 +41,16 @@ class SvmClassifier :
             class_list.append(self.clf.predict(test_dataset[row, :].reshape(1, -1))[0])
         return np.array(class_list)
 
-    def normalize(self, dataset) :
+    def normalize(self, dataset, method='mapminmax') :
         """ Normalize the dataset. """
+        if method == 'mapminmax' :
+            dataset = normalize_mapminmax(dataset)
+        elif method == 'zscore' :
+            dataset = normalize_zscore(dataset)
+        return dataset
+
+    def normalize_mapminmax(self, dataset) :
+        """ Normalize the dataset using mapminmax. """
         for col in range(dataset.shape[1]) :
             maximum = max(dataset[:, col])
             minimum = min(dataset[:, col])
@@ -49,6 +59,11 @@ class SvmClassifier :
                     dataset[row, col] = 0.0
                 else :
                     dataset[row, col] = 1.0 * (maximum - dataset[row, col]) / (maximum - minimum)
+        return dataset
+
+    def normalize_zscore(self, dataset) :
+        """ Normalize the dataset using zscore. """
+        dataset = preprocessing.scale(dataset)
         return dataset
 
     def evaluation(self, test_label, test_class) :

@@ -33,6 +33,7 @@
     <Compile Include="knowledge_tree\basic\market.py" />
     <Compile Include="knowledge_tree\basic\word.py" />
     <Compile Include="knowledge_tree\basic\__init__.py" />
+    <Compile Include="knowledge_tree\classify\script\optimize_params.py" />
     <Compile Include="knowledge_tree\classify\script\classifying.py" />
     <Compile Include="knowledge_tree\classify\script\feature_select.py" />
     <Compile Include="knowledge_tree\classify\script\convert_article.py" />
@@ -75,6 +76,7 @@
     <Folder Include="knowledge_tree\tag\script\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="knowledge_tree\classify\script\optimize_params.sh" />
     <Content Include="knowledge_tree\classify\script\classifying.sh" />
     <Content Include="knowledge_tree\classify\script\feature_select.sh" />
     <Content Include="knowledge_tree\classify\script\instruction.docx" />

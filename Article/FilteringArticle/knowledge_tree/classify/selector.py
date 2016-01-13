@@ -20,9 +20,10 @@ class BaseExtractor :
 
 class PosExtractor(BaseExtractor) :
 
-    def __init__(self, pos_path, w=10) :
+    def __init__(self, pos_path, w=20, combined=False) :
         BaseExtractor.__init__(self)
-
+        
+        self.pos_dict = self._read_dictionary(pos_path)
         self.w = w
         noun = [5, 11, 12, 14, 37]
         time = [16]
@@ -34,8 +35,10 @@ class PosExtractor(BaseExtractor) :
         conjunction = [24, 39]
         mood = [36, 46, 10]
         quantity = [34, 38, 27, 18]
-        self.cluster = [noun, time, place, name, adjective, verb, adverb, conjunction, mood, quantity]
-        self.pos_dict = self._read_dictionary(pos_path)
+        if combined :
+            self.cluster = [noun, time, place, name, adjective, verb, adverb, conjunction, mood, quantity]
+        else :
+            self.cluster = [range(len(self.pos_dict))]
         
     def _read_dictionary(self, pos_path) :
         file_operator = TextFileOperator()
@@ -143,9 +146,10 @@ class UserExtractor(BaseExtractor) :
 
 class WordExtractor(BaseExtractor) :
 
-    def __init__(self, word_path) :
+    def __init__(self, word_path, weight=1) :
         BaseExtractor.__init__(self)
 
+        self.weight = 1
         self.firpro_dict = dict().fromkeys([u'\u6211', u'\u54b1'])
         self.secpro_dict = dict().fromkeys([u'\u4f60', u'\u60a8'])
         self.thrpro_dict = dict().fromkeys([u'\u4ed6', u'\u5979', u'\u5b83'])
@@ -168,19 +172,19 @@ class WordExtractor(BaseExtractor) :
         n_knowldegeable_word = 0
         for word in participle_title :
             if word.name in self.firpro_dict :
-                n_firpro += 1
+                n_firpro += self.weight
             elif word.name in self.secpro_dict :
-                n_secpro += 1
+                n_secpro += self.weight
             elif word.name in self.thrpro_dict :
-                n_thrpro += 1
+                n_thrpro += self.weight
             elif word.name in self.word_dict :
-                n_knowldegeable_word += 1
+                n_knowldegeable_word += self.weight
             if word.feature in [u'nrg', u'nrf'] :
-                n_title_name += 1
+                n_title_name += self.weight
             if word.feature in [u'nt'] :
-                n_title_time += 1
+                n_title_time += self.weight
             if word.feature in [u'ns'] :
-                n_title_place += 1
+                n_title_place += self.weight
         for word in participle_content :
             if word.name in self.firpro_dict :
                 n_firpro += 1

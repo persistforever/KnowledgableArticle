@@ -38,25 +38,30 @@ class Corpus :
     def run_feature_select(self, article_market_path, pos_path, punc_path, klword_path, \
         feature_path, feature_market_path) :
         loader = PickleMarket()
-        pos_selector = selector.PosExtractor(pos_path, w=10)
-        token_selector = selector.TokenExtractor(punc_path)
-        word_selector = selector.WordExtractor(klword_path)
-        articles = loader.load_market(article_market_path)
-        length = len(articles) - 1
-        for idx, article in enumerate(articles) :
-            article['features'] = list()
-            article['features'].extend(pos_selector.extract_feature(article['participle_content']))
-            article['features'].extend(token_selector.extract_feature(article['title'], article['content'], \
-                                                                      article['participle_title'], \
-                                                                      article['participle_content']))
-            article['features'].extend(word_selector.extract_feature(article['participle_title'], \
-                                                                      article['participle_content']))
-            print 'finish rate is %.2f%%\r' % (100.0*idx/length),
-        print 'finish rate is %.2f%%\r' % (100.0*idx/length)
-        featuresets = [[article['id']] + article['features'] + [article['label']] for article in articles]
-        file_operator = TextFileOperator()
-        file_operator.writing(featuresets, feature_path)
-        loader.dump_market(featuresets, feature_market_path)
+        index = 0
+        for w in [5, 10, 15, 20] :
+            for combined in [True, False] :
+                for weight in [1, 2, 5] :
+                    pos_selector = selector.PosExtractor(pos_path, w=w, combined=combined)
+                    token_selector = selector.TokenExtractor(punc_path)
+                    word_selector = selector.WordExtractor(klword_path, weight=weight)
+                    articles = loader.load_market(article_market_path)
+                    length = len(articles) - 1
+                    for idx, article in enumerate(articles) :
+                        article['features'] = list()
+                        article['features'].extend(pos_selector.extract_feature(article['participle_content']))
+                        article['features'].extend(token_selector.extract_feature(article['title'], article['content'], \
+                                                                                  article['participle_title'], \
+                                                                                  article['participle_content']))
+                        article['features'].extend(word_selector.extract_feature(article['participle_title'], \
+                                                                                  article['participle_content']))
+                        print 'finish rate is %.2f%%\r' % (100.0*idx/length),
+                    print 'finish rate is %.2f%%\r' % (100.0*idx/length)
+                    featuresets = [[article['id']] + article['features'] + [article['label']] for article in articles]
+                    file_operator = TextFileOperator()
+                    file_operator.writing(featuresets, feature_path)
+                    loader.dump_market(featuresets, feature_market_path + str(index))
+                    index += 1
         print 'finish'
 
     def run_classify(self, train_path, test_path) :
@@ -69,11 +74,80 @@ class Corpus :
         test_label = np.array([np.array(int(article[-1])) for article in articles])
         # for c in range(1, 10000, 100) :
         classifier = SvmClassifier()
-        train_dataset = classifier.normalize(train_dataset)
-        test_dataset = classifier.normalize(test_dataset)
+        train_dataset = classifier.normalize_mapminmax(train_dataset)
+        test_dataset = classifier.normalize_mapminmax(test_dataset)
         classifier.training(train_dataset, train_label)
         test_class = classifier.testing(test_dataset)
         print 'performance is %.8f' % (classifier.evaluation(test_label, test_class))
+        print 'finish'
+
+    def run_optimize_params(self, train_article_market_path, test_article_market_path, \
+        pos_path, punc_path, klword_path, logger_path) :
+        loader = PickleMarket()
+        train_articles = loader.load_market(train_article_market_path)
+        test_articles = loader.load_market(test_article_market_path)
+        logger = list()
+        wset = [5, 10, 15, 20]
+        combinedset = [True, False]
+        weightset = [1, 2, 5]
+        kernelset = ['linear', 'poly', 'rbf']
+        cset = [range(10, 100, 10), range(100, 1000, 100), range(1000, 10000, 1000)]
+        normset = ['mapminmax', 'zscore']
+        token_selector = selector.TokenExtractor(punc_path)
+        for w in wset :
+            for combined in combinedset :
+                pos_selector = selector.PosExtractor(pos_path, w=w, combined=combined)
+                for weight in weightset :
+                    word_selector = selector.WordExtractor(klword_path, weight=weight)
+                    # train
+                    length = len(train_articles) - 1
+                    for idx, article in enumerate(train_articles) :
+                        article['features'] = list()
+                        article['features'].extend(pos_selector.extract_feature(article['participle_content']))
+                        article['features'].extend(token_selector.extract_feature(article['title'], article['content'], \
+                                                                                  article['participle_title'], \
+                                                                                  article['participle_content']))
+                        article['features'].extend(word_selector.extract_feature(article['participle_title'], \
+                                                                                  article['participle_content']))
+                        print 'finish rate is %.2f%%\r' % (100.0*idx/length),
+                    print 'finish rate is %.2f%%\r' % (100.0*idx/length)
+                    train_featuresets = [[article['id']] + article['features'] + [article['label']] for article in train_articles]
+                    # test
+                    length = len(test_articles) - 1
+                    for idx, article in enumerate(test_articles) :
+                        article['features'] = list()
+                        article['features'].extend(pos_selector.extract_feature(article['participle_content']))
+                        article['features'].extend(token_selector.extract_feature(article['title'], article['content'], \
+                                                                                  article['participle_title'], \
+                                                                                  article['participle_content']))
+                        article['features'].extend(word_selector.extract_feature(article['participle_title'], \
+                                                                                  article['participle_content']))
+                        print 'finish rate is %.2f%%\r' % (100.0*idx/length),
+                    print 'finish rate is %.2f%%\r' % (100.0*idx/length)
+                    test_featuresets = [[article['id']] + article['features'] + [article['label']] for article in test_articles]
+                    train_dataset = np.array([np.array(article[1:-1]) for article in train_featuresets])
+                    train_label = np.array([np.array(int(article[-1])) for article in train_featuresets])
+                    test_dataset = np.array([np.array(article[1:-1]) for article in test_featuresets])
+                    test_label = np.array([np.array(int(article[-1])) for article in test_featuresets])
+                    for kernel in kernelset :
+                        for c in cset :
+                            for norm in normset :
+                                classifier = SvmClassifier()
+                                train_dataset = classifier.normalize_mapminmax(train_dataset)
+                                test_dataset = classifier.normalize_mapminmax(test_dataset)
+                                classifier.training(train_dataset, train_label)
+                                test_class = classifier.testing(test_dataset)
+                                print 'performance is %.8f' % (classifier.evaluation(test_label, test_class))
+                                logger.append(['w is %d' % (w)])
+                                logger.append(['combines is %d' % (combined)])
+                                logger.append(['weight is %d' % (weight)])
+                                logger.append(['kernel is %s' % (kernel)])
+                                logger.append(['c is %d' % (c[0])])
+                                logger.append(['norm is %s' % (norm)])
+                                logger.append(['performance is %.8f' % (classifier.evaluation(test_label, test_class))])
+                                logger.append(['-'*100])
+        file_operator = TextFileOperator()
+        file_operator.writing(logger, logger_path)
         print 'finish'
 
     def read_article(self, article_path) :
