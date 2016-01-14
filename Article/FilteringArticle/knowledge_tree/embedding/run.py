@@ -9,6 +9,7 @@ from basic.market import PickleMarket
 from embedding.word_embed import WordEmbed
 from basic.word import Word
 from file.file_operator import TextFileOperator
+from basic.market import PickleMarket
 from pretreate.segementor import ContentSegementor
 from pretreate.unique import Unique
 # package importing end
@@ -19,10 +20,11 @@ class Corpus :
     def __init__(self) :
         pass
 
-    def run(self, article_path, participle_title_path, sentences_path, \
-        dictionary_path, word_embedding_path) :
-        self.run_create_sentences(article_path, participle_title_path, sentences_path)
-        self.run_create_word2vec(sentences_path, dictionary_path, word_embedding_path)
+    def run(self, article_path, participle_title_path, sentences_path, sentences_market_path, \
+        word_embedding_path, word_embedding_market_path) :
+        # self.run_create_sentences(article_path, participle_title_path, sentences_path)
+        # self.run_convert_sentences(sentences_path, sentences_market_path)
+        self.run_create_word2vec(sentences_market_path, word_embedding_path, word_embedding_market_path)
 
     def run_create_sentences(self, article_path, participle_title_path, sentences_path) :
         articles = self.read_article(article_path)
@@ -46,14 +48,28 @@ class Corpus :
             if idx % 100 == 0 :
                 print 'finish rate is %.2f%%\r' % (100.0*idx/length),
         print 'finish rate is %.2f%%\r' % (100.0*idx/length)
-
+        
         file_operator = TextFileOperator()
         file_operator.writing(sentences, sentences_path)
         print 'writing sentences finished ...'
+        
+    def run_convert_sentences(self, sentences_path, sentences_market_path) :
+        file_operator = TextFileOperator()
+        sentences = file_operator.reading(sentences_path)
+        sentences = [[word.split('<:>')[0] for word in sentence] for sentence in sentences]
+        loader = PickleMarket()
+        loader.dump_market(sentences, sentences_market_path)
+        print 'converting sentences finished ...'
 
-    def run_create_word2vec(self, sentences_path, dictionary_path, word_embedding_path) :
-        sentences = self.read_sentences(sentences_path)
-        dictionary = self.create_dictionary(sentences, type='name')
+    def run_create_word2vec(self, sentences_path, word_embedding_path, word_embedding_market_path) :
+        loader = PickleMarket()
+        sentences = loader.load_market(sentences_path)
+        embeddor = WordEmbed()
+        model = embeddor.word_to_vector(type='create', sentences=sentences, path=word_embedding_market_path)
+        data_list = embeddor.get_word2vec_model(model)
+        file_operator = TextFileOperator()
+        file_operator.writing(data_list, word_embedding_path)
+        print 'create word2vec finished ...'
 
     def read_article(self, article_path) :
         """ Read source article.
@@ -108,7 +124,7 @@ class Corpus :
         print 'finish rate is %.2f%%\r' % (100.0*idx/length)
         return source_list
 
-    def read_sentences(self, source_path) :
+    def read_sentences(self, source_path, type='all') :
         """ Read participle sentences.
             Each row is a sentence.
         """
@@ -117,13 +133,22 @@ class Corpus :
         entry_list = data_list[0]
         sentences = list()
         length = len(data_list[1:]) - 1
-        for idx, data in enumerate(data_list[1:]) :
-            if len(data) >= len(entry_list) :
-                sentence = [Word(word, sp_char=':').to_string() for word in data[0].split(' ')]
-                sentences.append(sentence)
-            if idx % 100 == 0 :
-                print 'finish rate is %.2f%%\r' % (100.0*idx/length),
-        print 'finish rate is %.2f%%\r' % (100.0*idx/length)
+        if type == 'all' :
+            for idx, data in enumerate(data_list[1:]) :
+                if len(data) >= len(entry_list) :
+                    sentence = [Word(word, sp_char=':').to_string() for word in data[0].split(' ')]
+                    sentences.append(sentence)
+                if idx % 100 == 0 :
+                    print 'finish rate is %.2f%%\r' % (100.0*idx/length),
+            print 'finish rate is %.2f%%\r' % (100.0*idx/length)
+        elif type == 'name' :
+            for idx, data in enumerate(data_list[1:]) :
+                if len(data) >= len(entry_list) :
+                    sentence = [Word(word, sp_char=':').name for word in data[0].split(' ')]
+                    sentences.append(sentence)
+                if idx % 100 == 0 :
+                    print 'finish rate is %.2f%%\r' % (100.0*idx/length),
+            print 'finish rate is %.2f%%\r' % (100.0*idx/length)
         return sentences
 
     def create_dictionary(self, sentences, type='all') :

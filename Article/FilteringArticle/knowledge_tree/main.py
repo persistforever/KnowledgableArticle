@@ -57,8 +57,10 @@ def embedding() :
     articles_path = PathManager.CORPUS_ARTICLE
     participle_title_path = PathManager.CORPUS_SPLIT
     sentences_path = PathManager.CORPUS_KEYWORD
+    word_embedding_path =PathManager.CORPUS_SIMPLYARTICLE
     corpus = Corpus()
-    corpus.run(articles_path, participle_title_path, sentences_path)
+    corpus.run(articles_path, participle_title_path, sentences_path, sentences_path, \
+        word_embedding_path, word_embedding_path)
 
 
 if __name__ == '__main__' :

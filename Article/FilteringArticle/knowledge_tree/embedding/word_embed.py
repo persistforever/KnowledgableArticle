@@ -85,3 +85,15 @@ class WordEmbed :
                         rmstop_sentence.append(word)
                 rmstop_sentences.append(rmstop_sentence)
             return rmstop_sentences
+
+    def get_word2vec_model(self, word2vec_model) :
+        """ Write word2vec model into file.
+            Each row is a word.
+            Each column is the entry of the embedding.
+        """
+        word_list = list()
+        for word in word2vec_model.index2word :
+            row = [word]
+            row.extend(word2vec_model[word])
+            word_list.append(row)
+        return word_list

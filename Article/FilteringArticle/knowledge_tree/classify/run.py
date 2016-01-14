@@ -68,9 +68,9 @@ class Corpus :
         test_dataset = np.array([np.array(article[1:-1]) for article in articles])
         test_label = np.array([np.array(int(article[-1])) for article in articles])
         classifier = SvmClassifier()
-        train_dataset = classifier.normalize_mapminmax(train_dataset)
-        test_dataset = classifier.normalize_mapminmax(test_dataset)
-        classifier.training(train_dataset, train_label)
+        train_dataset = classifier.normalize(train_dataset, type='mapminmax')
+        test_dataset = classifier.normalize(test_dataset, type='mapminmax')
+        classifier.training(train_dataset, train_label, cset=range(10, 100, 10), kernel='linear')
         test_class = classifier.testing(test_dataset)
         print 'performance is %.8f' % (classifier.evaluation(test_label, test_class))
         print 'finish'
@@ -81,6 +81,7 @@ class Corpus :
         train_articles = loader.load_market(train_article_market_path)
         test_articles = loader.load_market(test_article_market_path)
         logger = list()
+        logger.append(['w', 'combined', 'weight', 'kernel', 'c', 'norm', 'roc'])
         wset = [5, 10, 15, 20]
         combinedset = [True, False]
         weightset = [1, 2, 5]
@@ -132,14 +133,8 @@ class Corpus :
                                 classifier.training(train_dataset, train_label, cset=c, kernel=kernel)
                                 test_class = classifier.testing(test_dataset)
                                 print 'performance is %.8f' % (classifier.evaluation(test_label, test_class))
-                                logger.append(['w', str(w)])
-                                logger.append(['combined', str(combined)])
-                                logger.append(['weight', str(weight)])
-                                logger.append(['kernel', str(kernel)])
-                                logger.append(['c', str(c[0])])
-                                logger.append(['norm', str(norm)])
-                                logger.append(['performance', str(classifier.evaluation(test_label, test_class))])
-                                logger.append(['-'*100])
+                                logger.append([w, combined, weight, kernel, c[0], norm, \
+                                    classifier.evaluation(test_label, test_class)])
         file_operator = TextFileOperator()
         file_operator.writing(logger, logger_path)
         print 'finish'

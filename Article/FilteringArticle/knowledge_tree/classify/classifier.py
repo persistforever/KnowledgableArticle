@@ -44,9 +44,9 @@ class SvmClassifier :
     def normalize(self, dataset, method='mapminmax') :
         """ Normalize the dataset. """
         if method == 'mapminmax' :
-            dataset = normalize_mapminmax(dataset)
+            dataset = self.normalize_mapminmax(dataset)
         elif method == 'zscore' :
-            dataset = normalize_zscore(dataset)
+            dataset = self.normalize_zscore(dataset)
         return dataset
 
     def normalize_mapminmax(self, dataset) :
