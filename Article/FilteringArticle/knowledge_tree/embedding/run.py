@@ -9,6 +9,8 @@ from basic.market import PickleMarket
 from embedding.word_embed import WordEmbed
 from basic.word import Word
 from file.file_operator import TextFileOperator
+from pretreate.segementor import ContentSegementor
+from pretreate.unique import Unique
 # package importing end
 
 
@@ -17,58 +19,94 @@ class Corpus :
     def __init__(self) :
         pass
 
-    def run(self, sentences_path, dictionary_path, wordembed_path, word_cluster_path, \
-        similarity_path, wordvector_path) :
-        # self.run_create_word2vec(sentences_path, dictionary_path, wordembed_path)
-        # self.run_evaluate_word2vec(wordembed_path, dictionary_path, word_cluster_path, \
-        #     similarity_path)
-        # self.run_remove_stopwords(sentences_path, dictionary_path)
-        self.run_write_wordvector(wordembed_path, dictionary_path, wordvector_path)
+    def run(self, article_path, participle_title_path, sentences_path, \
+        dictionary_path, word_embedding_path) :
+        self.run_create_sentences(article_path, participle_title_path, sentences_path)
+        self.run_create_word2vec(sentences_path, dictionary_path, word_embedding_path)
 
-    def run_create_word2vec(self, sentence_path, dictionary_path, \
-        wordembed_path) :
-        loader = PickleMarket()
-        sentences = loader.load_market(sentence_path)
-        # sentences = self.run_remove_stopwords(sentence_path, dictionary_path)
-        embedor = WordEmbed()
-        word2vec = embedor.word_to_vector(type='create', sentences=sentences, path=wordembed_path)
+    def run_create_sentences(self, article_path, participle_title_path, sentences_path) :
+        articles = self.read_article(article_path)
+        titles = self.read_participle_title(participle_title_path)
 
-    def run_write_wordvector(self, wordembed_path, dictionary_path, wordvecotr_path) :
-        embedor = WordEmbed()
-        word2vec = embedor.word_to_vector(type='load', path=wordembed_path)
-        loader = PickleMarket()
-        dictionary = loader.load_market(dictionary_path)
-        index2word = dict((value, key) for key, value in dictionary.iteritems())
-        self.write_word_vector(word2vec, index2word, wordvecotr_path)
-        return word2vec
+        # remove duplications
+        processor = Unique()
+        indexs_unique = [titles[index]['id'] for index in processor.unique( \
+            [article['participle_title'] for article in titles])]
+        indexs_dict = dict().fromkeys(set(indexs_unique))
+        remained_articles = [article for article in articles if article['id'] in indexs_dict]
+        print 'remove duplications finished ...'
 
-    def write_word_vector(self, word2vec, index2word, wordvector_path) :
-        """ Write word vector.
-            Each row is a word.
-            Column[0] is the name of word.
-            Column[1:] is the entry of the word vector.
+        # create sentences
+        segmentor = ContentSegementor()
+        sentences = list()
+        length = len(remained_articles) - 1
+        for idx, article in enumerate(remained_articles) :
+            segmented_content = segmentor.segement(article['content'])
+            sentences.extend([[sentence] for sentence in segmented_content])
+            if idx % 100 == 0 :
+                print 'finish rate is %.2f%%\r' % (100.0*idx/length),
+        print 'finish rate is %.2f%%\r' % (100.0*idx/length)
+
+        file_operator = TextFileOperator()
+        file_operator.writing(sentences, sentences_path)
+        print 'writing sentences finished ...'
+
+    def run_create_word2vec(self, sentences_path, dictionary_path, word_embedding_path) :
+        sentences = self.read_sentences(sentences_path)
+        dictionary = self.create_dictionary(sentences, type='name')
+
+    def read_article(self, article_path) :
+        """ Read source article.
+            Each row is an article.
+            Colunm[0] is the id of article.
+            Column[1:] is the attributes of article.
         """
         file_operator = TextFileOperator()
-        data_list = list()
-        for index in index2word :
-            if str(index) in word2vec.vocab :
-                data = [index2word[index]]
-                data.extend(word2vec[str(index)])
-                data_list.append(data)
-        file_operator.writing(data_list, wordvector_path)
+        data_list = file_operator.reading(article_path)
+        entry_list = data_list[0]
+        source_list = []
+        length = len(data_list[1:]) - 1
+        for idx, data in enumerate(data_list[1:]) :
+            if len(data) >= len(entry_list) :
+                article = dict()
+                article['id'] = data[0]
+                article['url'] = data[1]
+                article['pub_time'] = data[2]
+                article['title'] = data[3]
+                article['content'] = data[4]
+                article['n_zan'] = data[5]
+                article['n_forward'] = data[6]
+                article['n_click'] = data[7]
+                article['n_collect'] = data[8]
+                article['read_time'] = data[9]
+                article['finish_rate'] = data[10]
+                source_list.append(article)
+            if idx % 100 == 0 :
+                print 'finish rate is %.2f%%\r' % (100.0*idx/length),
+        print 'finish rate is %.2f%%\r' % (100.0*idx/length)
+        return source_list
 
-    def run_create_market(self,  sentence_path, dictionary_path, market_path) :
-        sentences = self.read_sentences(sentence_path)
-        embedor = DictWordBag()
-        dictionary = embedor.dump_dictionary(sentences, dictionary_path)
-        converted_sentences = self.convert_sentences(sentences, dictionary)
-        loader = PickleMarket()
-        market = loader.dump_market(converted_sentences, market_path)
-
-    def run_load_market(self, market_path, dictionary_path) :
-        loader = PickleMarket()
-        market = loader.load_market(market_path)
-        return market
+    def read_participle_title(self, title_path) :
+        """ Read participle title.
+            Each row is an article.
+            Colunm[0] is the id of article.
+            Column[1:] is the word of participle title.
+        """
+        file_operator = TextFileOperator()
+        data_list = file_operator.reading(title_path)
+        entry_list = data_list[0]
+        source_list = list()
+        length = len(data_list[1:]) - 1
+        for idx, data in enumerate(data_list[1:]) :
+            if len(data) >= len(entry_list) :
+                article = dict()
+                article['id'] = data[0]
+                article['participle_title'] = [Word(word) for word in data[1].split(' ')]
+                source_list.append(article)
+            if idx % 100 == 0 :
+                print 'finish rate is %.2f%%\r' % (100.0*idx/length),
+        print 'finish rate is %.2f%%\r' % (100.0*idx/length)
+        return source_list
 
     def read_sentences(self, source_path) :
         """ Read participle sentences.
@@ -87,6 +125,24 @@ class Corpus :
                 print 'finish rate is %.2f%%\r' % (100.0*idx/length),
         print 'finish rate is %.2f%%\r' % (100.0*idx/length)
         return sentences
+
+    def create_dictionary(self, sentences, type='all') :
+        """ Create word dict using sentences. """
+        word2index = dict()
+        if type == 'all' :
+            for sentence in sentences :
+                for word in sentence :
+                    if word not in word2index :
+                        word2index[word] = 0
+        elif type == 'name' :
+            for sentence in sentences :
+                for word in sentence :
+                    if word.name not in word2index :
+                        word2index[word.name] = 0
+        for idx, word in enumerate(word2index.keys()) :
+            word2index[word] = idx
+        print 'dictionary size is %d' % len(word2index)
+        return word2index
 
     def convert_sentences(self, sentences, dictionary) :
         """ Convert each word in sentences.

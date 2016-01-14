@@ -50,9 +50,19 @@ def classify() :
     corpus.run(articles_path, article_market_path, \
         pos_path, punc_path, klword_path, feature_path, feature_market_path, \
         train_path, test_path)
+    
+def embedding() :
+    from embedding.run import Corpus
+    from file.path_manager import PathManager
+    articles_path = PathManager.CORPUS_ARTICLE
+    participle_title_path = PathManager.CORPUS_SPLIT
+    sentences_path = PathManager.CORPUS_KEYWORD
+    corpus = Corpus()
+    corpus.run(articles_path, participle_title_path, sentences_path)
 
 
 if __name__ == '__main__' :
     # tag()
     # pretreate()
-    classify()
+    # classify()
+    embedding()

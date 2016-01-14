@@ -42,6 +42,7 @@
     <Compile Include="knowledge_tree\classify\classifier.py" />
     <Compile Include="knowledge_tree\classify\__init__.py" />
     <Compile Include="knowledge_tree\embedding\run.py" />
+    <Compile Include="knowledge_tree\embedding\script\create_sentences.py" />
     <Compile Include="knowledge_tree\embedding\word_embed.py" />
     <Compile Include="knowledge_tree\embedding\__init__.py" />
     <Compile Include="knowledge_tree\file\base.py" />
@@ -71,6 +72,7 @@
     <Folder Include="knowledge_tree\" />
     <Folder Include="knowledge_tree\basic\" />
     <Folder Include="knowledge_tree\classify\script\" />
+    <Folder Include="knowledge_tree\embedding\script\" />
     <Folder Include="knowledge_tree\file\" />
     <Folder Include="knowledge_tree\classify\" />
     <Folder Include="knowledge_tree\embedding\" />
@@ -85,6 +87,7 @@
     <Content Include="knowledge_tree\classify\script\feature_select.sh" />
     <Content Include="knowledge_tree\classify\script\instruction.docx" />
     <Content Include="knowledge_tree\classify\script\convert_article.sh" />
+    <Content Include="knowledge_tree\embedding\script\create_sentences.sh" />
     <Content Include="knowledge_tree\file\configuration.ini" />
     <Content Include="knowledge_tree\pretreate\script\instruction.docx" />
     <Content Include="knowledge_tree\pretreate\script\pretreatement.sh" />
