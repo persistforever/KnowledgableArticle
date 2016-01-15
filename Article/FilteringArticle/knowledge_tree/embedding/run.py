@@ -63,7 +63,9 @@ class Corpus :
 
     def run_create_word2vec(self, sentences_path, word_embedding_path, word_embedding_market_path) :
         loader = PickleMarket()
-        sentences = loader.load_market(sentences_path)
+        sentences = list()
+        for type in [u'_car', u'_finance', u'_web'] :
+            sentences.extend(loader.load_market(sentences_path + type))
         embeddor = WordEmbed()
         model = embeddor.word_to_vector(type='create', sentences=sentences, path=word_embedding_market_path)
         data_list = embeddor.get_word2vec_model(model)
