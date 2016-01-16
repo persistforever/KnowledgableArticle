@@ -88,12 +88,12 @@ class Corpus :
             'car_finance', 'car_web', 'finance_car', 'finance_finance', 'finance_web', \
             'web_car', 'web_fiannce', 'web_web', 'merge_car', 'merge_finance', 'merge_web'])
         domains = [u'car', u'finance', u'web']
-        wset = [5, 10]#, 15, 20]
-        combinedset = [True]#, False]
-        weightset = [1]#, 2, 5]
-        kernelset = ['linear']#, 'poly', 'rbf']
-        cset = [range(10, 100, 10)]#, range(100, 1000, 100)]
-        normset = ['mapminmax']#, 'zscore']
+        wset = [5, 10, 15, 20]
+        combinedset = [True, False]
+        weightset = [1, 2, 5]
+        kernelset = ['linear', 'poly', 'rbf']
+        cset = [range(10, 100, 10), range(100, 1000, 100)]
+        normset = ['mapminmax', 'zscore']
         token_selector = selector.TokenExtractor(punc_path)
         for w in wset :
             for combined in combinedset :
