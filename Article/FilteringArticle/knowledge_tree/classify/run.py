@@ -86,15 +86,14 @@ class Corpus :
         logger = list()
         logger.append(['w', 'combined', 'weight', 'kernel', 'c', 'norm', 'car_car', \
             'car_finance', 'car_web', 'finance_car', 'finance_finance', 'finance_web', \
-            'web_car', 'web_fiannce', 'web_web', 'merge_car', 'merge_finance', 'merge_web', \
-            'all'])
+            'web_car', 'web_fiannce', 'web_web', 'merge_car', 'merge_finance', 'merge_web'])
         domains = [u'car', u'finance', u'web']
-        wset = [5]#, 10, 15, 20]
+        wset = [5, 10]#, 15, 20]
         combinedset = [True]#, False]
         weightset = [1]#, 2, 5]
         kernelset = ['linear']#, 'poly', 'rbf']
         cset = [range(10, 100, 10)]#, range(100, 1000, 100)]
-        normset = ['mapminmax', 'zscore']
+        normset = ['mapminmax']#, 'zscore']
         token_selector = selector.TokenExtractor(punc_path)
         for w in wset :
             for combined in combinedset :
@@ -151,6 +150,7 @@ class Corpus :
                                         test_prob = classifier.testing(test_dataset, type='prob')
                                         test_class = classifier.testing(test_dataset, type='label')
                                         evl.append(classifier.evaluation(test_label, test_prob, test_class)[1])
+                                print 'single finished ...'
                                 # merge
                                 articles = list()
                                 for train_idx in range(0, len(domains)) :
@@ -167,10 +167,10 @@ class Corpus :
                                     test_prob = classifier.testing(test_dataset, type='prob')
                                     test_class = classifier.testing(test_dataset, type='label')
                                     evl.append(classifier.evaluation(test_label, test_prob, test_class)[1])
+                                print 'merge finished ...'
                                 print 'performance is', 1.0*sum(evl)/len(evl)
                                 log = [w, combined, weight, kernel, c[0], norm]
                                 log.extend(evl)
-                                log.append(1.0*sum(evl)/len(evl)) 
                                 logger.append(log)
         file_operator = TextFileOperator()
         file_operator.writing(logger, logger_path)
