@@ -38,9 +38,9 @@ class Corpus :
     def run_feature_select(self, article_market_path, pos_path, punc_path, klword_path, \
         feature_path, feature_market_path) :
         loader = PickleMarket()
-        pos_selector = selector.PosExtractor(pos_path, w=5, combined=False)
+        pos_selector = selector.PosExtractor(pos_path, w=5, combined=True)
         token_selector = selector.TokenExtractor(punc_path)
-        word_selector = selector.WordExtractor(klword_path, weight=2)
+        word_selector = selector.WordExtractor(klword_path, weight=1)
         articles = loader.load_market(article_market_path)
         length = len(articles) - 1
         for idx, article in enumerate(articles) :
@@ -61,32 +61,39 @@ class Corpus :
 
     def run_classify(self, train_path, test_path) :
         loader = PickleMarket()
-        articles = loader.load_market(train_path)
+        articles = list()
+        # for type in [u'car', u'finance', u'web'] :
+        #     path = train_path.replace(u'all', type)
+        articles.extend(loader.load_market(train_path))
         train_dataset = np.array([np.array(article[1:-1]) for article in articles])
+        print train_dataset.shape
         train_label = np.array([np.array(int(article[-1])) for article in articles])
         articles = loader.load_market(test_path)
         test_dataset = np.array([np.array(article[1:-1]) for article in articles])
         test_label = np.array([np.array(int(article[-1])) for article in articles])
         classifier = SvmClassifier()
-        train_dataset = classifier.normalize(train_dataset, type='mapminmax')
-        test_dataset = classifier.normalize(test_dataset, type='mapminmax')
+        train_dataset = classifier.normalize(train_dataset, method='mapminmax')
+        test_dataset = classifier.normalize(test_dataset, method='mapminmax')
         classifier.training(train_dataset, train_label, cset=range(10, 100, 10), kernel='linear')
-        test_class = classifier.testing(test_dataset)
-        print 'performance is %.8f' % (classifier.evaluation(test_label, test_class))
+        test_prob = classifier.testing(test_dataset, type='prob')
+        test_class = classifier.testing(test_dataset, type='label')
+        print 'performance is', classifier.evaluation(test_label, test_prob, test_class)
         print 'finish'
 
     def run_optimize_params(self, train_article_market_path, test_article_market_path, \
         pos_path, punc_path, klword_path, logger_path) :
         loader = PickleMarket()
-        train_articles = loader.load_market(train_article_market_path)
-        test_articles = loader.load_market(test_article_market_path)
         logger = list()
-        logger.append(['w', 'combined', 'weight', 'kernel', 'c', 'norm', 'roc'])
-        wset = [5, 10, 15, 20]
-        combinedset = [True, False]
-        weightset = [1, 2, 5]
-        kernelset = ['linear', 'poly', 'rbf']
-        cset = [range(10, 100, 10), range(100, 1000, 100), range(1000, 10000, 1000)]
+        logger.append(['w', 'combined', 'weight', 'kernel', 'c', 'norm', 'car_car', \
+            'car_finance', 'car_web', 'finance_car', 'finance_finance', 'finance_web', \
+            'web_car', 'web_fiannce', 'web_web', 'merge_car', 'merge_finance', 'merge_web', \
+            'all'])
+        domains = [u'car', u'finance', u'web']
+        wset = [5]#, 10, 15, 20]
+        combinedset = [True]#, False]
+        weightset = [1]#, 2, 5]
+        kernelset = ['linear']#, 'poly', 'rbf']
+        cset = [range(10, 100, 10)]#, range(100, 1000, 100)]
         normset = ['mapminmax', 'zscore']
         token_selector = selector.TokenExtractor(punc_path)
         for w in wset :
@@ -94,47 +101,77 @@ class Corpus :
                 pos_selector = selector.PosExtractor(pos_path, w=w, combined=combined)
                 for weight in weightset :
                     word_selector = selector.WordExtractor(klword_path, weight=weight)
-                    # train
-                    length = len(train_articles) - 1
-                    for idx, article in enumerate(train_articles) :
-                        article['features'] = list()
-                        article['features'].extend(pos_selector.extract_feature(article['participle_content']))
-                        article['features'].extend(token_selector.extract_feature(article['title'], article['content'], \
-                                                                                  article['participle_title'], \
-                                                                                  article['participle_content']))
-                        article['features'].extend(word_selector.extract_feature(article['participle_title'], \
-                                                                                  article['participle_content']))
-                        print 'finish rate is %.2f%%\r' % (100.0*idx/length),
-                    print 'finish rate is %.2f%%\r' % (100.0*idx/length)
-                    train_featuresets = [[article['id']] + article['features'] + [article['label']] for article in train_articles]
-                    # test
-                    length = len(test_articles) - 1
-                    for idx, article in enumerate(test_articles) :
-                        article['features'] = list()
-                        article['features'].extend(pos_selector.extract_feature(article['participle_content']))
-                        article['features'].extend(token_selector.extract_feature(article['title'], article['content'], \
-                                                                                  article['participle_title'], \
-                                                                                  article['participle_content']))
-                        article['features'].extend(word_selector.extract_feature(article['participle_title'], \
-                                                                                  article['participle_content']))
-                        print 'finish rate is %.2f%%\r' % (100.0*idx/length),
-                    print 'finish rate is %.2f%%\r' % (100.0*idx/length)
-                    test_featuresets = [[article['id']] + article['features'] + [article['label']] for article in test_articles]
-                    train_dataset = np.array([np.array(article[1:-1]) for article in train_featuresets])
-                    train_label = np.array([np.array(int(article[-1])) for article in train_featuresets])
-                    test_dataset = np.array([np.array(article[1:-1]) for article in test_featuresets])
-                    test_label = np.array([np.array(int(article[-1])) for article in test_featuresets])
+                    train_featuresets, test_featuresets = list(), list()
+                    for step in range(len(domains)) :
+                        train_featuresets.append(list())
+                        test_featuresets.append(list())
+                    for index, domain in enumerate(domains) :
+                        train_articles = loader.load_market(train_article_market_path.replace(u'all', domain))
+                        test_articles = loader.load_market(test_article_market_path.replace(u'all', domain))
+                        # train
+                        length = len(train_articles) - 1
+                        for idx, article in enumerate(train_articles) :
+                            article['features'] = list()
+                            article['features'].extend(pos_selector.extract_feature(article['participle_content']))
+                            article['features'].extend(token_selector.extract_feature(article['title'], article['content'], \
+                                                                                        article['participle_title'], \
+                                                                                        article['participle_content']))
+                            article['features'].extend(word_selector.extract_feature(article['participle_title'], \
+                                                                                        article['participle_content']))
+                            print 'finish rate is %.2f%%\r' % (100.0*idx/length),
+                        print 'finish rate is %.2f%%\r' % (100.0*idx/length)
+                        train_featuresets[index] = [[article['id']] + article['features'] + [article['label']] for article in train_articles]
+                        # test
+                        length = len(test_articles) - 1
+                        for idx, article in enumerate(test_articles) :
+                            article['features'] = list()
+                            article['features'].extend(pos_selector.extract_feature(article['participle_content']))
+                            article['features'].extend(token_selector.extract_feature(article['title'], article['content'], \
+                                                                                        article['participle_title'], \
+                                                                                        article['participle_content']))
+                            article['features'].extend(word_selector.extract_feature(article['participle_title'], \
+                                                                                        article['participle_content']))
+                            print 'finish rate is %.2f%%\r' % (100.0*idx/length),
+                        print 'finish rate is %.2f%%\r' % (100.0*idx/length)
+                        test_featuresets[index] = [[article['id']] + article['features'] + [article['label']] for article in test_articles]
                     for kernel in kernelset :
                         for c in cset :
                             for norm in normset :
-                                classifier = SvmClassifier()
-                                train_dataset = classifier.normalize(train_dataset, norm)
-                                test_dataset = classifier.normalize(test_dataset, norm)
-                                classifier.training(train_dataset, train_label, cset=c, kernel=kernel)
-                                test_class = classifier.testing(test_dataset)
-                                print 'performance is %.8f' % (classifier.evaluation(test_label, test_class))
-                                logger.append([w, combined, weight, kernel, c[0], norm, \
-                                    classifier.evaluation(test_label, test_class)])
+                                evl = list()
+                                for train_idx in range(0, len(domains)) :
+                                    for test_idx in range(0, len(domains)) :
+                                        train_dataset = np.array([np.array(article[1:-1]) for article in train_featuresets[train_idx]])
+                                        train_label = np.array([np.array(int(article[-1])) for article in train_featuresets[train_idx]])
+                                        test_dataset = np.array([np.array(article[1:-1]) for article in test_featuresets[test_idx]])
+                                        test_label = np.array([np.array(int(article[-1])) for article in test_featuresets[test_idx]])
+                                        classifier = SvmClassifier()
+                                        train_dataset = classifier.normalize(train_dataset, method=norm)
+                                        test_dataset = classifier.normalize(test_dataset, method=norm)
+                                        classifier.training(train_dataset, train_label, cset=c, kernel=kernel)
+                                        test_prob = classifier.testing(test_dataset, type='prob')
+                                        test_class = classifier.testing(test_dataset, type='label')
+                                        evl.append(classifier.evaluation(test_label, test_prob, test_class)[1])
+                                # merge
+                                articles = list()
+                                for train_idx in range(0, len(domains)) :
+                                    articles.extend(train_featuresets[train_idx])
+                                train_dataset = np.array([np.array(article[1:-1]) for article in articles])
+                                train_label = np.array([np.array(int(article[-1])) for article in articles])
+                                for test_idx in range(0, len(domains)) :
+                                    test_dataset = np.array([np.array(article[1:-1]) for article in test_featuresets[test_idx]])
+                                    test_label = np.array([np.array(int(article[-1])) for article in test_featuresets[test_idx]])
+                                    classifier = SvmClassifier()
+                                    train_dataset = classifier.normalize(train_dataset, method=norm)
+                                    test_dataset = classifier.normalize(test_dataset, method=norm)
+                                    classifier.training(train_dataset, train_label, cset=c, kernel=kernel)
+                                    test_prob = classifier.testing(test_dataset, type='prob')
+                                    test_class = classifier.testing(test_dataset, type='label')
+                                    evl.append(classifier.evaluation(test_label, test_prob, test_class)[1])
+                                print 'performance is', 1.0*sum(evl)/len(evl)
+                                log = [w, combined, weight, kernel, c[0], norm]
+                                log.extend(evl)
+                                log.append(1.0*sum(evl)/len(evl)) 
+                                logger.append(log)
         file_operator = TextFileOperator()
         file_operator.writing(logger, logger_path)
         print 'finish'

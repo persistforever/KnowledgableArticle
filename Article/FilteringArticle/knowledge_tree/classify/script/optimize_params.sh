@@ -1,5 +1,5 @@
-train_type=$1
-test_type=$2
+train_type=all
+test_type=all
 
 train_article_market_path=E:/data/knowledge/classify/$train_type/article_trainset_market
 test_article_market_path=E:/data/knowledge/classify/$test_type/article_testset_market

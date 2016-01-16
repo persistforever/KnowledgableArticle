@@ -66,5 +66,5 @@ def embedding() :
 if __name__ == '__main__' :
     # tag()
     # pretreate()
-    # classify()
-    embedding()
+    classify()
+    # embedding()
