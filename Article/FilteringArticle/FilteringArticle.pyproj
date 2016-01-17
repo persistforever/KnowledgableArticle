@@ -68,6 +68,20 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="knowledge_tree\tag\__init__.py" />
+    <Compile Include="KnowlegeableCNN\backup\test.py" />
+    <Compile Include="KnowlegeableCNN\DocEmbeddingNN.py" />
+    <Compile Include="KnowlegeableCNN\DocEmbeddingNNOneDoc.py" />
+    <Compile Include="KnowlegeableCNN\DocEmbeddingNNPadding.py" />
+    <Compile Include="KnowlegeableCNN\getLabeledData.py" />
+    <Compile Include="KnowlegeableCNN\knoweagebleClassifyFlattened.py" />
+    <Compile Include="KnowlegeableCNN\knoweagebleClassifyOnMonster.py" />
+    <Compile Include="KnowlegeableCNN\knoweagebleClassifyPadding.py" />
+    <Compile Include="KnowlegeableCNN\logistic_sgd.py" />
+    <Compile Include="KnowlegeableCNN\mlp.py" />
+    <Compile Include="KnowlegeableCNN\structureTest.py" />
+    <Compile Include="KnowlegeableCNN\structureTestOnMonster.py" />
+    <Compile Include="KnowlegeableCNN\structureTestOnMonster2.py" />
+    <Compile Include="KnowlegeableCNN\structureTestOnMonster2OneDocTest.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="knowledge_tree\" />
@@ -81,6 +95,9 @@
     <Folder Include="knowledge_tree\pretreate\script\" />
     <Folder Include="knowledge_tree\tag\" />
     <Folder Include="knowledge_tree\tag\script\" />
+    <Folder Include="KnowlegeableCNN\" />
+    <Folder Include="KnowlegeableCNN\backup\" />
+    <Folder Include="KnowlegeableCNN\result\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="knowledge_tree\classify\script\optimize_params.sh" />
@@ -97,6 +114,9 @@
     <Content Include="knowledge_tree\tag\script\convert_sentences.sh" />
     <Content Include="knowledge_tree\tag\script\instruction.docx" />
     <Content Include="knowledge_tree\tag\script\tag_sentences.sh" />
+    <Content Include="KnowlegeableCNN\.pydevproject" />
+    <Content Include="KnowlegeableCNN\LICENSE" />
+    <Content Include="KnowlegeableCNN\result\SVM.txt" />
   </ItemGroup>
   <Import Condition="Exists($(PtvsTargetsFile))" Project="$(PtvsTargetsFile)" />
   <Import Condition="!Exists($(PtvsTargetsFile))" Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
